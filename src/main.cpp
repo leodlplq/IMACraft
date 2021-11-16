@@ -57,6 +57,7 @@ int main()
         get_app(window).size_callback(width, height);
     });
 
+    app.init();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
         app.render();
