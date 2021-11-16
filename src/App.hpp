@@ -3,6 +3,8 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
+#include "Triangle.h"
+
 class App {
 public:
     App(int window_width, int window_height);

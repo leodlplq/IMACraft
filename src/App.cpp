@@ -6,17 +6,21 @@ App::App(int window_width, int window_height)
     size_callback(window_width, window_height);
 }
 void App::init(){
+
+
     glGenBuffers(1, &vbo);
 
     //binding the vbo
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    Triangle triangle;
 
     //vertex of the triangle
-    GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+
+    glBufferData(GL_ARRAY_BUFFER,
+                 static_cast<GLsizeiptr>(static_cast<unsigned long>(triangle.getVertexCount()) * sizeof(GLfloat)),
+                 triangle.getDataPointer(), GL_STATIC_DRAW);
 
     glBindBuffer(1, 0);
-
     //VAO
     glGenVertexArrays(1, &vao);
 
@@ -30,13 +34,16 @@ void App::init(){
     glBindBuffer(1, 0);
 
     glBindVertexArray(0);
+
 }
 
 void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
 
 }
 
