@@ -29,7 +29,7 @@ void App::init(){
             5, 4, 1
     };
 
-    _shaderProgram = Shader("shader.vs.glsl","shader.fs.glsl" );
+    _shaderProgram = Shader("/home/leodlplq/Documents/cours/imac2/synthese_image/IMACraft/src/shader.vs.glsl","/home/leodlplq/Documents/cours/imac2/synthese_image/IMACraft/src/shader.fs.glsl" );
 
     _vao.bind();
 

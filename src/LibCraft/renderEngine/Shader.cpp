@@ -4,18 +4,24 @@
 
 #include "Shader.hpp"
 
-std::string get_file_contents(const char* filename){
-    std::ifstream in(filename, std::ios::binary);
-    if(in){
-        std::string contents;
-        in.seekg(0, std::ios::end);
-        contents.resize(static_cast<unsigned long>(in.tellg()));
-        in.seekg(0, std::ios::beg);
-        in.read(&contents[0], static_cast<long>(contents.size()));
-        in.close();
-        return (contents);
+std::string get_file_contents(const char* filepath){
+    std::string content;
+    std::ifstream  fileStream(filepath, std::ios::in);
+    
+    if(!fileStream.is_open()){
+        std::cerr << "not load" << std::endl;
+        return "";
     }
-    throw(errno);
+
+    std::string line = "";
+
+    while(!fileStream.eof()){
+        std::getline(fileStream, line);
+        content.append(line + "\n");
+    }
+
+    fileStream.close();
+    return content;
 }
 
 Shader::Shader(const char *vertexFile, const char *fragmentFile) {
