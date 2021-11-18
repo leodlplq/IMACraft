@@ -1,4 +1,7 @@
+#include <valarray>
 #include "App.hpp"
+
+
 
 static App& get_app(GLFWwindow* window)
 {
