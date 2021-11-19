@@ -6,8 +6,9 @@
 
 std::string get_file_contents(const char* filepath){
     std::string content;
-    std::ifstream  fileStream(filepath, std::ios::in);
-    
+    std::string currPath = std::filesystem::current_path();
+    std::ifstream  fileStream(currPath + filepath, std::ios::in);
+
     if(!fileStream.is_open()){
         std::cerr << "not load" << std::endl;
         return "";

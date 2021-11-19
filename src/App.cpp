@@ -5,7 +5,7 @@
 #include <valarray>
 
 App::App(int window_width, int window_height) :
- _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("", "")
+ _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("/assets/shaders/shader.vs.glsl","/assets/shaders/shader.fs.glsl" )
 {
     size_callback(window_width, window_height);
 }
@@ -29,7 +29,7 @@ void App::init(){
             5, 4, 1
     };
 
-    _shaderProgram = Shader("/home/leodlplq/Documents/cours/imac2/synthese_image/IMACraft/src/shader.vs.glsl","/home/leodlplq/Documents/cours/imac2/synthese_image/IMACraft/src/shader.fs.glsl" );
+
 
     _vao.bind();
 
