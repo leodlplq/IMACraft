@@ -1,6 +1,6 @@
 #include "App.hpp"
 #include "GLFW/glfw3.h"
-
+#include "Cube.hpp"
 #include <iostream>
 #include <valarray>
 
@@ -17,25 +17,10 @@ App::App(int window_width, int window_height, FilePath appPath) :
 }
 void App::init(){
 
-
-    // Vertices coordinates
-    GLfloat vertices[] =
-            { //     COORDINATES     /        COLORS      /   TexCoord  //
-                    -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
-                    -0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
-                    0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
-                    0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
-            };
-
-    GLuint indices[] = {
-            0, 2, 1,
-            0, 3, 2
-    };
-
+    Cube cube;
     _vao.bind();
-
-    _vbo = vbo(vertices, sizeof(vertices));
-    _ibo = ibo(indices, sizeof(indices));
+    _vbo = vbo(cube.getDataPointer(),sizeof(cube.getDataPointer()));
+    _ibo = ibo(cube.getIndices(), sizeof(cube.getIndices()));
     _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, 8 * sizeof (float), (void*)0);
     _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, 8 * sizeof (float), (void*)(3* sizeof(float)));
     _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, 8 * sizeof (float), (void*)(6* sizeof(float)));
@@ -46,11 +31,11 @@ void App::init(){
     _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
 
     //TEXTURE
-    std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
+    //std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
 
-    Texture dirt(&filePathDirt[0], GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); //GL_RGB == JPG file, GL_RGBA == PNG file
-    dirt.texUnit(_shaderProgram, "tex0", 0);
-    _textures.push_back(dirt);
+    //Texture dirt(&filePathDirt[0], GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); //GL_RGB == JPG file, GL_RGBA == PNG file
+    //dirt.texUnit(_shaderProgram, "tex0", 0);
+    //_textures.push_back(dirt);
 }
 
 void App::render()
@@ -61,11 +46,11 @@ void App::render()
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
     glUniform1f(_uniId, 0.5f);
-    _textures[0].bind();
+    //_textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive
-    glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 
 }

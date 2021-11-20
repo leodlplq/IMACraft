@@ -4,7 +4,8 @@
 
 #include "vbo.hpp"
 
-vbo::vbo(GLfloat *vertices, GLsizeiptr size) {
+
+vbo::vbo(Vertex *vertices, GLsizeiptr size) {
     glGenBuffers(1, &_id);
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
