@@ -5,7 +5,13 @@
 #include <valarray>
 
 App::App(int window_width, int window_height, FilePath appPath) :
- _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath), _uniId(0)
+ _vao(),
+ _vbo({}, 0),
+ _ibo({}, 0),
+ _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+ _uniId(0),
+ _appPath(appPath),
+ _textures()
 {
     size_callback(window_width, window_height);
 }
@@ -14,35 +20,37 @@ void App::init(){
 
     // Vertices coordinates
     GLfloat vertices[] =
-            {               //POSITION                                              //COLORS
-                    -0.5f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f, // Lower left corner
-                    0.5f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f, // Lower right corner
-                    0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f,     1.0f, 0.6f,  0.32f, // Upper corner
-                    -0.25f, 0.5f * float(sqrt(3)) * 1 / 6, 0.0f,     0.9f, 0.45f, 0.17f, // Inner left
-                    0.25f, 0.5f * float(sqrt(3)) * 1 / 6, 0.0f,     0.9f, 0.45f, 0.17f, // Inner right
-                    0.0f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f  // Inner down
+            { //     COORDINATES     /        COLORS      /   TexCoord  //
+                    -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+                    -0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+                    0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+                    0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
             };
 
     GLuint indices[] = {
-            0, 3, 5,
-            3, 2, 4,
-            5, 4, 1
+            0, 2, 1,
+            0, 3, 2
     };
-
-
 
     _vao.bind();
 
     _vbo = vbo(vertices, sizeof(vertices));
     _ibo = ibo(indices, sizeof(indices));
-    _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, 6 * sizeof (float), (void*)0);
-    _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, 6 * sizeof (float), (void*)(3* sizeof(float)));
+    _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, 8 * sizeof (float), (void*)0);
+    _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, 8 * sizeof (float), (void*)(3* sizeof(float)));
+    _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, 8 * sizeof (float), (void*)(6* sizeof(float)));
     _vao.unbind();
     _vbo.unbind();
     _ibo.unbind();
 
     _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
 
+    //TEXTURE
+    std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
+
+    Texture dirt(&filePathDirt[0], GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); //GL_RGB == JPG file, GL_RGBA == PNG file
+    dirt.texUnit(_shaderProgram, "tex0", 0);
+    _textures.push_back(dirt);
 }
 
 void App::render()
@@ -53,6 +61,7 @@ void App::render()
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
     glUniform1f(_uniId, 0.5f);
+    _textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive
@@ -62,6 +71,13 @@ void App::render()
 }
 
 App::~App(){
+    _vao.deleteVao();
+    _vbo.deleteVbo();
+    _ibo.deleteIbo();
+    for(auto &item : _textures){
+        item.deleteTex();
+    }
+    _shaderProgram.deleteShader();
 
 }
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 cmake_policy(SET CMP0112 NEW) # Required by copy_folder_to_output()
 
 project(IMACraft)
-add_executable(${PROJECT_NAME} src/Triangle.cpp src/Triangle.h src/LibCraft/Cube.cpp src/LibCraft/Cube.hpp src/LibCraft/renderEngine/Shader.cpp src/LibCraft/renderEngine/Shader.hpp src/LibCraft/renderEngine/vbo.cpp src/LibCraft/renderEngine/vbo.hpp src/LibCraft/renderEngine/ibo.cpp src/LibCraft/renderEngine/ibo.hpp src/LibCraft/renderEngine/vao.cpp src/LibCraft/renderEngine/vao.hpp src/LibCraft/tools/filePath.hpp)
+add_executable(${PROJECT_NAME} src/Triangle.cpp src/Triangle.h src/LibCraft/Cube.cpp src/LibCraft/Cube.hpp src/LibCraft/renderEngine/Shader.cpp src/LibCraft/renderEngine/Shader.hpp src/LibCraft/renderEngine/vbo.cpp src/LibCraft/renderEngine/vbo.hpp src/LibCraft/renderEngine/ibo.cpp src/LibCraft/renderEngine/ibo.hpp src/LibCraft/renderEngine/vao.cpp src/LibCraft/renderEngine/vao.hpp src/LibCraft/tools/filePath.hpp src/LibCraft/renderEngine/Texture.cpp src/LibCraft/renderEngine/Texture.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
 # Enable many good warnings

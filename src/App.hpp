@@ -3,7 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 #include <iostream>
-//#include "stb/stb.h"
+#include "../lib/stb/stb.h"
 #include "Triangle.h"
 
 #include "LibCraft/renderEngine/vbo.hpp"
@@ -11,6 +11,7 @@
 #include "LibCraft/renderEngine/ibo.hpp"
 #include "LibCraft/renderEngine/Shader.hpp"
 #include "LibCraft/tools/filePath.hpp"
+#include "LibCraft/renderEngine/Texture.hpp"
 
 class App {
 public:
@@ -31,7 +32,9 @@ private:
     vbo _vbo;
     ibo _ibo;
     Shader _shaderProgram;
-    GLint _uniId;
+    GLint _uniId, _tex0Id;
+    FilePath _appPath;
+    std::vector<Texture> _textures;
     int _width{};
     int _height{};
 
