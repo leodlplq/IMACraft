@@ -1,6 +1,5 @@
 #include "App.hpp"
 #include "GLFW/glfw3.h"
-#include "Cube.hpp"
 #include <iostream>
 #include <valarray>
 
@@ -11,7 +10,9 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
  _uniId(0),
  _appPath(appPath),
- _textures()
+ _textures(),
+ _rotation(0.0f),
+ _prevTime(0.0f)
 {
     size_callback(window_width, window_height);
 }
@@ -19,34 +20,62 @@ void App::init(){
 
     Cube cube;
     _vao.bind();
-    _vbo = vbo(cube.getDataPointer(),sizeof(cube.getDataPointer()));
-    _ibo = ibo(cube.getIndices(), sizeof(cube.getIndices()));
-    _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, 8 * sizeof (float), (void*)0);
-    _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, 8 * sizeof (float), (void*)(3* sizeof(float)));
-    _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, 8 * sizeof (float), (void*)(6* sizeof(float)));
+    _vbo = vbo(cube.getDataPointer(),cube.getVertexCount()*sizeof(Vertex));
+    _ibo = ibo(cube.getIndices(), cube.getVertexCount()*sizeof (GLuint));
+    _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, position));
+    _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, color));
+    _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, texCoords));
     _vao.unbind();
     _vbo.unbind();
     _ibo.unbind();
 
+
     _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
 
     //TEXTURE
-    //std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
+    std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
 
-    //Texture dirt(&filePathDirt[0], GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); //GL_RGB == JPG file, GL_RGBA == PNG file
-    //dirt.texUnit(_shaderProgram, "tex0", 0);
-    //_textures.push_back(dirt);
+    Texture dirt(&filePathDirt[0], GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); //GL_RGB == JPG file, GL_RGBA == PNG file
+    dirt.texUnit(_shaderProgram, "tex0", 0);
+    _textures.push_back(dirt);
+
+    _rotation = 0.0f;
+    _prevTime = glfwGetTime();
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 void App::render()
 {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
+
+    double crtTime = glfwGetTime();
+    if(crtTime - _prevTime >= 1/60){
+        _rotation += 0.5f;
+        _prevTime = crtTime;
+    }
+
+    glm::mat4 model = glm::mat4 (1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 proj = glm::mat4(1.0f);
+    model = glm::rotate(model,glm::radians(_rotation), glm::vec3(0.0f,1.0f,0.0f));
+    view = glm::translate(view,glm::vec3(0.0f,0.0f,-2.0f));
+    proj = glm::perspective(glm::radians(45.0f),(float)(800/800),0.1f,100.0f);
+
+
+    int modelLoc = glGetUniformLocation(_shaderProgram._id,"model");
+    glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
+    int viewLoc = glGetUniformLocation(_shaderProgram._id,"view");
+    glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view));
+    int projLoc = glGetUniformLocation(_shaderProgram._id,"proj");
+    glUniformMatrix4fv(projLoc,1,GL_FALSE,glm::value_ptr(proj));
+
     glUniform1f(_uniId, 0.5f);
-    //_textures[0].bind();
+    _textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive

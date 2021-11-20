@@ -32,7 +32,13 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 include_directories(/lib/stb/stb.h)
 link_directories(/lib/stb/stb.h)
 
-
+# ---Add glm ---
+include_directories(/lib/glm/glm.hpp)
+link_directories(/lib/glm/glm.hpp)
+include_directories(/lib/glm/gtc/matrix_transform.hpp)
+link_directories(/lib/glm/gtc/matrix_transform.hpp)
+include_directories(/lib/glm/gtc/type_ptr.hpp)
+link_directories(/lib/glm/gtc/type_ptr.hpp)
 
 # Copy the assets to the output folder (where the executable is created)
 function(copy_folder_to_output DIR)

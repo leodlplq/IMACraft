@@ -4,7 +4,10 @@
 #include "glad/glad.h"
 #include <iostream>
 #include "../lib/stb/stb.h"
-#include "Triangle.h"
+#include "Cube.hpp"
+#include "../lib/glm/glm.hpp"
+#include "../lib/glm/gtc/matrix_transform.hpp"
+#include "../lib/glm/gtc/type_ptr.hpp"
 
 #include "LibCraft/renderEngine/vbo.hpp"
 #include "LibCraft/renderEngine/vao.hpp"
@@ -27,7 +30,6 @@ public:
     void size_callback(int width, int height);
 
 private:
-
     vao _vao;
     vbo _vbo;
     ibo _ibo;
@@ -35,6 +37,8 @@ private:
     GLint _uniId, _tex0Id;
     FilePath _appPath;
     std::vector<Texture> _textures;
+    float _rotation;
+    double _prevTime;
     int _width{};
     int _height{};
 
