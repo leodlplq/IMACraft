@@ -5,7 +5,7 @@
 #include <valarray>
 
 App::App(int window_width, int window_height) :
- _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("/assets/shaders/shader.vs.glsl","/assets/shaders/shader.fs.glsl" )
+ _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("/assets/shaders/shader.vs.glsl","/assets/shaders/shader.fs.glsl" ), _uniId(0)
 {
     size_callback(window_width, window_height);
 }
@@ -14,13 +14,13 @@ void App::init(){
 
     // Vertices coordinates
     GLfloat vertices[] =
-            {
-                    -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-                    0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-                    0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-                    -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-                    0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-                    0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+            {               //POSITION                                              //COLORS
+                    -0.5f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f, // Lower left corner
+                    0.5f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f, // Lower right corner
+                    0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f,     1.0f, 0.6f,  0.32f, // Upper corner
+                    -0.25f, 0.5f * float(sqrt(3)) * 1 / 6, 0.0f,     0.9f, 0.45f, 0.17f, // Inner left
+                    0.25f, 0.5f * float(sqrt(3)) * 1 / 6, 0.0f,     0.9f, 0.45f, 0.17f, // Inner right
+                    0.0f, -0.5f * float(sqrt(3)) * 1 / 3, 0.0f,     0.8f, 0.3f,  0.02f  // Inner down
             };
 
     GLuint indices[] = {
@@ -35,10 +35,13 @@ void App::init(){
 
     _vbo = vbo(vertices, sizeof(vertices));
     _ibo = ibo(indices, sizeof(indices));
-    _vao.linkVBO(_vbo, 0);
+    _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, 6 * sizeof (float), (void*)0);
+    _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, 6 * sizeof (float), (void*)(3* sizeof(float)));
     _vao.unbind();
     _vbo.unbind();
     _ibo.unbind();
+
+    _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
 
 }
 
@@ -49,6 +52,7 @@ void App::render()
     glClear(GL_COLOR_BUFFER_BIT);
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
+    glUniform1f(_uniId, 0.5f);
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive

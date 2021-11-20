@@ -9,7 +9,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 if (MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /WX /W4)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Werror -Wall -Wextra -Wpedantic -pedantic-errors -Wconversion -Wsign-conversion)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -pedantic-errors -Wconversion -Wsign-conversion)
 endif()
 
 # Set the folder where the executable is created
@@ -27,6 +27,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 add_library(glad lib/glad/src/glad.c)
 target_include_directories(glad PUBLIC lib/glad/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad)
+
+# --- Add stb ---
+include_directories(/lib/stb/stb.h)
+link_directories(/lib/stb/stb.h)
+
+
 
 # Copy the assets to the output folder (where the executable is created)
 function(copy_folder_to_output DIR)

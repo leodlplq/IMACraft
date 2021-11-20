@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 #include <iostream>
+#include "stb/stb.h"
 #include "Triangle.h"
 
 #include "LibCraft/renderEngine/vbo.hpp"
@@ -29,6 +30,7 @@ private:
     vbo _vbo;
     ibo _ibo;
     Shader _shaderProgram;
+    GLint _uniId;
     int _width{};
     int _height{};
 
