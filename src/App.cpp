@@ -4,8 +4,8 @@
 #include <iostream>
 #include <valarray>
 
-App::App(int window_width, int window_height) :
- _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("/assets/shaders/shader.vs.glsl","/assets/shaders/shader.fs.glsl" ), _uniId(0)
+App::App(int window_width, int window_height, FilePath appPath) :
+ _vao(), _vbo({}, 0), _ibo({}, 0), _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath), _uniId(0)
 {
     size_callback(window_width, window_height);
 }

@@ -4,10 +4,10 @@
 
 #include "Shader.hpp"
 
-std::string get_file_contents(const char* filepath){
+std::string get_file_contents(FilePath filePath){
     std::string content;
-    std::string currPath = std::filesystem::current_path();
-    std::ifstream  fileStream(currPath + filepath, std::ios::in);
+    std::cout << filePath << std::endl;
+    std::ifstream  fileStream(filePath, std::ios::in);
 
     if(!fileStream.is_open()){
         std::cerr << "not load" << std::endl;
@@ -25,9 +25,9 @@ std::string get_file_contents(const char* filepath){
     return content;
 }
 
-Shader::Shader(const char *vertexFile, const char *fragmentFile) {
-    std::string vertexCode = get_file_contents(vertexFile);
-    std::string fragmentCode = get_file_contents(fragmentFile);
+Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPath) {
+    std::string vertexCode = get_file_contents(appPath.dirPath() + vertexFile);
+    std::string fragmentCode = get_file_contents(appPath.dirPath() + fragmentFile);
 
     const char* vertexSource = vertexCode.c_str();
     const char* fragmentSource = fragmentCode.c_str();

@@ -3,17 +3,18 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 #include <iostream>
-#include "stb/stb.h"
+//#include "stb/stb.h"
 #include "Triangle.h"
 
 #include "LibCraft/renderEngine/vbo.hpp"
 #include "LibCraft/renderEngine/vao.hpp"
 #include "LibCraft/renderEngine/ibo.hpp"
 #include "LibCraft/renderEngine/Shader.hpp"
+#include "LibCraft/tools/filePath.hpp"
 
 class App {
 public:
-    App(int window_width, int window_height);
+    App(int window_width, int window_height, FilePath appPath);
     ~App();
     void render();
     void init();

@@ -1,5 +1,6 @@
 #include <valarray>
 #include "App.hpp"
+#include "LibCraft/tools/filePath.hpp"
 
 
 
@@ -8,7 +9,7 @@ static App& get_app(GLFWwindow* window)
     return *reinterpret_cast<App*>(glfwGetWindowUserPointer(window));
 }
 
-int main()
+int main(int argc, char** argv)
 {
     /* Initialize the library */
     if (!glfwInit()) {
@@ -37,10 +38,11 @@ int main()
         return -1;
     }
 
+    FilePath appPath(argv[0]);
     /* Create the App */
     int w, h;
     glfwGetWindowSize(window, &w, &h);
-    App app{w, h};
+    App app{w, h, appPath};
 
     /* Hook user inputs to the App */
     glfwSetWindowUserPointer(window, reinterpret_cast<void*>(&app));

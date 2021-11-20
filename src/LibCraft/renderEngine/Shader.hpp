@@ -10,13 +10,14 @@
 #include <iostream>
 #include <cerrno>
 #include <filesystem>
+#include "../tools/filePath.hpp"
 
 std::string get_file_contents(const char* filename);
 
 class Shader {
 public:
     GLuint _id;
-    Shader(const char* vertexFile, const char* fragmentFile);
+    Shader(const char* vertexFile, const char* fragmentFile, FilePath appPath);
 
     void activate();
     void deleteShader();
