@@ -10,7 +10,7 @@
 #include <iostream>
 #include <cerrno>
 #include <filesystem>
-#include "../tools/filePath.hpp"
+#include "LibCraft/tools/filePath.hpp"
 
 std::string get_file_contents(const char* filename);
 

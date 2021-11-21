@@ -2,7 +2,7 @@
 // Created by leodlplq on 18/11/2021.
 //
 
-#include "vbo.hpp"
+#include "LibCraft/renderEngine/include/vbo.hpp"
 
 
 vbo::vbo(Vertex *vertices, GLsizeiptr size) {

@@ -2,7 +2,7 @@
 // Created by leodlplq on 18/11/2021.
 //
 
-#include "Shader.hpp"
+#include "LibCraft/renderEngine/include/Shader.hpp"
 
 std::string get_file_contents(FilePath filePath){
     std::string content;

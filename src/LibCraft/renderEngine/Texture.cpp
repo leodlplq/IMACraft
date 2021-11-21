@@ -2,7 +2,7 @@
 // Created by leodlplq on 20/11/2021.
 //
 
-#include "Texture.hpp"
+#include "LibCraft/renderEngine/include/Texture.hpp"
 
 Texture::Texture(const char *image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType) {
     _type = texType;

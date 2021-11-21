@@ -2,7 +2,7 @@
 // Created by leodlplq on 18/11/2021.
 //
 
-#include "ibo.hpp"
+#include "LibCraft/renderEngine/include/ibo.hpp"
 
 ibo::ibo(GLuint *vertices, GLsizeiptr size) {
     glGenBuffers(1, &_id);

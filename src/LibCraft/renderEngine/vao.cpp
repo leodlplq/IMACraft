@@ -2,7 +2,7 @@
 // Created by leodlplq on 18/11/2021.
 //
 
-#include "vao.hpp"
+#include "LibCraft/renderEngine/include/vao.hpp"
 
 vao::vao() {
     glGenVertexArrays(1, &_id);

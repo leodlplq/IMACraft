@@ -8,7 +8,7 @@
 #include "glad/glad.h"
 #include "vector"
 #include "glm/glm.hpp"
-#include "LibCraft/renderEngine/Vertex.hpp"
+#include "LibCraft/renderEngine/include/Vertex.hpp"
 
 
 

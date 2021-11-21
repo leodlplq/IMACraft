@@ -6,8 +6,8 @@
 
 #include<glad/glad.h>
 #include "stb/stb_image.h"
-#include "Shader.hpp"
-#include "../tools/filePath.hpp"
+#include "LibCraft/renderEngine/include/Shader.hpp"
+#include "LibCraft/tools/filePath.hpp"
 
 class Texture {
 public:

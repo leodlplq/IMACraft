@@ -10,12 +10,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "LibCraft/renderEngine/vbo.hpp"
-#include "LibCraft/renderEngine/vao.hpp"
-#include "LibCraft/renderEngine/ibo.hpp"
-#include "LibCraft/renderEngine/Shader.hpp"
+#include "LibCraft/renderEngine/include/vbo.hpp"
+#include "LibCraft/renderEngine/include/vao.hpp"
+#include "LibCraft/renderEngine/include/ibo.hpp"
+#include "LibCraft/renderEngine/include/Shader.hpp"
 #include "LibCraft/tools/filePath.hpp"
-#include "LibCraft/renderEngine/Texture.hpp"
+#include "LibCraft/renderEngine/include/Texture.hpp"
 
 class App {
 public:
