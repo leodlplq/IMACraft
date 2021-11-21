@@ -1,11 +1,15 @@
+#include <valarray>
 #include "App.hpp"
+#include "LibCraft/tools/filePath.hpp"
+
+
 
 static App& get_app(GLFWwindow* window)
 {
     return *reinterpret_cast<App*>(glfwGetWindowUserPointer(window));
 }
 
-int main()
+int main(int argc, char** argv)
 {
     /* Initialize the library */
     if (!glfwInit()) {
@@ -20,7 +24,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "IMACraft", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "IMACraft", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -34,10 +38,11 @@ int main()
         return -1;
     }
 
+    FilePath appPath(argv[0]);
     /* Create the App */
     int w, h;
     glfwGetWindowSize(window, &w, &h);
-    App app{w, h};
+    App app{w, h, appPath};
 
     /* Hook user inputs to the App */
     glfwSetWindowUserPointer(window, reinterpret_cast<void*>(&app));

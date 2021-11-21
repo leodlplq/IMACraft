@@ -11,7 +11,9 @@ Triangle::Triangle() :
 }
 
 void Triangle::build() {
-    t_Vertices = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-    t_VertexCount = 6;
+    t_Vertices = {-0.5f, -0.5f, 0.f,
+                  0.5f, -0.5f, 0.f,
+                  0.0f, 0.5f, 0.f};
+    t_VertexCount = 9;
 }
 

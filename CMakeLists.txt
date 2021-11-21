@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.8)
 cmake_policy(SET CMP0112 NEW) # Required by copy_folder_to_output()
 
 project(IMACraft)
-add_executable(${PROJECT_NAME} src/Triangle.cpp src/Triangle.h src/LibCraft/Cube.cpp src/LibCraft/Cube.hpp)
+add_executable(${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
 # Enable many good warnings
 if (MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /WX /W4)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Werror -Wall -Wextra -Wpedantic -pedantic-errors -Wconversion -Wsign-conversion)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -pedantic-errors -Wconversion -Wsign-conversion)
 endif()
 
 # Set the folder where the executable is created
@@ -20,13 +20,14 @@ file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*)
 target_sources(${PROJECT_NAME} PRIVATE ${MY_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-# ---Add GLFW---
-add_subdirectory(lib/glfw)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-# ---Add glad---
-add_library(glad lib/glad/src/glad.c)
-target_include_directories(glad PUBLIC lib/glad/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad)
+
+# --- Include libs
+
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC lib)
+
+
+
 
 # Copy the assets to the output folder (where the executable is created)
 function(copy_folder_to_output DIR)
