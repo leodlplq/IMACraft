@@ -3,7 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 #include <iostream>
-#include "../lib/stb/stb.h"
+#include "stb/stb_image.h"
 #include "Cube.hpp"
 #include "glm/glm.hpp"
 

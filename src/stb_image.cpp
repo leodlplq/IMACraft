@@ -3,5 +3,5 @@
 //
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../lib/stb/stb.h"
+#include "stb/stb_image.h"
 

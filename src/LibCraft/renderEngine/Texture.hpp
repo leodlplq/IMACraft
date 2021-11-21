@@ -5,7 +5,7 @@
 #pragma once
 
 #include<glad/glad.h>
-#include "../lib/stb/stb.h"
+#include "stb/stb_image.h"
 #include "Shader.hpp"
 #include "../tools/filePath.hpp"
 

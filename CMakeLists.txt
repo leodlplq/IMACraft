@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 cmake_policy(SET CMP0112 NEW) # Required by copy_folder_to_output()
 
 project(IMACraft)
-add_executable(${PROJECT_NAME} src/Triangle.cpp src/Triangle.h src/Cube.cpp src/Cube.hpp src/LibCraft/renderEngine/Shader.cpp src/LibCraft/renderEngine/Shader.hpp src/LibCraft/renderEngine/vbo.cpp src/LibCraft/renderEngine/vbo.hpp src/LibCraft/renderEngine/ibo.cpp src/LibCraft/renderEngine/ibo.hpp src/LibCraft/renderEngine/vao.cpp src/LibCraft/renderEngine/vao.hpp src/LibCraft/tools/filePath.hpp src/LibCraft/renderEngine/Texture.cpp src/LibCraft/renderEngine/Texture.hpp src/LibCraft/renderEngine/Vertex.hpp)
+add_executable(${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
 # Enable many good warnings
@@ -20,23 +20,14 @@ file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*)
 target_sources(${PROJECT_NAME} PRIVATE ${MY_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-# ---Add GLFW---
-add_subdirectory(lib/glfw)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-# ---Add glad---
-add_library(glad lib/glad/src/glad.c)
-target_include_directories(glad PUBLIC lib/glad/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad)
 
-# --- Add stb ---
-include_directories(/lib/stb/stb.h)
-link_directories(/lib/stb/stb.h)
+# --- Include libs
 
-# ---Add glm ---
-include_directories(/lib/glm/gtc/matrix_transform.hpp)
-link_directories(/lib/glm/gtc/matrix_transform.hpp)
-include_directories(/lib/glm/gtc/type_ptr.hpp)
-link_directories(/lib/glm/gtc/type_ptr.hpp)
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC lib)
+
+
+
 
 # Copy the assets to the output folder (where the executable is created)
 function(copy_folder_to_output DIR)

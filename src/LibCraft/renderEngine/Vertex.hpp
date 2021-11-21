@@ -2,7 +2,7 @@
 // Created by valentin on 20/11/2021.
 //
 #pragma once
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 struct Vertex {
     glm::vec3 position;
