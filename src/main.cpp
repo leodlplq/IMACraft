@@ -73,6 +73,12 @@ int main(int argc, char** argv)
 
         /* Poll for and process events */
         glfwPollEvents();
+
+        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwTerminate();
+        }
+
     }
 
     glfwTerminate();

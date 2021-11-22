@@ -5,52 +5,69 @@
 
 Camera::Camera(int width , int height, glm::vec3 position):_width(width),_height(height),_position(position){}
 
-void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader)
 {
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
-
-
-    view = glm::lookAt(_position, _position + _orientation, _up);
-    projection = glm::perspective(glm::radians(FOVdeg), (float)_width/_height,nearPlane,farPlane);
-
-    glUniformMatrix4fv(glGetUniformLocation(shader._id,"model"),1,GL_FALSE,glm::value_ptr(_model));
-    glUniformMatrix4fv(glGetUniformLocation(shader._id,uniform), 1, GL_FALSE, glm::value_ptr(projection*view));
+    _projection = glm::perspective(glm::radians(FOVdeg), (float)_width/_height,nearPlane,farPlane);
+    if(_tpscam)
+    {
+        _view = glm::lookAt(_position, glm::vec3(0.0,0.0,0.0) , _up); // CAM TPS
+    }
+   else
+   {
+       _view = glm::lookAt(_position, _position + _orientation , _up);
+   }
 }
 
 void Camera::Inputs(GLFWwindow *window)
 {
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
     {
-        _position += _speed * -_orientation;
-    }
-    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS)
-    {
-        _rotaxis = glm::vec3(0.0f,1.0f,0.0f);
-        _model = glm::rotate(_model,glm::radians(-_rotationspeed), _rotaxis);
-    }
-    if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS)
-    {
-        _position += _speed * _orientation;
-
-    }
-    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS)
-    {
-        _rotaxis = glm::vec3(0.0f,1.0f,0.0f);
-        _model = glm::rotate(_model,glm::radians(_rotationspeed), _rotaxis);
-    }
-    if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS)
-    {
-        _model = glm::mat4(1.0f);
-    }
-
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-    {
+        _tpscam = false;
         glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
 
-        if(_firstClick)
+        if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
+        {
+            _position += _speed * glm::vec3(_orientation.x,0.0f,_orientation.z);
+        }
+        if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS)
+        {
+            //_rotaxis = glm::vec3(0.0f,1.0f,0.0f);   ROTATION DU MODELE PEUT ETRE UTILE POUR PLAYER.CPP
+            //_model = glm::rotate(_model,glm::radians(_rotationspeed), _rotaxis);
+            _position += _speed * -glm::normalize(glm::cross(_orientation,_up));
+        }
+        if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS)
+        {
+            _position -= _speed * glm::vec3(_orientation.x,0.0f,_orientation.z);
+
+        }
+        if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS)
+        {
+            _position += _speed * glm::normalize(glm::cross(_orientation,_up));
+        }
+        if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        {
+            _speed = 0.3f;
+        }
+        if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+        {
+            _speed = 0.1f;
+        }
+
+        if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS)
+        {
+            _position += _speed * _up;
+        }
+
+        if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        {
+            _position -= _speed * _up;
+        }
+
+        if(_firstClick == true)
         {
             glfwSetCursorPos(window,(_width/2),(_height/2));
+            _position = glm::vec3(0.0f,0.0f,5.0f);
+            _orientation = glm::vec3(0.0f,0.0f,-1.0f);
             _firstClick = false;
         }
         double mouseX;
@@ -59,20 +76,37 @@ void Camera::Inputs(GLFWwindow *window)
         float rotx = _sensitivity * (float)(mouseY - (_height/2))/_height;
         float roty = _sensitivity * (float)(mouseX - (_height/2))/_height;
 
-        //glm::vec3 newOrientation = glm::rotate(_orientation, glm::radians(-rotx),glm::normalize(glm::cross(_orientation,_up)));
 
-
-        _rotaxis = glm::vec3(1.0f,0.0f,0.0f);
-        _model = glm::rotate(_model,glm::radians(rotx), _rotaxis);
-        _rotaxis = glm::vec3(0.0f,1.0f,0.0f);
-        _model = glm::rotate(_model,glm::radians(roty), _rotaxis);
-
+        glm::vec3 newOrientation = glm::rotate(_orientation,glm::radians(-rotx),glm::normalize(glm::cross(_orientation,_up)));
+        if (abs(glm::angle(newOrientation, _up) - glm::radians(90.0f)) <= glm::radians(85.0f))
+        {
+            _orientation = newOrientation;
+        }
+        // Rotates the Orientation left and right
+        _orientation = glm::rotate(_orientation, glm::radians(-roty), _up);
         glfwSetCursorPos(window,(_width/2),(_height/2));
     }
-    else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+
+    else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     {
+        _tpscam = true;
+        if(_firstClick == false)
+        {
+            _position = glm::vec3(0.0f,0.0f,3.0f);
+            _firstClick = true;
+        }
         glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
-        _firstClick = true;
+
+        double mouseX;
+        double mouseY;
+        glfwGetCursorPos(window,&mouseX,&mouseY);
+        float rotx = _sensitivity * (float)(mouseY - (_height/2))/_height;
+        float roty = _sensitivity * (float)(mouseX - (_height/2))/_height;
+        _rotaxis = glm::vec3(1.0f,0.0f,0.0f);
+        _position = glm::rotate(_position,glm::radians(rotx), _rotaxis);
+        _rotaxis = glm::vec3(0.0f,1.0f,0.0f);
+        _position = glm::rotate(_position,glm::radians(roty), _rotaxis);
+        glfwSetCursorPos(window,(_width/2),(_height/2));
     }
 
 }

@@ -14,7 +14,7 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _textures(),
  _rotation(0.0f),
  _prevTime(0.0f),
- _camera(window_width,window_height,glm::vec3(0.0f,0.0f,2.0f))
+ _camera(window_width,window_height,glm::vec3(0.0f,0.0f,0.0f))
 {
     size_callback(window_width, window_height);
 }
@@ -40,7 +40,7 @@ void App::init(){
     _textures.push_back(dirt);
 
     glEnable(GL_DEPTH_TEST);
-    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,3.0f));
+    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,6.0f));
 }
 
 void App::render(GLFWwindow* window)
@@ -51,12 +51,23 @@ void App::render(GLFWwindow* window)
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
     _camera.Inputs(window);
-    _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram,"camMatrix");
+    _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram);
+
+    int matrixID = glGetUniformLocation(_shaderProgram._id,"camMatrix");
+    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+
 
     _textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+    // DRAW ANOTHER CUBE FOR TESTING
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model,glm::vec3(2.0f,0.0f,0.0f));
+    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 

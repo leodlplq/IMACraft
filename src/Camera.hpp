@@ -26,12 +26,25 @@ class Camera
         float _sensitivity = 100.0f;
         glm::vec3 _rotaxis;
         glm::mat4 _model = glm::mat4(1.0f);
+        glm::mat4 _view = glm::mat4(1.0f);
+        glm::mat4 _projection = glm::mat4(1.0f);
+
 
         bool _firstClick = true;
+        bool _tpscam = true;
 
 
         Camera(int width , int height, glm::vec3 position);
         void Inputs(GLFWwindow* window);
-        void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+        void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader);
 
+        glm::mat4 getModelMatrix(){
+            return _model;
+        }
+        glm::mat4 getViewMatrix(){
+        return _view;
+        }
+        glm::mat4 getProjMatrix(){
+        return _projection;
+        }
 };
