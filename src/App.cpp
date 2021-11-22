@@ -13,7 +13,8 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _appPath(appPath),
  _textures(),
  _rotation(0.0f),
- _prevTime(0.0f)
+ _prevTime(0.0f),
+ _camera(window_width,window_height,glm::vec3(0.0f,0.0f,2.0f))
 {
     size_callback(window_width, window_height);
 }
@@ -31,8 +32,6 @@ void App::init(){
     _ibo.unbind();
 
 
-    _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
-
     //TEXTURE
     std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
 
@@ -40,42 +39,20 @@ void App::init(){
     dirt.texUnit(_shaderProgram, "tex0", 0);
     _textures.push_back(dirt);
 
-    _rotation = 0.0f;
-    _prevTime = glfwGetTime();
-
     glEnable(GL_DEPTH_TEST);
+    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,3.0f));
 }
 
-void App::render()
+void App::render(GLFWwindow* window)
 {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
+    _camera.Inputs(window);
+    _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram,"camMatrix");
 
-    double crtTime = glfwGetTime();
-    if(crtTime - _prevTime >= 1/60){
-        _rotation += 0.5f;
-        _prevTime = crtTime;
-    }
-
-    glm::mat4 model = glm::mat4 (1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 proj = glm::mat4(1.0f);
-    model = glm::rotate(model,glm::radians(_rotation), glm::vec3(0.0f,1.0f,0.0f));
-    view = glm::translate(view,glm::vec3(0.0f,0.0f,-2.0f));
-    proj = glm::perspective(glm::radians(45.0f),(float)(_width/_height),0.1f,100.0f);
-
-
-    int modelLoc = glGetUniformLocation(_shaderProgram._id,"model");
-    glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
-    int viewLoc = glGetUniformLocation(_shaderProgram._id,"view");
-    glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view));
-    int projLoc = glGetUniformLocation(_shaderProgram._id,"proj");
-    glUniformMatrix4fv(projLoc,1,GL_FALSE,glm::value_ptr(proj));
-
-    glUniform1f(_uniId, 0.5f);
     _textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();

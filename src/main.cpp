@@ -65,7 +65,8 @@ int main(int argc, char** argv)
     app.init();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
-        app.render();
+
+        app.render(window);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

@@ -6,6 +6,7 @@
 #include "stb/stb_image.h"
 #include "Cube.hpp"
 #include "glm/glm.hpp"
+#include "Camera.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -21,7 +22,7 @@ class App {
 public:
     App(int window_width, int window_height, FilePath appPath);
     ~App();
-    void render();
+    void render(GLFWwindow* window);
     void init();
 
     void key_callback(int key, int scancode, int action, int mods);
@@ -42,5 +43,6 @@ private:
     double _prevTime;
     int _width{};
     int _height{};
+    Camera _camera;
 
 };
