@@ -4,15 +4,10 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <cerrno>
-#include <filesystem>
-#include "LibCraft/tools/filePath.hpp"
 
-std::string get_file_contents(const char* filename);
+#include "LibCraft/tools/include/filePath.hpp"
+#include "LibCraft/tools/include/getFIleContent.hpp"
+
 
 class Shader {
 public:

@@ -7,7 +7,7 @@
 #include<glad/glad.h>
 #include "stb/stb_image.h"
 #include "LibCraft/renderEngine/include/Shader.hpp"
-#include "LibCraft/tools/filePath.hpp"
+#include "LibCraft/tools/include/filePath.hpp"
 
 class Texture {
 public:

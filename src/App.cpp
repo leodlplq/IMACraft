@@ -19,6 +19,9 @@ App::App(int window_width, int window_height, FilePath appPath) :
 }
 void App::init(){
 
+    _map = Map(_appPath.dirPath() + "/assets/maps/map2.pgm");
+
+
     Cube cube;
     _vao.bind();
     _vbo = vbo(cube.getDataPointer(),cube.getVertexCount()*sizeof(Vertex));
@@ -60,27 +63,36 @@ void App::render()
         _prevTime = crtTime;
     }
 
-    glm::mat4 model = glm::mat4 (1.0f);
+
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 proj = glm::mat4(1.0f);
-    model = glm::rotate(model,glm::radians(_rotation), glm::vec3(0.0f,1.0f,0.0f));
-    view = glm::translate(view,glm::vec3(0.0f,0.0f,-2.0f));
-    proj = glm::perspective(glm::radians(45.0f),(float)(_width/_height),0.1f,100.0f);
+
+    view = glm::translate(view,glm::vec3(-8.0f,-6.0f,-35.0f));
+    proj = glm::perspective(glm::radians(45.0f),(float)_width/_height,0.1f,500.0f);
 
 
     int modelLoc = glGetUniformLocation(_shaderProgram._id,"model");
-    glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
+
     int viewLoc = glGetUniformLocation(_shaderProgram._id,"view");
     glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view));
     int projLoc = glGetUniformLocation(_shaderProgram._id,"proj");
     glUniformMatrix4fv(projLoc,1,GL_FALSE,glm::value_ptr(proj));
 
-    glUniform1f(_uniId, 0.5f);
-    _textures[0].bind();
-    // Bind the VAO so OpenGL knows to use it
     _vao.bind();
+
+    for(auto &cube:_map.getMap()){
+        glm::mat4 model = glm::mat4 (1.0f);
+        model = cube.getObjectMatrix();
+        glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
+        _textures[0].bind();
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    }
+    glUniform1f(_uniId, 0.5f);
+
+    // Bind the VAO so OpenGL knows to use it
+
     // Draw the triangle using the GL_TRIANGLES primitive
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
 
 
 }

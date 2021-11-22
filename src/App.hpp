@@ -14,8 +14,9 @@
 #include "LibCraft/renderEngine/include/vao.hpp"
 #include "LibCraft/renderEngine/include/ibo.hpp"
 #include "LibCraft/renderEngine/include/Shader.hpp"
-#include "LibCraft/tools/filePath.hpp"
+#include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/renderEngine/include/Texture.hpp"
+#include "LibCraft/coreEngine/include/Map.hpp"
 
 class App {
 public:
@@ -31,6 +32,7 @@ public:
     void size_callback(int width, int height);
 
 private:
+    Map _map;
     vao _vao;
     vbo _vbo;
     ibo _ibo;
