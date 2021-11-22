@@ -27,6 +27,8 @@ class Camera
         glm::vec3 _rotaxis;
         glm::mat4 _model = glm::mat4(1.0f);
 
+        bool _firstClick = true;
+
 
         Camera(int width , int height, glm::vec3 position);
         void Inputs(GLFWwindow* window);
