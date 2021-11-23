@@ -3,8 +3,17 @@
 //
 #include "Cube.hpp"
 
-Cube::Cube(){
+Cube::Cube() :
+_placement(glm::mat4())
+{
     build();
+}
+
+Cube::Cube(const float x, const float y, const float z) :
+_placement(1)
+{
+    _placement = glm::translate(_placement, glm::vec3(x,z,y));
+
 }
 
 void Cube::build (){
@@ -19,4 +28,9 @@ void Cube::build (){
             Vertex(glm::vec3(0.5, 0.5, 0.5),glm::vec3(0, 0, 1), glm::vec2(0, 0)) // SOMMET 7
     };
 }
+
+
+
+
+
 

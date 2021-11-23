@@ -13,11 +13,17 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _appPath(appPath),
  _textures(),
  _rotation(0.0f),
- _prevTime(0.0f)
+ _prevTime(0.0f),
+ _camera(window_width,window_height,glm::vec3(0.0f,0.0f,0.0f)),
+ _width(window_width),
+ _height(window_height)
 {
     size_callback(window_width, window_height);
 }
 void App::init(){
+
+    _map = Map(_appPath.dirPath() + "/assets/maps/map3.pgm");
+
 
     Cube cube;
     _vao.bind();
@@ -31,8 +37,6 @@ void App::init(){
     _ibo.unbind();
 
 
-    _uniId = glGetUniformLocation(_shaderProgram._id, "scale");
-
     //TEXTURE
     std::string filePathDirt = ((std::string)_appPath.dirPath() + "/assets/textures/dirt.jpg");
 
@@ -40,48 +44,45 @@ void App::init(){
     dirt.texUnit(_shaderProgram, "tex0", 0);
     _textures.push_back(dirt);
 
-    _rotation = 0.0f;
-    _prevTime = glfwGetTime();
-
     glEnable(GL_DEPTH_TEST);
+    std::cout << _width << _height << std::endl;
+    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,6.0f));
 }
 
-void App::render()
+void App::render(GLFWwindow* window)
 {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
+    _camera.Inputs(window);
+    _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram);
 
-    double crtTime = glfwGetTime();
-    if(crtTime - _prevTime >= 1/60){
-        _rotation += 0.5f;
-        _prevTime = crtTime;
-    }
-
-    glm::mat4 model = glm::mat4 (1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 proj = glm::mat4(1.0f);
-    model = glm::rotate(model,glm::radians(_rotation), glm::vec3(0.0f,1.0f,0.0f));
-    view = glm::translate(view,glm::vec3(0.0f,0.0f,-2.0f));
-    proj = glm::perspective(glm::radians(45.0f),(float)(_width/_height),0.1f,100.0f);
+    int matrixID = glGetUniformLocation(_shaderProgram._id,"camMatrix");
+    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
 
 
-    int modelLoc = glGetUniformLocation(_shaderProgram._id,"model");
-    glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
-    int viewLoc = glGetUniformLocation(_shaderProgram._id,"view");
-    glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view));
-    int projLoc = glGetUniformLocation(_shaderProgram._id,"proj");
-    glUniformMatrix4fv(projLoc,1,GL_FALSE,glm::value_ptr(proj));
-
-    glUniform1f(_uniId, 0.5f);
     _textures[0].bind();
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
     // Draw the triangle using the GL_TRIANGLES primitive
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
+    for(auto &cube:_map.getMap()){
+        glm::mat4 model = glm::mat4 (1.0f);
+        model = cube.getObjectMatrix();
+        glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+        _textures[0].bind();
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    }
+
+    // DRAW ANOTHER CUBE FOR TESTING
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model,glm::vec3(2.0f,0.0f,0.0f));
+    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 }
 

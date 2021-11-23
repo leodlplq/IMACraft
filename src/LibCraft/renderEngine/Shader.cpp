@@ -4,25 +4,7 @@
 
 #include "LibCraft/renderEngine/include/Shader.hpp"
 
-std::string get_file_contents(FilePath filePath){
-    std::string content;
-    std::ifstream  fileStream(filePath, std::ios::in);
 
-    if(!fileStream.is_open()){
-        std::cerr << "not load" << std::endl;
-        return "";
-    }
-
-    std::string line = "";
-
-    while(!fileStream.eof()){
-        std::getline(fileStream, line);
-        content.append(line + "\n");
-    }
-
-    fileStream.close();
-    return content;
-}
 
 Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPath) {
     std::string vertexCode = get_file_contents(appPath.dirPath() + vertexFile);

@@ -1,6 +1,8 @@
 #include <valarray>
 #include "App.hpp"
-#include "LibCraft/tools/filePath.hpp"
+#include "LibCraft/tools/include/filePath.hpp"
+
+#include <iostream>
 
 
 
@@ -24,7 +26,8 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(800, 800, "IMACraft", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1920, 1080, "IMACraft", glfwGetPrimaryMonitor(), nullptr);
+
     if (!window) {
         glfwTerminate();
         return -1;
@@ -63,15 +66,23 @@ int main(int argc, char** argv)
     });
 
     app.init();
+    std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
-        app.render();
+
+        app.render(window);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
+
+        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwTerminate();
+        }
+
     }
 
     glfwTerminate();

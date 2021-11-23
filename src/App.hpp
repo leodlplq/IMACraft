@@ -6,6 +6,7 @@
 #include "stb/stb_image.h"
 #include "Cube.hpp"
 #include "glm/glm.hpp"
+#include "Camera.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -14,14 +15,15 @@
 #include "LibCraft/renderEngine/include/vao.hpp"
 #include "LibCraft/renderEngine/include/ibo.hpp"
 #include "LibCraft/renderEngine/include/Shader.hpp"
-#include "LibCraft/tools/filePath.hpp"
+#include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/renderEngine/include/Texture.hpp"
+#include "LibCraft/coreEngine/include/Map.hpp"
 
 class App {
 public:
     App(int window_width, int window_height, FilePath appPath);
     ~App();
-    void render();
+    void render(GLFWwindow* window);
     void init();
 
     void key_callback(int key, int scancode, int action, int mods);
@@ -31,6 +33,7 @@ public:
     void size_callback(int width, int height);
 
 private:
+    Map _map;
     vao _vao;
     vbo _vbo;
     ibo _ibo;
@@ -40,7 +43,8 @@ private:
     std::vector<Texture> _textures;
     float _rotation;
     double _prevTime;
-    int _width{};
-    int _height{};
+    int _width;
+    int _height;
+    Camera _camera;
 
 };
