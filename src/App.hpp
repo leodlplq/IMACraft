@@ -4,9 +4,11 @@
 #include "glad/glad.h"
 #include <iostream>
 #include "stb/stb_image.h"
-#include "Cube.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
 #include "glm/glm.hpp"
-#include "Camera.hpp"
+#include "LibCraft/renderEngine/include/Camera.hpp"
+#include "LibCraft/renderEngine/include/Skybox.hpp"
+#include "LibCraft/renderEngine/include/TextureCube.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -38,13 +40,15 @@ private:
     vbo _vbo;
     ibo _ibo;
     Shader _shaderProgram;
+    Shader _skyboxShader;
     GLint _uniId, _tex0Id;
     FilePath _appPath;
-    std::vector<Texture> _textures;
+    std::vector<TextureCube> _textures;
     float _rotation;
     double _prevTime;
     int _width;
     int _height;
     Camera _camera;
+    Skybox _skybox;
 
 };
