@@ -1,7 +1,7 @@
 //
 // Created by leodlplq on 16/11/2021.
 //
-#include "Cube.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
 
 Cube::Cube(const float radius) :
 _placement(glm::mat4())

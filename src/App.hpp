@@ -4,11 +4,11 @@
 #include "glad/glad.h"
 #include <iostream>
 #include "stb/stb_image.h"
-#include "Cube.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
 #include "glm/glm.hpp"
-#include "Camera.hpp"
-#include "Skybox.hpp"
-#include "TextureCube.hpp"
+#include "LibCraft/renderEngine/include/Camera.hpp"
+#include "LibCraft/renderEngine/include/Skybox.hpp"
+#include "LibCraft/renderEngine/include/TextureCube.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"

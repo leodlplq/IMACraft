@@ -4,6 +4,7 @@
 #include "Cube.hpp"
 #include "string"
 #include "iostream"
+#include "stb/stb_image.h"
 
 class Skybox : public Cube{
 

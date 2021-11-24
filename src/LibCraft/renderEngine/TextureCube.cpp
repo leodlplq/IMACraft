@@ -1,10 +1,10 @@
 //
 // Created by valentin on 24/11/2021.
 //
-#include "TextureCube.hpp"
+#include "LibCraft/renderEngine/include/TextureCube.hpp"
 
-TextureCube::TextureCube(const char* rightpath, const char* leftpath,const char* toppath,const char* bottompath,const char* frontpath,const char* backpath)
-:_facesCubemap({rightpath,leftpath,toppath,bottompath,frontpath,backpath}){
+TextureCube::TextureCube(const char* rightpath, const char* leftpath,const char* toppath,const char* bottompath,const char* frontpath,const char* backpath, const GLenum format)
+:_facesCubemap{rightpath,leftpath,toppath,bottompath,frontpath,backpath}{
     _type = GL_TEXTURE_CUBE_MAP;
     glGenTextures(1,&_cubemapTexture);
     glBindTexture(_type, _cubemapTexture);
@@ -29,7 +29,7 @@ TextureCube::TextureCube(const char* rightpath, const char* leftpath,const char*
                             width,
                             height,
                             0,
-                            GL_RGB,
+                            format,
                             GL_UNSIGNED_BYTE,
                             data
                     );
@@ -44,20 +44,6 @@ TextureCube::TextureCube(const char* rightpath, const char* leftpath,const char*
     glBindTexture(_type, 0);
 }
 
-void TextureCube::texUnit(Shader& shader, const char *uniform, GLuint unit) {
-    GLuint tex0Uni = glGetUniformLocation(shader._id, uniform);
-    shader.activate();
-    glUniform1i(tex0Uni, unit);
-}
-
 void TextureCube::bind(){
     glBindTexture(_type, _cubemapTexture);
-}
-
-void TextureCube::unbind(){
-    glBindTexture(_type, 0);
-}
-
-void TextureCube::deleteTex() {
-    glDeleteTextures(1, &_id);
 }

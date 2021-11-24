@@ -2,8 +2,8 @@
 // Created by valentin on 23/11/2021.
 //
 
-#include "Skybox.hpp"
-#include "../lib/stb/stb_image.h"
+#include "LibCraft/renderEngine/include/Skybox.hpp"
+
 
 Skybox::Skybox() {
     Cube skybox(2);

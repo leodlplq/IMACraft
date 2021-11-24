@@ -2,7 +2,7 @@
 // Created by leodlplq on 22/11/2021.
 //
 #pragma once
-#include "Cube.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/tools/include/getFIleContent.hpp"
 #include <vector>

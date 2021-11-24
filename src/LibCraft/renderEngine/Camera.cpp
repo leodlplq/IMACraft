@@ -1,7 +1,7 @@
 //
 // Created by valentin on 22/11/2021.
 //
-#include "Camera.hpp"
+#include "LibCraft/renderEngine/include/Camera.hpp"
 
 Camera::Camera(const int width , const int height, const glm::vec3 position):_position(position),_width((float)width),_height((float)height){}
 

@@ -40,7 +40,7 @@ void App::init(){
     std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
     std::string filePathGrassTop = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
     std::string filePathGrassBottom = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
-    TextureCube grass(&filePathGrassSide[0],&filePathGrassSide[0],&filePathGrassTop[0],&filePathGrassBottom[0],&filePathGrassSide[0],&filePathGrassSide[0]);
+    TextureCube grass(&filePathGrassSide[0],&filePathGrassSide[0],&filePathGrassTop[0],&filePathGrassBottom[0],&filePathGrassSide[0],&filePathGrassSide[0], GL_RGB);
     grass.texUnit(_shaderProgram,"tex0",0);
     _textures.push_back(grass);
 
