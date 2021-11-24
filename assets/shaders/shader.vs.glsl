@@ -10,11 +10,11 @@ uniform mat4 camMatrix;
 uniform mat4 model;
 
 out vec3 vColor;
-out vec2 vTexCoord;
+out vec3 vTexCoord;
 void main()
 {
     gl_Position = camMatrix * model* vec4(aPos,1.0);
 
     vColor = aColor;
-    vTexCoord = aTex;
+    vTexCoord = vec3(aPos.x, aPos.y, -aPos.z);
 }

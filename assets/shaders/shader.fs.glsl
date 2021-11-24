@@ -1,9 +1,9 @@
 #version 330 core
 
 in vec3 vColor;
-in vec2 vTexCoord;
+in vec3 vTexCoord;
 
-uniform sampler2D tex0;
+uniform samplerCube tex0;
 
 out vec4 FragColor;
 

@@ -3,10 +3,10 @@
 //
 #include "Cube.hpp"
 
-Cube::Cube() :
+Cube::Cube(const float radius) :
 _placement(glm::mat4())
 {
-    build();
+    build(radius);
 }
 
 Cube::Cube(const float x, const float y, const float z) :
@@ -16,16 +16,16 @@ _placement(1)
 
 }
 
-void Cube::build (){
+void Cube::build (const float r){
     vertices = {  //                        POSITION          |                     COLOR         |          TEXTURES COORDS
-            Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 0
-            Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 1
-            Vertex(glm::vec3(-0.5, 0.5, -0.5),glm::vec3(0, 0, 1), glm::vec2(0, 0)), // SOMMET 2
-            Vertex(glm::vec3(0.5, 0.5, -0.5),glm::vec3(0, 0, 1), glm::vec2(1, 0)), // SOMMET 3
-            Vertex(glm::vec3(-0.5, -0.5, 0.5),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 4
-            Vertex(glm::vec3(0.5, -0.5, 0.5),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 5
-            Vertex(glm::vec3(-0.5, 0.5, 0.5),glm::vec3(0, 0, 1), glm::vec2(1, 0)), // SOMMET 6
-            Vertex(glm::vec3(0.5, 0.5, 0.5),glm::vec3(0, 0, 1), glm::vec2(0, 0)) // SOMMET 7
+            Vertex(glm::vec3(-0.5*r, -0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 0        7--------6
+            Vertex(glm::vec3(0.5*r, -0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 1        /|       /|
+            Vertex(glm::vec3(0.5*r, -0.5*r, -0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 2      4--------5 |
+            Vertex(glm::vec3(-0.5*r, -0.5*r, -0.5*r),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 3     | |      | |
+            Vertex(glm::vec3(-0.5*r, 0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 0)), // SOMMET 4       | 3------|-2
+            Vertex(glm::vec3(0.5*r, 0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(1, 0)), // SOMMET 5        |/       |/
+            Vertex(glm::vec3(0.5*r, 0.5*r, -0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 0)), // SOMMET 6       0--------1
+            Vertex(glm::vec3(-0.5*r, 0.5*r, -0.5*r),glm::vec3(0, 0, 1), glm::vec2(1, 0)) // SOMMET 7
     };
 }
 
