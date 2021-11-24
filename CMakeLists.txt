@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 cmake_policy(SET CMP0112 NEW) # Required by copy_folder_to_output()
 
-project(IMACraft)
+project(project)
 add_executable(${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 

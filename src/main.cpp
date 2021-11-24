@@ -1,10 +1,4 @@
-#include <valarray>
 #include "App.hpp"
-#include "LibCraft/tools/include/filePath.hpp"
-
-#include <iostream>
-
-
 
 static App& get_app(GLFWwindow* window)
 {
@@ -26,7 +20,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1920, 1080, "IMACraft", NULL , nullptr);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Template OpenGL", NULL , nullptr);
 
     if (!window) {
         glfwTerminate();
@@ -40,12 +34,10 @@ int main(int argc, char** argv)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         return -1;
     }
-
-    FilePath appPath(argv[0]);
     /* Create the App */
     int w, h;
     glfwGetWindowSize(window, &w, &h);
-    App app{w, h, appPath};
+    App app{w, h};
 
     /* Hook user inputs to the App */
     glfwSetWindowUserPointer(window, reinterpret_cast<void*>(&app));
@@ -65,23 +57,15 @@ int main(int argc, char** argv)
         get_app(window).size_callback(width, height);
     });
 
-    app.init();
-    std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
 
         app.render(window);
-
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
-
-        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        {
-            glfwTerminate();
-        }
 
     }
 
