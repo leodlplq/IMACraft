@@ -1,25 +1,29 @@
 #pragma once
+
 #define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <iostream>
-#include "stb/stb_image.h"
-#include "LibCraft/renderEngine/include/Cube.hpp"
-#include "glm/glm.hpp"
-#include "LibCraft/renderEngine/include/Camera.hpp"
-#include "LibCraft/renderEngine/include/Skybox.hpp"
-#include "LibCraft/renderEngine/include/TextureCube.hpp"
+#include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
+//TOOLS
+#include "LibCraft/tools/include/filePath.hpp"
+//RENDER ENGINE
 #include "LibCraft/renderEngine/include/vbo.hpp"
 #include "LibCraft/renderEngine/include/vao.hpp"
 #include "LibCraft/renderEngine/include/ibo.hpp"
 #include "LibCraft/renderEngine/include/Shader.hpp"
-#include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/renderEngine/include/Texture.hpp"
+#include "LibCraft/renderEngine/include/Camera.hpp"
+#include "LibCraft/renderEngine/include/Skybox.hpp"
+#include "LibCraft/renderEngine/include/TextureCube.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
+//CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
+#include "LibCraft/coreEngine/include/Player.hpp"
 
 class App {
 public:
@@ -50,5 +54,7 @@ private:
     int _height;
     Camera _camera;
     Skybox _skybox;
+
+    Player _player;
 
 };

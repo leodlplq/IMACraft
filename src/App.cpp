@@ -17,7 +17,8 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _prevTime(0.0f),
  _camera(window_width,window_height,glm::vec3(0.0f,0.0f,0.0f)),
  _width(window_width),
- _height(window_height)
+ _height(window_height),
+ _player()
 {
     size_callback(window_width, window_height);
 }
@@ -36,6 +37,9 @@ void App::init(){
     _vbo.unbind();
     _ibo.unbind();
 
+    //PLAYER
+    _player = Player(cube, glm::vec3(0.f, 5.0f, 0.f));
+
     //TEXTURE
     std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
     std::string filePathGrassTop = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
@@ -44,9 +48,14 @@ void App::init(){
     grass.texUnit(_shaderProgram,"tex0",0);
     _textures.push_back(grass);
 
+    std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/player/side.png");
+    TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
+    player.texUnit(_shaderProgram,"tex0",0);
+    _textures.push_back(player);
+
     glEnable(GL_DEPTH_TEST);
     std::cout << _width << _height << std::endl;
-    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,6.0f));
+    _camera = Camera(_width,_height,glm::vec3(0.0f,6.0f,0.0f));
 
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
@@ -68,9 +77,15 @@ void App::render(GLFWwindow* window)
 
     // Bind the VAO so OpenGL knows to use it
     _vao.bind();
-    _textures[0].bind();
-    // Draw the triangle using the GL_TRIANGLES primitive
+
+    _textures[1].bind();
+    // DRAW OUR PLAYER FOR TESTING
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model,_player.getPosition());
+    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+    _textures[0].bind();
 
     for(auto &cube:_map.getMap()){
         glm::mat4 model = glm::mat4 (1.0f);
@@ -82,10 +97,14 @@ void App::render(GLFWwindow* window)
     }
 
     // DRAW ANOTHER CUBE FOR TESTING
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model,glm::vec3(2.0f,0.0f,0.0f));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    //glm::mat4 model = glm::mat4(1.0f);
+    //model = glm::translate(model,glm::vec3(2.0f,0.0f,0.0f));
+    //glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+
+
+
 
     // SKYBOX PART
     glDepthFunc(GL_LEQUAL);

@@ -17,6 +17,8 @@ class Cube {
 public:
     Cube(const float radius = 1.0);
     Cube(const float x, const float y, const float z);
+    Cube(const Cube& ) = default;
+
     void build(const float radius =1.0);
     //renvoie ptr sur data
     Vertex* getDataPointer() {
