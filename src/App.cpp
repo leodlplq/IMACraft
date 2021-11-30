@@ -38,7 +38,7 @@ void App::init(){
     _ibo.unbind();
 
     //PLAYER
-    _player = Player(cube, glm::vec3(0.f, 5.0f, 0.f));
+    _player = Player(cube, glm::vec3(0.f, 0.0f, 0.f));
 
     //TEXTURE
     std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
@@ -55,7 +55,7 @@ void App::init(){
 
     glEnable(GL_DEPTH_TEST);
     std::cout << _width << _height << std::endl;
-    _camera = Camera(_width,_height,glm::vec3(0.0f,6.0f,0.0f));
+    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,0.0f));
 
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
@@ -69,6 +69,8 @@ void App::render(GLFWwindow* window)
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
     _camera.Inputs(window);
+    _player.Inputs(window);
+    _player.render();
     _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram);
 
     int matrixID = glGetUniformLocation(_shaderProgram._id,"camMatrix");

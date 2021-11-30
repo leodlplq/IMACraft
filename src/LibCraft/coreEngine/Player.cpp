@@ -8,9 +8,73 @@ _mesh(mesh), _position(spawnPos), _hp(10)
 {
 }
 
-void Player::Inputs(GLFWwindow *window) {
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
-    {
-        _position += _speed * glm::vec3(_orientation.x,0.0f,_orientation.z);
+void Player::startJump(){
+    if(_onGround){
+        _velocityY = 10.f;
+        _onGround = false;
+    }
+    //_position -= glm::vec3(0.f, 1.f, 0.f);
+}
+
+void Player::moveRight() {
+    if(_placement <= 0){
+        _position += _speed * glm::normalize(glm::cross(_orientation,_up));
     }
 }
+
+void Player::moveLeft() {
+    if(_placement <= 0){
+        _position -= _speed * glm::normalize(glm::cross(_orientation,_up));
+    }
+}
+
+void Player::render(){
+
+    //JUMP PART
+    _velocityY -= _gravity;
+    _position += (_speedJump * _velocityY) * glm::vec3(0.f, 1.f, 0.f);
+
+    /*if(_position.y > 2.f){
+        _velocityY = 0.f;
+        _onGround = false;
+        _position.y = 0.f;
+    }*/
+    if(_position.y < 0.f){
+        _position.y = 0.f;
+        _velocityY = 0.f;
+        _onGround = true;
+
+    }
+
+}
+
+void Player::Inputs(GLFWwindow *window) {
+
+    if(glfwGetKey(window,GLFW_KEY_I) == GLFW_PRESS){
+        _position += _speed * _orientation;
+        std::cout << "i" << std::endl;
+
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS){
+        moveRight();
+        std::cout << "l" << std::endl;
+
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_J) == GLFW_PRESS){
+        moveLeft();
+        std::cout << "l" << std::endl;
+
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_COMMA) == GLFW_PRESS){ //press ; to get this until we use fps cam
+        if(_onGround){
+            startJump();
+        }
+        std::cout << "space" << std::endl;
+
+    }
+
+}
+
