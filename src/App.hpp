@@ -21,6 +21,7 @@
 #include "LibCraft/renderEngine/include/Skybox.hpp"
 #include "LibCraft/renderEngine/include/TextureCube.hpp"
 #include "LibCraft/renderEngine/include/Cube.hpp"
+#include "LibCraft/renderEngine/include/Model.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -40,14 +41,12 @@ public:
 
 private:
     Map _map;
-    vao _vao;
-    vbo _vbo;
-    ibo _ibo;
     Shader _shaderProgram;
     Shader _skyboxShader;
     GLint _uniId, _tex0Id;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
+    std::vector<Model> _models;
     float _rotation;
     double _prevTime;
     int _width;

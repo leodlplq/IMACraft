@@ -1,7 +1,7 @@
 //
 // Created by valentin on 24/11/2021.
 //
-#pragma
+#pragma once
 //#include "LibCraft/renderEngine/include/Texture.hpp"
 #include <array>
 #include "LibCraft/renderEngine/include/Shader.hpp"
