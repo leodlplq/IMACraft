@@ -29,13 +29,17 @@ public:
         return glm::vec3(_position.x, _position.y, _position.z);
     }
 
+    const glm::vec3 getOrientation() const{
+        return glm::vec3(_orientation.x, _orientation.y, _orientation.z);
+    }
+
 private:
     glm::vec3 _position;
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
     float _hp;
     Cube _mesh;
-    float _speed = 0.1f;
+    float _speed = 0.05f;
     float _speedJump = 0.01f;
 
     bool _onGround = true;

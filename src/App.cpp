@@ -13,10 +13,12 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _models(),
  _rotation(0.0f),
  _prevTime(0.0f),
- _camera(window_width,window_height,glm::vec3(0.0f,0.0f,0.0f)),
  _width(window_width),
  _height(window_height),
- _player()
+ _player(Cube(), glm::vec3(0.f, 1.0f, 0.f)),
+ _camera(_width,_height,_player)
+
+
 {
     size_callback(window_width, window_height);
 }
@@ -43,8 +45,8 @@ void App::init(){
     _models.push_back(cube_modeltest);
 
     //PLAYER
-    _player = Player(cube, glm::vec3(0.f, 0.0f, 0.f));
-    std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/player/side.png");
+    _player = Player(cube, glm::vec3(0.f, 1.0f, 0.f));
+    std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/cobblestone/side.png");
     TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
     player.texUnit(_shaderProgram,"tex0",0);
     _textures.push_back(player);
@@ -52,7 +54,7 @@ void App::init(){
     // CAMERA
     glEnable(GL_DEPTH_TEST);
     std::cout << _width << _height << std::endl;
-    _camera = Camera(_width,_height,glm::vec3(0.0f,0.0f,0.0f));
+
 
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
@@ -66,13 +68,12 @@ void App::render(GLFWwindow* window)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //INPUTS
-    _camera.Inputs(window);
     _player.Inputs(window);
     _player.render();
 
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
-    _camera.Matrix(45.0f,0.1f,100.0f,_shaderProgram);
+    _camera.Matrix(45.0f,0.1f,100.0f);
 
     int matrixID = glGetUniformLocation(_shaderProgram._id,"camMatrix");
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
@@ -87,12 +88,12 @@ void App::render(GLFWwindow* window)
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     //TEST 2 CUBES
-    model = glm::translate(model,glm::vec3(2,0,0));
+    /*model = glm::translate(model,glm::vec3(2,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0].draw();
     model = glm::translate(model,glm::vec3(3,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[1].draw();
+    _models[1].draw();*/
 
 
     // Draw the map
@@ -126,20 +127,28 @@ App::~App(){
 
 }
 
-void App::key_callback(int /*key*/, int /*scancode*/, int /*action*/, int /*mods*/)
+void App::key_callback(int key, int scancode, int action, int mods)
 {
+    std::cout << key << std::endl;
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
 {
 }
 
-void App::scroll_callback(double /*xoffset*/, double /*yoffset*/)
+void App::scroll_callback(double xoffset, double yoffset)
 {
+    _camera.scrollCallback(xoffset, -yoffset);
 }
 
-void App::cursor_position_callback(double /*xpos*/, double /*ypos*/)
+void App::cursor_position_callback(double xpos, double ypos, GLFWwindow* window)
 {
+    glfwSetCursorPos(window,(_width/2),(_height/2));
+    float rotx = _camera._sensitivity * (float)(ypos - ((float)_height/2))/(float)_height;
+    float roty = _camera._sensitivity * (float)(xpos- ((float)_width/2))/(float)_width;
+
+    _camera.rotateLeft(rotx);
+    _camera.rotateUp(roty);
 }
 
 void App::size_callback(int width, int height)

@@ -2,6 +2,8 @@
 // Created by valentin on 22/11/2021.
 //
 #pragma once
+
+#include <LibCraft/coreEngine/include/Player.hpp>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -23,7 +25,7 @@ class Camera
 
         float _speed = 0.1f;
         float _rotationspeed = 1.5f;
-        float _sensitivity = 100.0f;
+        float _sensitivity = 50.0f;
         glm::vec3 _rotaxis;
         glm::mat4 _model = glm::mat4(1.0f);
         glm::mat4 _view = glm::mat4(1.0f);
@@ -34,17 +36,44 @@ class Camera
         bool _tpscam = true;
 
 
-        Camera(int width , int height, glm::vec3 position);
-        void Inputs(GLFWwindow* window);
-        void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader);
+        Camera(int width , int height, Player &player);
+        void Matrix(float FOVdeg, float nearPlane, float farPlane);
 
-        glm::mat4 getModelMatrix(){
+
+        //INPUTS EVENTS
+        void scrollCallback(double xOffset, double yOffset); //move front camera
+        void rotateLeft(float degree);
+        void rotateUp(float degree);
+
+        glm::mat4 getModelMatrix() const{
             return _model;
         }
-        glm::mat4 getViewMatrix(){
-        return _view;
+        glm::mat4 getViewMatrix() const{
+            glm::vec3 shiftCamera = _player.getOrientation() * _distanceFromCamera;
+
+            glm::mat4 translate = glm::translate(glm::mat4(1.f), -shiftCamera);
+            glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
+            glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
+            glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition());
+            glm::mat4 view = glm::mat4(translate * rotX * rotY * lookTo);
+
+            return view;
+
         }
-        glm::mat4 getProjMatrix(){
-        return _projection;
+        glm::mat4 getProjMatrix() const{
+            return _projection;
         }
+
+
+
+
+    private:
+        Player &_player;
+        float _distanceFromCamera = 5.0f;
+        float _angleX = 10.f;
+        float _angleY = 10.f;
+
+        //SENSITIVITY PART
+        float _scrollSensitivity = 0.5;
 };
+
