@@ -41,6 +41,12 @@ void Map::generateCubeMap(FilePath pathToMap) {
                         _map.push_back(Cube(i,j,0));
                         _map.push_back(Cube(i,j,1));
                         break;
+                    case 1:
+                        _spawnPoint = glm::vec3(i,1 ,j);
+                        _map.push_back(Cube(i,j,0));
+                        break;
+
+
                 }
                 /*float z = stoi(line)/(255/10);
                 _map.push_back(Cube(i,j,z));*/

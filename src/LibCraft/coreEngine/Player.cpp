@@ -17,16 +17,18 @@ void Player::startJump(){
 }
 
 void Player::moveRight() {
-    if(_placement <= 0){
-        _position += _speed * glm::normalize(glm::cross(_orientation,_up));
-        _placement++;
+
+    if(_placement < 1){
+        _position += _speed * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+        _placement+= _speed;
     }
 }
 
 void Player::moveLeft() {
-    if(_placement >= 0){
-        _position -= _speed * glm::normalize(glm::cross(_orientation,_up));
-        _placement--;
+
+    if(_placement > -1){
+        _position -= _speed * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+        _placement-= _speed;
     }
 }
 
@@ -46,7 +48,7 @@ void Player::render(){
 void Player::Inputs(GLFWwindow *window) {
 
     if(glfwGetKey(window,GLFW_KEY_I) == GLFW_PRESS){
-        _position += _speed * _orientation;
+        _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
     }
 
     if(glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS){
@@ -66,7 +68,7 @@ void Player::Inputs(GLFWwindow *window) {
     }
 
     if(glfwGetKey(window,GLFW_KEY_K) == GLFW_PRESS){
-        _position -= _speed * _orientation;
+        _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
 
     }
 

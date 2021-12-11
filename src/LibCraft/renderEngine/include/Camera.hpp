@@ -17,7 +17,7 @@ class Camera
 {
     public:
         glm::vec3 _position;
-        glm::vec3 _orientation = glm::vec3(0.0f,0.0f,-1.0f);
+        glm::vec3 _orientation;
         glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
 
         float _width;

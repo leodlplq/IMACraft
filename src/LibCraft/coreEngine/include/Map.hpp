@@ -23,4 +23,11 @@ public:
     inline const std::vector<Cube> getMap() const {return _map;}
     void generateCubeMap(FilePath pathToMap);
     void display() const;
+
+    inline const glm::vec3 getSpawnPoint() const{
+        return _spawnPoint;
+    }
+
+private:
+    glm::vec3 _spawnPoint;
 };

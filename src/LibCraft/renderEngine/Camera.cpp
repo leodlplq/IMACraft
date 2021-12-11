@@ -7,7 +7,8 @@ Camera::Camera(const int width , const int height, Player &player):
     _position(player.getPosition()),
     _width((float)width),
     _height((float)height),
-    _player(player)
+    _player(player),
+    _orientation(player.getOrientation())
 {}
 
 void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane)

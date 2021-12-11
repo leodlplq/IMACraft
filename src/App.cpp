@@ -15,18 +15,14 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _prevTime(0.0f),
  _width(window_width),
  _height(window_height),
- _player(Cube(), glm::vec3(0.f, 1.0f, 0.f)),
+ _map(appPath.dirPath() + "/assets/maps/map2.pgm"),
+ _player(Cube(), _map.getSpawnPoint()),
  _camera(_width,_height,_player)
-
-
 {
+
     size_callback(window_width, window_height);
 }
 void App::init(){
-
-    // MAP
-    _map = Map(_appPath.dirPath() + "/assets/maps/map3.pgm");
-
     // MESH DU CUBE ORIGINEL !!
     Cube cube;
 
@@ -45,7 +41,6 @@ void App::init(){
     _models.push_back(cube_modeltest);
 
     //PLAYER
-    _player = Player(cube, glm::vec3(0.f, 1.0f, 0.f));
     std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/cobblestone/side.png");
     TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
     player.texUnit(_shaderProgram,"tex0",0);
@@ -129,7 +124,7 @@ App::~App(){
 
 void App::key_callback(int key, int scancode, int action, int mods)
 {
-    std::cout << key << std::endl;
+    //std::cout << key << std::endl;
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
