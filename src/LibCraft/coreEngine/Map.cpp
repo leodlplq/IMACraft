@@ -37,14 +37,21 @@ void Map::generateCubeMap(FilePath pathToMap) {
                     case 255:
                         _map.push_back(Cube(i,j,0));
                         break;
-                    case 254:
+                    case 240:
                         _map.push_back(Cube(i,j,0));
                         _map.push_back(Cube(i,j,1));
                         break;
-                    case 1:
+                    case 15:
                         _spawnPoint = glm::vec3(i,1 ,j);
                         _map.push_back(Cube(i,j,0));
                         break;
+                    case 90:
+                        _map.push_back(Cube(i,j,0));
+                        break;
+
+                    /*default:
+                        std::cout << "lol y a r" << std::endl;
+                        break;*/
 
 
                 }
@@ -54,11 +61,6 @@ void Map::generateCubeMap(FilePath pathToMap) {
             }
 
         }
-
-
-
-
-        std::cout <<  line << std::endl;
     }
 
 

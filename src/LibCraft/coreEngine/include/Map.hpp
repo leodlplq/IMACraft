@@ -13,6 +13,7 @@
 class Map {
 private:
     std::vector<Cube> _map;
+    glm::vec3 _spawnPoint;
 
 public:
 
@@ -27,7 +28,4 @@ public:
     inline const glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
-
-private:
-    glm::vec3 _spawnPoint;
 };

@@ -15,7 +15,7 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _prevTime(0.0f),
  _width(window_width),
  _height(window_height),
- _map(appPath.dirPath() + "/assets/maps/map2.pgm"),
+ _map(appPath.dirPath() + "/assets/maps/map6.pgm"),
  _player(Cube(), _map.getSpawnPoint()),
  _camera(_width,_height,_player)
 {
