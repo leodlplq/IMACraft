@@ -1,39 +1,33 @@
 //
-// Created by valentin on 10/12/2021.
+// Created by valentin on 12/12/2021.
 //
+
 #pragma once
-
-#include "vbo.hpp"
-#include "vao.hpp"
-#include "ibo.hpp"
 #include "Texture.hpp"
-#include "TextureCube.hpp"
-#include "Cube.hpp"
+#include "Mesh.hpp"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
-class Model {
+class Model
+{
 public:
-    vao _vao; // A mettre en privé quand Player sera mieux défini
-
-    Model(Cube mesh,std::string filePathRight, std::string filePathLeft, std::string filePathTop,std::string filePathBottom,std::string filePathFront,std::string filePathBack, GLenum format);
-
-    void draw(){
-        _vao.bind();
-        _texturecube.bind();
-        glDrawElements(GL_TRIANGLES, _mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
+    Model(char *path)
+    {
+        loadModel(path);
     }
-    void del(){
-        _vao.deleteVao();
-        _vbo.deleteVbo();
-        _ibo.deleteIbo();
+    void draw()
+    {
+        for(unsigned int i = 0; i < meshes.size()-1; i++) // ATTENTION -1 JUSTE POUR LE SPACE MARINE
+            meshes[i].draw();
     }
-
 private:
-    vbo _vbo;
-    ibo _ibo;
-    TextureCube _texturecube;
-    Cube _mesh;
+    // model data
+    std::vector<Mesh> meshes;
+    std::string directory;
 
+    void loadModel(std::string path);
+    void processNode(aiNode *node, const aiScene *scene);
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 };
-
-
 

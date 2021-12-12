@@ -21,6 +21,7 @@
 #include "LibCraft/renderEngine/include/Skybox.hpp"
 #include "LibCraft/renderEngine/include/TextureCube.hpp"
 #include "LibCraft/renderEngine/include/Cube.hpp"
+#include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
@@ -43,10 +44,11 @@ private:
     Map _map;
     Shader _shaderProgram;
     Shader _skyboxShader;
+    Shader _steveShader;
     GLint _uniId, _tex0Id;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
-    std::vector<Model> _models;
+    std::vector<Mesh> _models;
     float _rotation;
     double _prevTime;
     int _width;
@@ -55,5 +57,6 @@ private:
     Skybox _skybox;
 
     Player _player;
+    Model* _steve;
 
 };

@@ -7,6 +7,7 @@
 App::App(int window_width, int window_height, FilePath appPath) :
  _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
  _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
+ _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
  _uniId(0),
  _appPath(appPath),
  _textures(),
@@ -15,6 +16,7 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _prevTime(0.0f),
  _width(window_width),
  _height(window_height),
+ _steve(),
  _player(Cube(), glm::vec3(0.f, 1.0f, 0.f)),
  _camera(_width,_height,_player)
 
@@ -36,13 +38,13 @@ void App::init(){
     std::string filePathGrassBottom = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
 
     // MODEL OF THE GROUND
-    Model cube_model(cube,filePathGrassSide,filePathGrassSide,filePathGrassTop,filePathGrassBottom,filePathGrassSide,filePathGrassSide,GL_RGB);
-    _models.push_back(cube_model);
+    Mesh cube_mesh(cube, filePathGrassSide, filePathGrassSide, filePathGrassTop, filePathGrassBottom, filePathGrassSide, filePathGrassSide, GL_RGB);
+    _models.push_back(cube_mesh);
 
     // TEST: ANOTHER CUBE Text
     std::string filePathTest = ((std::string)_appPath.dirPath() + "/assets/textures/player/side.png");
-    Model cube_modeltest(cube,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,GL_RGBA);
-    _models.push_back(cube_modeltest);
+    Mesh cube_meshtest(cube, filePathTest, filePathTest, filePathTest, filePathTest, filePathTest, filePathTest, GL_RGBA);
+    _models.push_back(cube_meshtest);
 
     //PLAYER
     _player = Player(cube, glm::vec3(0.f, 1.0f, 0.f));
@@ -51,10 +53,13 @@ void App::init(){
     player.texUnit(_shaderProgram,"tex0",0);
     _textures.push_back(player);
 
+    //Steve??AALLOOO??
+    std::string fileToSteve = (std::string)_appPath.dirPath()+"/assets/obj/space.obj";
+    _steveShader.activate();
+    _steve = new Model(&fileToSteve[0]);
+
     // CAMERA
     glEnable(GL_DEPTH_TEST);
-    std::cout << _width << _height << std::endl;
-
 
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
@@ -71,6 +76,8 @@ void App::render(GLFWwindow* window)
     _player.Inputs(window);
     _player.render();
 
+
+
     // Tell OpenGL which Shader Program we want to use
     _shaderProgram.activate();
     _camera.Matrix(45.0f,0.1f,100.0f);
@@ -85,16 +92,15 @@ void App::render(GLFWwindow* window)
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0]._vao.bind();
     _textures[0].bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-    //TEST 2 CUBES
+//    //TEST 2 CUBES
     model = glm::translate(model,glm::vec3(2,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0].draw();
     model = glm::translate(model,glm::vec3(3,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[1].draw();
-
 
     // Draw the map
     for(auto &cube:_map.getMap()){
@@ -108,6 +114,19 @@ void App::render(GLFWwindow* window)
             _models[1].draw();
         }
     }
+
+
+    //Steve Part
+    _steveShader.activate();
+    //glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    float scalef = 1.0f;
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f),glm::vec3( scalef, scalef, scalef ));
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"scale"),1,GL_FALSE,glm::value_ptr(scale));
+    int matrixsteve = glGetUniformLocation(_steveShader._id,"camMatrix");
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
+    glUniformMatrix4fv(matrixsteve, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+    _steve->draw();
+
     // SKYBOX PART | SETUP AND DRAWING
     _skybox.setup(_skyboxShader,_camera,_width,_height);
 }

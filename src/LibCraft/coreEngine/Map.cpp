@@ -52,7 +52,7 @@ void Map::generateCubeMap(FilePath pathToMap) {
 
 
 
-        std::cout <<  line << std::endl;
+        //std::cout <<  line << std::endl;
     }
 
 
@@ -67,7 +67,7 @@ void Map::display() const {
 
             //std::cout << _map[j + (i * size)] << " ";
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 }
 

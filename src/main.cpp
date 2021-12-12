@@ -66,7 +66,7 @@ int main(int argc, char** argv)
     });
 
     app.init();
-    std::cout << w << h << std::endl;
+    //std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
 

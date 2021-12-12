@@ -14,7 +14,7 @@ class TextureCube : public Texture{
 public:
     unsigned int _cubemapTexture;
     TextureCube(const char* rightpath, const char* leftpath,const char* toppath,const char* bottompath,const char* frontpath,const char* backpath, const GLenum format);
-
+    TextureCube() = default;
     std::array<std::string,6>_facesCubemap;
 
     void bind();
