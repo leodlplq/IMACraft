@@ -88,12 +88,12 @@ void App::render(GLFWwindow* window)
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     //TEST 2 CUBES
-    /*model = glm::translate(model,glm::vec3(2,0,0));
+    model = glm::translate(model,glm::vec3(2,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0].draw();
     model = glm::translate(model,glm::vec3(3,0,0));
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[1].draw();*/
+    _models[1].draw();
 
 
     // Draw the map
