@@ -124,7 +124,13 @@ App::~App(){
 
 void App::key_callback(int key, int scancode, int action, int mods)
 {
-    //std::cout << key << std::endl;
+    if(key == 65 && action == GLFW_PRESS){
+        _player.moveLeft();
+    }
+
+    if(key == 68 && action == GLFW_PRESS){
+        _player.moveRight();
+    }
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)

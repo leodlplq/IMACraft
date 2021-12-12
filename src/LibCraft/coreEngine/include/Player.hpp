@@ -42,12 +42,14 @@ private:
     float _hp;
     Cube _mesh;
     float _speed = 0.05f;
+    float _speedSide = 1.f;
     float _speedJump = 0.01f;
 
-    bool _onGround = true;
+    bool _ableToMove = true;
     float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
 
 
+    bool _onGround = true;
     float _velocityY = 0.f;
     float _gravity = 0.2f;
 

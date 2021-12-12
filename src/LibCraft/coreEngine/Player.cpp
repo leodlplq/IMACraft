@@ -18,18 +18,40 @@ void Player::startJump(){
 
 void Player::moveRight() {
 
-    if(_placement < 1){
-        _position += _speed * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
-        _placement+= _speed;
+    if(_placement < 1 && _ableToMove == 1){
+        if(_placement == 0){
+            _ableToMove = false;
+        }
+        _position += _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+        _placement+= _speedSide;
+
+        /*_ableToMove = false;*/
+
+
+
+        //std::cout << "placement : " << _placement << " able to move ? : " << _ableToMove <<  std::endl;
     }
 }
 
 void Player::moveLeft() {
+    /*if(!_movingSide){
+        _velocityX = 1.f;
+    }*/
 
-    if(_placement > -1){
-        _position -= _speed * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
-        _placement-= _speed;
+
+    if(_placement > -1 && _ableToMove == 1){
+        if(_placement == 0){
+            _ableToMove = false;
+        }
+        _position -= _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+        _placement-= _speedSide;
+
+        /*_ableToMove = false;*/
+
+
+        //std::cout << "placement : " << _placement << " able to move ? : " << _ableToMove <<  std::endl;
     }
+
 }
 
 void Player::render(){
@@ -43,31 +65,58 @@ void Player::render(){
         _onGround = true;
     }
 
+    //MOVE LEFT
+
+
+
+
 }
 
 void Player::Inputs(GLFWwindow *window) {
 
-    if(glfwGetKey(window,GLFW_KEY_I) == GLFW_PRESS){
+
+
+
+
+    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){ //Z
         _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
     }
 
-    if(glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS){
-        moveRight();
+
+    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
+        /*if(_ableToMove){
+            std::cout << "going right " << std::endl;
+            moveRight();
+            _ableToMove = false;
+
+        }*/
     }
 
-    if(glfwGetKey(window,GLFW_KEY_J) == GLFW_PRESS){
-        moveLeft();
+    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_RELEASE){
+        _ableToMove = true;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_COMMA) == GLFW_PRESS){ //press ; to get this until we use fps cam
+    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){ //Q
+        /*if(_ableToMove){
+            std::cout << "going left " << std::endl;
+
+            moveLeft();
+            _ableToMove = false;
+
+        }*/
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_RELEASE){ //Q
+        _ableToMove = true;
+    }
+
+    if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS){ //press ; to get this until we use fps cam
         if(_onGround){
             startJump();
         }
-
-
     }
 
-    if(glfwGetKey(window,GLFW_KEY_K) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
         _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
 
     }
