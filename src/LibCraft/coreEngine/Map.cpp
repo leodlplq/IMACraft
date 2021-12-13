@@ -37,7 +37,7 @@ void Map::generateCubeMap(FilePath pathToMap) {
                     case 255:
                         _map.push_back(Cube(i,j,0));
                         break;
-                    case 240:
+                    case 240: //WALL
                         _map.push_back(Cube(i,j,0));
                         _map.push_back(Cube(i,j,1));
                         break;
