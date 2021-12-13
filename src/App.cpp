@@ -1,29 +1,22 @@
 #include "App.hpp"
-#include "GLFW/glfw3.h"
-#include <iostream>
-#include <valarray>
 
 
-App::App(int window_width, int window_height, FilePath appPath) :
+App::App(int window_width, int window_height, const FilePath& appPath) :
+ _map(appPath.dirPath() + "/assets/maps/map6.pgm"),
  _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
  _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
- _uniId(0),
  _appPath(appPath),
  _textures(),
  _models(),
- _rotation(0.0f),
- _prevTime(0.0f),
  _width(window_width),
  _height(window_height),
- _map(appPath.dirPath() + "/assets/maps/map6.pgm"),
- _player(Cube(), _map.getSpawnPoint()),
- _camera(_width,_height,_player)
+ _camera(_width,_height,_player),
+ _player(Cube(), _map.getSpawnPoint())
 {
-
     size_callback(window_width, window_height);
 }
 void App::init(){
-    // MESH DU CUBE ORIGINEL !!
+    // MESH DU CUBE ORIGINAL !!
     Cube cube;
 
     //TEXTURE PATH FOR THE GROUND
@@ -80,7 +73,7 @@ void App::render(GLFWwindow* window)
     glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0]._vao.bind();
     _textures[0].bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
     //TEST 2 CUBES
     /*model = glm::translate(model,glm::vec3(2,0,0));
@@ -93,7 +86,7 @@ void App::render(GLFWwindow* window)
 
     // Draw the map
     for(auto &cube:_map.getMap()){
-        glm::mat4 model = glm::mat4 (1.0f);
+        model = glm::mat4 (1.0f);
         model = cube.getObjectMatrix();
         glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
         if(int(model[3][2]) % 2 == 0){
@@ -108,21 +101,35 @@ void App::render(GLFWwindow* window)
 }
 
 App::~App(){
-    _skybox._vao.deleteVao();
-    _skybox._vbo.deleteVbo();
-    _skybox._ibo.deleteIbo();
-    for(unsigned int i=0;i<_models.size();i++){
-        _models[0].del();
-    }
+    //DELETING EVERYTHING
+    //SHADERS
+    _shaderProgram.deleteShader();
+    _shaderProgram.~Shader();
+    _skyboxShader.deleteShader();
+    _skyboxShader.~Shader();
+    //APP PATH
+    _appPath.~FilePath();
+    //TEXTURES
     for(auto &item : _textures){
         item.deleteTex();
     }
-    _shaderProgram.deleteShader();
-    _skyboxShader.deleteShader();
-
+    _textures.erase(_textures.begin(), _textures.end());
+    _textures.shrink_to_fit();
+    //MODELS
+    for(auto &item : _models){
+        item.del();
+    }
+    _models.erase(_models.begin(), _models.end());
+    _models.shrink_to_fit();
+    //CAMERA
+    _camera.~Camera();
+    //SKYBOX
+    _skybox.~Skybox();
+    //PLAYER
+    _player.~Player();
 }
 
-void App::key_callback(int key, int scancode, int action, int mods)
+void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
     if(key == 65 && action == GLFW_PRESS){
         _player.moveLeft();
@@ -137,19 +144,19 @@ void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
 {
 }
 
-void App::scroll_callback(double xoffset, double yoffset)
+void App::scroll_callback(double xOffset, double yOffset)
 {
-    _camera.scrollCallback(xoffset, -yoffset);
+    _camera.scrollCallback(xOffset, -yOffset);
 }
 
-void App::cursor_position_callback(double xpos, double ypos, GLFWwindow* window)
+void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
-    glfwSetCursorPos(window,(_width/2),(_height/2));
-    float rotx = _camera._sensitivity * (float)(ypos - ((float)_height/2))/(float)_height;
-    float roty = _camera._sensitivity * (float)(xpos- ((float)_width/2))/(float)_width;
+    glfwSetCursorPos(window,(float)_width/2,(float)_height/2);
+    float rotX = _camera._sensitivity * (float)(yPos - ((float)_height/2))/(float)_height;
+    float rotY = _camera._sensitivity * (float)(xPos- ((float)_width/2))/(float)_width;
 
-    _camera.rotateLeft(rotx);
-    _camera.rotateUp(roty);
+    _camera.rotateLeft(rotX);
+    _camera.rotateUp(rotY);
 }
 
 void App::size_callback(int width, int height)

@@ -2,7 +2,9 @@
 // Created by Léo on 13/12/2021.
 //
 
-#ifndef IMACRAFT_DELETEELEMENTSFROMVECTOR_HPP
-#define IMACRAFT_DELETEELEMENTSFROMVECTOR_HPP
+#pragma once
 
-#endif //IMACRAFT_DELETEELEMENTSFROMVECTOR_HPP
+#include <vector>
+
+template<typename T>
+void deleteElementsFromVector(std::vector<T> &v);

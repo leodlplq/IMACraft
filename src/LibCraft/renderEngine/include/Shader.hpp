@@ -13,6 +13,8 @@ class Shader {
 public:
     GLuint _id;
     Shader(const char* vertexFile, const char* fragmentFile, FilePath appPath);
+    ~Shader() = default;
+
 
     void activate();
     void deleteShader();

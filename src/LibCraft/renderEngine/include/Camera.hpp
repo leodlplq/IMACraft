@@ -37,6 +37,7 @@ class Camera
 
 
         Camera(int width , int height, Player &player);
+        ~Camera() =default;
         void Matrix(float FOVdeg, float nearPlane, float farPlane);
 
 
