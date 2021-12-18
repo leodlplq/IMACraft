@@ -18,6 +18,7 @@ public:
     explicit Cube(float radius = 1.0);
     Cube(float x, float y, float z);
     Cube(const Cube& ) = default;
+    ~Cube() = default;
 
     void build(float radius =1.0);
     //renvoie ptr sur data
