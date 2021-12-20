@@ -21,11 +21,11 @@ public:
     explicit Map(FilePath pathToMap);
     ~Map() = default;
 
-    inline const std::vector<Cube> getMap() const {return _map;}
+    inline std::vector<Cube> getMap() const {return _map;}
     void generateCubeMap(FilePath pathToMap);
     void display() const;
 
-    inline const glm::vec3 getSpawnPoint() const{
+    inline glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
 };

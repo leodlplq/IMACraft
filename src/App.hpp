@@ -11,6 +11,7 @@
 
 //TOOLS
 #include "LibCraft/tools/include/filePath.hpp"
+#include "LibCraft/tools/include/deleteElementsFromVector.hpp"
 //RENDER ENGINE
 #include "LibCraft/renderEngine/include/vbo.hpp"
 #include "LibCraft/renderEngine/include/vao.hpp"
@@ -28,27 +29,24 @@
 
 class App {
 public:
-    App(int window_width, int window_height, FilePath appPath);
+    App(int window_width, int window_height, const FilePath& appPath);
     ~App();
     void render(GLFWwindow* window);
     void init();
 
-    void key_callback(int key, int scancode, int action, int mods);
+    void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
     void mouse_button_callback(int button, int action, int mods);
-    void scroll_callback(double xoffset, double yoffset);
-    void cursor_position_callback(double xpos, double ypos, GLFWwindow* window);
+    void scroll_callback(double xOffset, double yOffset);
+    void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
 
 private:
     Map _map;
     Shader _shaderProgram;
     Shader _skyboxShader;
-    GLint _uniId, _tex0Id;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
     std::vector<Model> _models;
-    float _rotation;
-    double _prevTime;
     int _width;
     int _height;
     Camera _camera;
