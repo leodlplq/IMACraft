@@ -131,12 +131,22 @@ App::~App(){
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
+
+
     if(key == 65 && action == GLFW_PRESS){
+        //TODO : we need to check if the player is able to move or if there is a collision
+        _player.display();
+        //TODO : we need to check if the player is turning while on intersection
         _player.moveLeft();
     }
 
     if(key == 68 && action == GLFW_PRESS){
         _player.moveRight();
+        _player.display();
+    }
+
+    if(key == 32 && action == GLFW_PRESS){
+        _player.startJump();
     }
 }
 

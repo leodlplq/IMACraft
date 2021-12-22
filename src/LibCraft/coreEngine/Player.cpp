@@ -54,6 +54,14 @@ void Player::moveLeft() {
 
 }
 
+void Player::moveForward(){
+    _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+}
+
+void Player::moveBackward(){
+    _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+}
+
 void Player::render(){
     //JUMP PART
     _velocityY -= _gravity;
@@ -65,11 +73,6 @@ void Player::render(){
         _onGround = true;
     }
 
-    //MOVE LEFT
-
-
-
-
 }
 
 void Player::Inputs(GLFWwindow *window) {
@@ -79,46 +82,45 @@ void Player::Inputs(GLFWwindow *window) {
 
 
     if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){ //Z
-        _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+        moveForward();
     }
 
 
-    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
-        /*if(_ableToMove){
+    /*if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
+        if(_ableToMove){
             std::cout << "going right " << std::endl;
             moveRight();
             _ableToMove = false;
 
-        }*/
-    }
+        }
+    }*/
 
     if(glfwGetKey(window,GLFW_KEY_D) == GLFW_RELEASE){
         _ableToMove = true;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){ //Q
-        /*if(_ableToMove){
+    /*if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){ //Q
+        if(_ableToMove){
             std::cout << "going left " << std::endl;
 
             moveLeft();
             _ableToMove = false;
 
-        }*/
-    }
+        }
+    }*/
 
     if(glfwGetKey(window,GLFW_KEY_A) == GLFW_RELEASE){ //Q
         _ableToMove = true;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS){ //press ; to get this until we use fps cam
+    /*if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS){ //press ; to get this until we use fps cam
         if(_onGround){
             startJump();
         }
-    }
+    }*/
 
     if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
-        _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
-
+        moveBackward();
     }
 
 

@@ -15,8 +15,14 @@ public:
     Player(const Cube &mesh, glm::vec3 spawnPos);
     ~Player() = default;
 
+
+    //player movement.
     void moveLeft();
     void moveRight();
+    void moveForward();
+    void moveBackward();
+
+
     void looseHP();
     void gainHP();
     void startJump();
@@ -25,6 +31,14 @@ public:
     void render();
 
     void Inputs(GLFWwindow* window);
+
+    inline void display(){
+        std::cout << "player position is : " << " x : " << _position.x  <<" y : " << _position.y << " z : " << _position.z << std::endl;
+    }
+
+    inline void inverseAbleToMove(){
+        _ableToMove = !_ableToMove;
+    }
 
     const glm::vec3 getPosition() const{
         return _position;
