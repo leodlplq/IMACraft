@@ -1,38 +1,55 @@
 #include "App.hpp"
 
+std::vector<Model> getAllModels(const FilePath& appPath){
+    std::vector<Model> models;
 
-App::App(int window_width, int window_height, const FilePath& appPath) :
- _map(appPath.dirPath() + "/assets/maps/map6.pgm"),
- _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
- _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
- _appPath(appPath),
- _textures(),
- _models(),
- _width(window_width),
- _height(window_height),
- _camera(_width,_height,_player),
- _player(Cube(), _map.getSpawnPoint())
-{
-    size_callback(window_width, window_height);
-}
-void App::init(){
     // MESH DU CUBE ORIGINAL !!
     Cube cube;
 
     //TEXTURE PATH FOR THE GROUND
-    std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
-    std::string filePathGrassTop = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
-    std::string filePathGrassBottom = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
+    std::string filePathGrassSide = ((std::string)appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
+    std::string filePathGrassTop = ((std::string)appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
+    std::string filePathGrassBottom = ((std::string)appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
 
-    // MODEL OF THE GROUND
+    // MODEL OF THE GROUND -- 0
     Model cube_model(cube,filePathGrassSide,filePathGrassSide,filePathGrassTop,filePathGrassBottom,filePathGrassSide,filePathGrassSide,GL_RGB);
-    _models.push_back(cube_model);
+    models.push_back(cube_model);
 
-    // TEST: ANOTHER CUBE Text
-    std::string filePathTest = ((std::string)_appPath.dirPath() + "/assets/textures/player/side.png");
+    // TEST: ANOTHER CUBE Text -- 1
+    std::string filePathTest = ((std::string)appPath.dirPath() + "/assets/textures/player/side.png");
     Model cube_modeltest(cube,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,GL_RGBA);
-    _models.push_back(cube_modeltest);
+    models.push_back(cube_modeltest);
 
+    // GOLD TEXTURE MODEL -- 2
+    std::string filePathGold = ((std::string)appPath.dirPath() + "/assets/textures/gold/side.jpeg");
+    Model gold_cube(cube,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,GL_RGB);
+    models.push_back(gold_cube);
+
+    // REDSTONE TEXTURE MODEL -- 3
+    std::string filePathRedstone = ((std::string)appPath.dirPath() + "/assets/textures/redstone/side.jpg");
+    Model redstone_cube(cube,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone, filePathRedstone,GL_RGB);
+    models.push_back(redstone_cube);
+
+    //
+
+    return models;
+}
+
+App::App(int window_width, int window_height, const FilePath& appPath) :
+     _models(getAllModels(appPath)),
+     _map(appPath.dirPath() + "/assets/maps/map6.pgm", _models),
+     _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+     _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
+     _appPath(appPath),
+     _textures(),
+     _width(window_width),
+     _height(window_height),
+     _camera(_width,_height,_player),
+     _player(Cube(), _map.getSpawnPoint())
+{
+    size_callback(window_width, window_height);
+}
+void App::init(){
     //PLAYER
     std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/cobblestone/side.png");
     TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
@@ -42,6 +59,8 @@ void App::init(){
     // CAMERA
     glEnable(GL_DEPTH_TEST);
     std::cout << _width << _height << std::endl;
+
+    std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
 
     // SKYBOX SHADER BINDING
@@ -85,17 +104,25 @@ void App::render(GLFWwindow* window)
 
 
     // Draw the map
-    for(auto &cube:_map.getMap()){
-        model = glm::mat4 (1.0f);
-        model = cube.getObjectMatrix();
-        glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-        if(int(model[3][2]) % 2 == 0){
-            _models[0].draw();
-        }
-        else {
-            _models[1].draw();
+    //FLOOR PART
+    for(auto &me:_map.getFloor()){
+        if(me.getModel() != -1){
+            model = me.getObjectMatrix();
+            glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+            _models[static_cast<unsigned long>(me.getModel())].draw();
         }
     }
+    //SECOND FLOOR PART (WALL / JUMP OBSTACLE...)
+    for(auto &me:_map.getSecondFloor()){
+        if(me.getModel() != -1){
+            model = me.getObjectMatrix();
+            glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+            _models[static_cast<unsigned long>(me.getModel())].draw();
+        }
+
+    }
+
+
     // SKYBOX PART | SETUP AND DRAWING
     _skybox.setup(_skyboxShader,_camera,_width,_height);
 }
@@ -131,18 +158,28 @@ App::~App(){
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
-
+    //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
 
     if(key == 65 && action == GLFW_PRESS){
         //TODO : we need to check if the player is able to move or if there is a collision
         _player.display();
+        int x = static_cast<int>(round(_player.getPosition().x));
+        int y = static_cast<int>(round(_player.getPosition().z));
+
+        int coord = static_cast<int>((x * sqrt(static_cast<double>(_map.getSecondFloor().size()))) + y);
+        //std::cout << "sx : " << x << " sy : " << y << std::endl;
+        _map.getSecondFloor()[static_cast<unsigned long>(coord)].displayPosition();
+
+        //std::cout << "model " << _map.getSecondFloor()[static_cast<unsigned long>(coord)].getModel() << std::endl;
+
+        _player.getHitbox().display();
         //TODO : we need to check if the player is turning while on intersection
         _player.moveLeft();
     }
 
     if(key == 68 && action == GLFW_PRESS){
         _player.moveRight();
-        _player.display();
+        //_player.display();
     }
 
     if(key == 32 && action == GLFW_PRESS){

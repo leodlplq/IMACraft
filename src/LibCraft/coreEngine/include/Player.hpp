@@ -7,12 +7,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include "../../renderEngine/include/Cube.hpp"
+#include "Hitbox.hpp"
 
 class Player {
 public:
-
+    //CONSTRUCTORS & DESTRUCTOR
     Player() = default;
-    Player(const Cube &mesh, glm::vec3 spawnPos);
+    Player(const Cube &mesh, const glm::vec3 &spawnPos);
     ~Player() = default;
 
 
@@ -22,17 +23,19 @@ public:
     void moveForward();
     void moveBackward();
 
-
-    void looseHP();
-    void gainHP();
     void startJump();
     void slide();
+
+    //HP PLAYER
+    void looseHP();
+    void gainHP();
+
 
     void render();
 
     void Inputs(GLFWwindow* window);
 
-    inline void display(){
+    inline void display() const{
         std::cout << "player position is : " << " x : " << _position.x  <<" y : " << _position.y << " z : " << _position.z << std::endl;
     }
 
@@ -40,12 +43,16 @@ public:
         _ableToMove = !_ableToMove;
     }
 
-    const glm::vec3 getPosition() const{
+    glm::vec3 getPosition() const{
         return _position;
     }
 
-    const glm::vec3 getOrientation() const{
+    glm::vec3 getOrientation() const{
         return _orientation;
+    }
+
+    Hitbox getHitbox() const {
+        return _hitbox;
     }
 
 private:
@@ -62,10 +69,11 @@ private:
     bool _ableToMove = true;
     float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
 
-
     bool _onGround = true;
     float _velocityY = 0.f;
     float _gravity = 0.2f;
+
+    Hitbox _hitbox;
 
 
 

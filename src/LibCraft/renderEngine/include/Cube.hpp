@@ -39,7 +39,12 @@ public:
         return &indices[0];
     }
 
+    float getHeight() const{
+        return _radius;
+    }
+
 private:
+    float _radius;
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices = {
             // Right

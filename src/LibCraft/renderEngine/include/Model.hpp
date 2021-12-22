@@ -27,11 +27,16 @@ public:
         _ibo.deleteIbo();
     }
 
+    float getHeight() const {
+        return _mesh.getHeight();
+    }
+
 private:
     vbo _vbo;
     ibo _ibo;
     TextureCube _texturecube;
     Cube _mesh;
+
 
 };
 

@@ -4,16 +4,13 @@
 
 #include "include/Map.hpp"
 
-Map::Map():_map()
-{
-}
 
-Map::Map(FilePath pathToMap):
-_map()
+Map::Map(const FilePath &pathToMap, std::vector<Model> &models):
+_models(models)
 {
     generateCubeMap(pathToMap);
 }
-void Map::generateCubeMap(FilePath pathToMap) {
+void Map::generateCubeMap(const FilePath& pathToMap){
     std::string line;
     std::fstream image;
     double size;
@@ -28,35 +25,52 @@ void Map::generateCubeMap(FilePath pathToMap) {
             }
         }
 
+
+
         for(int i = 0; i < size; i++){
 
             for(int j = 0; j < size; j++){
                 std::getline(image, line);
 
                 switch (stoi(line)) {
-                    case 255:
-                        _map.push_back(Cube(i,j,0));
+                    case 255: //FLOOR
+                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0]));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0),_models[0]));
+                        //_floor.push_back(Cube(i,j,0));
+                        //_map.push_back(Cube(i,j,0));
                         break;
                     case 240: //WALL
-                        _map.push_back(Cube(i,j,0));
-                        _map.push_back(Cube(i,j,1));
+                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0]));
+                        _secondFloor.push_back(MapElement(1,glm::vec3(i,1,j), _models[1]));
+//                        _floor.push_back(Cube(i,j,0));
+//                        _map.push_back(Cube(i,j,0));
+//                        _map.push_back(Cube(i,j,1));
                         break;
-                    case 15:
+                    case 15: //SPAWN POINT
+                        _floor.push_back(MapElement(3,glm::vec3(i,0,j), _models[3]));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0]));
                         _spawnPoint = glm::vec3(i,1 ,j);
-                        _map.push_back(Cube(i,j,0));
+//                        _floor.push_back(Cube(i,j,0));
+//                        _map.push_back(Cube(i,j,0));
                         break;
-                    case 90:
-                        _map.push_back(Cube(i,j,0));
+                    case 90: //INTERSECTION
+                        _floor.push_back(MapElement(2,glm::vec3(i,0,j), _models[2]));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0]));
+//                        _floor.push_back(Cube(i,j,0));
+//                        _map.push_back(Cube(i,j,0));
                         break;
-
-                    /*default:
-                        std::cout << "lol y a r" << std::endl;
-                        break;*/
+                    case 0: //VOID
+                        _floor.push_back(MapElement(-1,glm::vec3(0), _models[0]));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0]));
+                        //_floor.push_back(Cube(0));
+                        break;
+                    default:
+                        //std::cout << "lol y a r" << std::endl;
+                        break;
 
 
                 }
-                /*float z = stoi(line)/(255/10);
-                _map.push_back(Cube(i,j,z));*/
+
 
             }
 
@@ -67,9 +81,9 @@ void Map::generateCubeMap(FilePath pathToMap) {
 }
 
 void Map::display() const {
-    double size = sqrt(_map.size());
+    double size = sqrt(static_cast<double>(_floor.size()));
 
-    for (double i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
 
         for (int j = 0; j < size; j++) {
 

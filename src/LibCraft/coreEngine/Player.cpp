@@ -3,8 +3,8 @@
 //
 #include "include/Player.hpp"
 
-Player::Player(const Cube &mesh, const glm::vec3 spawnPos):
-_position(spawnPos), _hp(10), _mesh(mesh)
+Player::Player(const Cube &mesh, const glm::vec3 &spawnPos):
+_position(spawnPos), _hp(10), _mesh(mesh), _hitbox(mesh, spawnPos)
 {
 }
 
@@ -24,6 +24,8 @@ void Player::moveRight() {
         }
         _position += _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
         _placement+= _speedSide;
+
+        //TODO : check for collision
 
         /*_ableToMove = false;*/
 
@@ -48,6 +50,8 @@ void Player::moveLeft() {
 
         /*_ableToMove = false;*/
 
+        //TODO : check for collision
+
 
         //std::cout << "placement : " << _placement << " able to move ? : " << _ableToMove <<  std::endl;
     }
@@ -56,10 +60,12 @@ void Player::moveLeft() {
 
 void Player::moveForward(){
     _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    //TODO : check for collision
 }
 
 void Player::moveBackward(){
     _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    //TODO : check for collision
 }
 
 void Player::render(){

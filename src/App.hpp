@@ -41,12 +41,12 @@ public:
     void size_callback(int width, int height);
 
 private:
+    std::vector<Model> _models;
     Map _map;
     Shader _shaderProgram;
     Shader _skyboxShader;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
-    std::vector<Model> _models;
     int _width;
     int _height;
     Camera _camera;
@@ -55,3 +55,5 @@ private:
     Player _player;
 
 };
+
+std::vector<Model> getAllModels(const FilePath &appPath);
