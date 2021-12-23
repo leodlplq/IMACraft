@@ -42,10 +42,10 @@ void Camera::scrollCallback(double xOffset, double yOffset){
 }
 
 void Camera::rotateLeft(float degree){
-    _angleX += degree;
+    _angleY += degree;
 }
 void Camera::rotateUp(float degree){
-    _angleY += degree;
+    _angleX += degree;
 }
 
 

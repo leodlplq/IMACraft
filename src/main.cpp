@@ -66,10 +66,10 @@ int main(__attribute__((unused)) int argc, char** argv)
     });
 
     app.init();
-    bool isGameActive = true;
+
     std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window) && isGameActive) {
+    while (!glfwWindowShouldClose(window) && app.isGameRunning()) {
 
         app.render(window);
 
@@ -81,7 +81,7 @@ int main(__attribute__((unused)) int argc, char** argv)
 
         if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
-            isGameActive = false;
+            app.closeGame();
         }
 
     }

@@ -38,10 +38,17 @@ public:
         std::cout << "player position is : " << " x : " << _position.x  <<" y : " << _position.y << " z : " << _position.z << std::endl;
     }
     inline void inverseAbleToMove(){ _ableToMove = !_ableToMove; }
+
+    //GETTERS
     inline glm::vec3 getPosition() const{ return _position; }
     inline glm::vec3 getOrientation() const{ return _orientation; }
     inline char getFacingDirection() const { return _facingDirection; }
     inline Hitbox getHitbox() const { return _hitbox; }
+
+    //SETTERS
+    inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
+    inline char setFacingOrientation(char dir){return _facingDirection = dir; }
+
 
 
 private:
@@ -62,7 +69,7 @@ private:
     char _facingDirection;
 
     //SPEEDS AND VALUE FOR THE MOVEMENT + JUMP OF THE PLAYER
-    float _speed = 0.05f;
+    float _speed = 0.1f;
     float _speedSide = _speed;
     float _speedJump = 0.01f;
     float _velocityY = 0.f;

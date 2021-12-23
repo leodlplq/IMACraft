@@ -42,7 +42,12 @@ public:
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
 
+    inline bool isGameRunning() const { return _running; }
+    inline void closeGame(){ _running = false; }
+
 private:
+    bool _running = true;
+
     std::vector<Model> _models;
     Map _map;
     Shader _shaderProgram;

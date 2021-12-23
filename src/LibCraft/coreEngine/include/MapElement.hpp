@@ -25,6 +25,7 @@ private:
     int _modelType;
     glm::vec3 _position;
     Hitbox _hitbox;
+    bool _isIntersection;
 
 public:
     //CONSTRUCTORS
@@ -32,10 +33,11 @@ public:
     /*inline MapElement(int type, int texture, glm::vec3 position) :
         _type(type), _texture(texture), _position(position)
     {};*/
-    inline MapElement(int modelType, glm::vec3 position, Model model)
+    inline MapElement(int modelType, glm::vec3 position, Model model, bool inter)
     {
         _modelType = int(modelType);
         _position = glm::vec3(position);
+        _isIntersection = inter;
 
         if(modelType != -1){
             _hitbox = Hitbox(model, position);
@@ -80,6 +82,8 @@ public:
     inline Hitbox getHitbox() const{
         return _hitbox;
     }
+
+    inline bool isIntersection() const { return _isIntersection; }
 
 
 

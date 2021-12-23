@@ -158,49 +158,71 @@ App::~App(){
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
-    //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
-    /*int nextBlockPos;
-    if(key == 65 && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-        switch (_player.getFacingDirection()) {
-            case 'N': //WHEN GOING LEFT Z INCREASE
-                nextBlockPos = +1;
-                break;
-            case 'S': //WHEN GOING LEFT Z DECREASE
-                nextBlockPos = -1;
-                break;
-            default: // if it is not N or S then it's W or E and it's a 0;
-                nextBlockPos = 0;
-                break;
+
+
+
+    double sizeMap = sqrt((static_cast<double>(_map.getSecondFloor().size())));
+    if(key == 65 && action == GLFW_PRESS){
+        int xPlayer = static_cast<int>(round(_player.getPosition().x));
+        int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+
+        int coord = static_cast<int>((xPlayer * sizeMap) + yPlayer);
+
+        if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+            _player.setOrientationRotation(90.f);
+            switch (_player.getFacingDirection()) {
+                case 'N':
+                    _player.setFacingOrientation('W');
+                    break;
+                case 'W':
+                    _player.setFacingOrientation('S');
+                    break;
+                case 'S':
+                    _player.setFacingOrientation('E');
+                    break;
+                case 'E':
+                    _player.setFacingOrientation('N');
+                    break;
+            }
+            _camera.rotateLeft(-90.f);
         }
 
-        //TODO : we need to check if the player is able to move or if there is a collision
-        _player.display();
-        int x = static_cast<int>(round(_player.getPosition().x));
-        int y = static_cast<int>(round(_player.getPosition().z)) + nextBlockPos;
-
-        int coord = static_cast<int>((x * sqrt(static_cast<double>(_map.getSecondFloor().size()))) + y);
-        //std::cout << "sx : " << x << " sy : " << y << std::endl;
-        Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
-        std::cout << (_player.getHitbox().intersect(blockHitbox) ?"collision" : "no collision")<< std::endl;
 
 
-        //_map.getSecondFloor()[static_cast<unsigned long>(coord)].displayPosition();
-
-        //std::cout << "model " << _map.getSecondFloor()[static_cast<unsigned long>(coord)].getModel() << std::endl;
-
-        _player.getHitbox().display();
-        //TODO : we need to check if the player is turning while on intersection
-        _player.moveLeft();
     }
 
-    if(key == 68 && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-        _player.moveRight();
+    if(key == 68 && action == GLFW_PRESS){
+        int xPlayer = static_cast<int>(round(_player.getPosition().x));
+        int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+        int coord = static_cast<int>((xPlayer * sizeMap) + yPlayer);
+
+        if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+            _player.setOrientationRotation(-90.f);
+            switch (_player.getFacingDirection()) {
+                case 'N':
+                    _player.setFacingOrientation('E');
+                    break;
+                case 'W':
+                    _player.setFacingOrientation('N');
+                    break;
+                case 'S':
+                    _player.setFacingOrientation('W');
+                    break;
+                case 'E':
+                    _player.setFacingOrientation('S');
+                    break;
+            }
+
+            _camera.rotateLeft(90.f);
+        }
+
     }
 
-    if(key == 87 && (action == GLFW_PRESS || action == GLFW_REPEAT)){ //Z
+    /*if(key == 87 && (action == GLFW_PRESS || action == GLFW_REPEAT)){ //Z
         _player.moveForward();
-    }
-    */
+    }*/
     if(key == 32 && (action == GLFW_PRESS)){
         _player.startJump();
     }
@@ -221,8 +243,8 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
     float rotX = _camera._sensitivity * (float)(yPos - ((float)_height/2))/(float)_height;
     float rotY = _camera._sensitivity * (float)(xPos- ((float)_width/2))/(float)_width;
 
-    _camera.rotateLeft(rotX);
-    _camera.rotateUp(rotY);
+    _camera.rotateLeft(rotY);
+    _camera.rotateUp(rotX);
 }
 
 void App::size_callback(int width, int height)
@@ -232,11 +254,12 @@ void App::size_callback(int width, int height)
 }
 
 void App::inputs(GLFWwindow* window) {
+//(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
 
-    int nextBlockPos;
-    int nextBlockNeighbour;
 
     if(glfwGetKey(window, 65) == GLFW_PRESS){ // MOVEMENT TO THE LEFT
+        int nextBlockPos;
+        int nextBlockNeighbour;
         switch (_player.getFacingDirection()) {
             case 'N': //WHEN GOING LEFT Z INCREASE
                 nextBlockPos = +1;
@@ -267,6 +290,7 @@ void App::inputs(GLFWwindow* window) {
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
 
+
         bool playerBlock = !_player.getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !_player.getHitbox().intersect(neiBlockHitbox);
 
@@ -280,7 +304,8 @@ void App::inputs(GLFWwindow* window) {
     }
     if(glfwGetKey(window, 68) == GLFW_PRESS){ //GOING RIGHT
 
-
+        int nextBlockPos;
+        int nextBlockNeighbour;
         //DETECTING COLLISION
         switch (_player.getFacingDirection()) {
             case 'N': //WHEN GOING RIGHT Z DECREASE
@@ -325,19 +350,58 @@ void App::inputs(GLFWwindow* window) {
 
     }
 
-
     if(glfwGetKey(window,87) == GLFW_PRESS){ //GOING FORWARD
+        int nextBlockPosX;
+        int nextBlockPosY;
+        int nextBlockNeighbourRX;
+        int nextBlockNeighbourRY;
+        int nextBlockNeighbourLX;
+        int nextBlockNeighbourLY;
+
         switch (_player.getFacingDirection()) {
             case 'N': //WHEN GOING RIGHT Z DECREASE
-                nextBlockPos = -1;
-                nextBlockNeighbour = 1;
+                nextBlockPosX = -1;
+                nextBlockPosY = 0;
+                //RIGHT
+                nextBlockNeighbourRX = -1;
+                nextBlockNeighbourRY = -1;
+                //LEFT
+                nextBlockNeighbourLX = -1;
+                nextBlockNeighbourLY = 1;
                 break;
             case 'S': //WHEN GOING RIGHT Z INCREASE
-                nextBlockPos = 1;
-                nextBlockNeighbour = 1;
+                nextBlockPosX = 1;
+                nextBlockPosY = 0;
+                //RIGHT
+                nextBlockNeighbourRX = 1;
+                nextBlockNeighbourRY = 1;
+                //LEFT
+                nextBlockNeighbourLX = 1;
+                nextBlockNeighbourLY = -1;
+                break;
+            case 'W': //WHEN GOING RIGHT Z INCREASE
+                nextBlockPosX = 0;
+                nextBlockPosY = 1;
+                //RIGHT
+                nextBlockNeighbourRX = -1;
+                nextBlockNeighbourRY = 1;
+                //LEFT
+                nextBlockNeighbourLX = 1;
+                nextBlockNeighbourLY = 1;
+                break;
+
+            case 'E': //WHEN GOING RIGHT Z INCREASE
+                nextBlockPosX = 0;
+                nextBlockPosY = -1;
+                //RIGHT
+                nextBlockNeighbourRX = 1;
+                nextBlockNeighbourRY = -1;
+                //LEFT
+                nextBlockNeighbourLX = -1;
+                nextBlockNeighbourLY = -1;
                 break;
             default: // if it is not N or S then it's W or E and it's a 0;
-                nextBlockPos = 0;
+                //nextBlockPos = 0;
                 break;
         } // WHICH DIRECTION IT GOES
 
@@ -345,21 +409,34 @@ void App::inputs(GLFWwindow* window) {
 
         int xPlayer = static_cast<int>(round(_player.getPosition().x));
         int yPlayer = static_cast<int>(round(_player.getPosition().z));
-        int x =  xPlayer + nextBlockPos;
-        int y = yPlayer;
+        int x =  xPlayer + nextBlockPosX;
+        int y = yPlayer + nextBlockPosY;
 
         int coord = static_cast<int>((x * sizeMap) + y);
         Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
 
-        int neiX = xPlayer + nextBlockPos;
-        int neiY = yPlayer + nextBlockNeighbour;
+        //RIGHT NEIGHBOUR
+        int neiX = xPlayer + nextBlockNeighbourRX;
+        int neiY = yPlayer + nextBlockNeighbourRY;
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
 
-        int neiX2 = xPlayer + nextBlockPos;
-        int neiY2 = yPlayer - nextBlockNeighbour;
+        //LEFT NEIGHBOUR
+        int neiX2 = xPlayer + nextBlockNeighbourLX;
+        int neiY2 = yPlayer + nextBlockNeighbourLY;
         int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
         Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
+
+        _player.display();
+        std::cout << "-------------DIRECTION : " << _player.getFacingDirection() << " -------------"<< std::endl;
+        std::cout << "------------ PLAYER -------------" << std::endl;
+        _player.getHitbox().display();
+        std::cout << "------------ BLOCK -------------" << std::endl;
+        blockHitbox.display();
+        std::cout << (_player.getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
+        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
+        neiBlockHitbox.display();
+        std::cout << (_player.getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
 
         bool playerBlock = !_player.getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !_player.getHitbox().intersect(neiBlockHitbox);
@@ -372,6 +449,8 @@ void App::inputs(GLFWwindow* window) {
 
             ){
             _player.moveForward();
+        } else {
+            //closeGame(); COMMENTED WHILE WORKING ON THE GAME.
         }
 
 
