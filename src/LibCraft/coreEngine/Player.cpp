@@ -4,7 +4,7 @@
 #include "include/Player.hpp"
 
 Player::Player(const Cube &mesh, const glm::vec3 &spawnPos):
-_position(spawnPos), _hp(10), _mesh(mesh), _hitbox(mesh, spawnPos)
+_position(spawnPos), _facingDirection('N'), _mesh(mesh), _hitbox(mesh, spawnPos), _hp(10)
 {
 }
 
@@ -18,7 +18,7 @@ void Player::startJump(){
 
 void Player::moveRight() {
 
-    if(_placement < 1 && _ableToMove == 1){
+   /* if(_placement < 1 && _ableToMove == 1){
         if(_placement == 0){
             _ableToMove = false;
         }
@@ -27,12 +27,19 @@ void Player::moveRight() {
 
         //TODO : check for collision
 
-        /*_ableToMove = false;*/
+        *//*_ableToMove = false;*//*
 
 
 
         //std::cout << "placement : " << _placement << " able to move ? : " << _ableToMove <<  std::endl;
-    }
+    }*/
+    glm::vec3 displacement = _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+    _position += displacement;
+
+    glm::vec3 newCorner1 = _hitbox.getCorner1() + displacement;
+    _hitbox.setCorner1( newCorner1 );
+    glm::vec3 newCorner2 = _hitbox.getCorner2() + displacement;
+    _hitbox.setCorner2( newCorner2 );
 }
 
 void Player::moveLeft() {
@@ -41,31 +48,54 @@ void Player::moveLeft() {
     }*/
 
 
-    if(_placement > -1 && _ableToMove == 1){
+    /*if(_placement > -1 && _ableToMove == 1){
         if(_placement == 0){
             _ableToMove = false;
         }
         _position -= _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
         _placement-= _speedSide;
 
-        /*_ableToMove = false;*/
+        *//*_ableToMove = false;*//*
 
         //TODO : check for collision
 
 
         //std::cout << "placement : " << _placement << " able to move ? : " << _ableToMove <<  std::endl;
-    }
+    }*/
+    glm::vec3 displacement = _speedSide * glm::normalize(glm::cross(glm::rotate(_orientation, glm::radians(_orientationRot), _up),_up));
+    _position -= displacement;
 
+    glm::vec3 newCorner1 = _hitbox.getCorner1() - displacement;
+    _hitbox.setCorner1( newCorner1 );
+    glm::vec3 newCorner2 = _hitbox.getCorner2() - displacement;
+    _hitbox.setCorner2( newCorner2 );
 }
 
 void Player::moveForward(){
-    _position += _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+
+    //PLAYER MOVEMENT
+    glm::vec3 displacement = _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _position += displacement;
+
+    //PLAYER'S HITBOX MOVEMENT
+    glm::vec3 newCorner1 = _hitbox.getCorner1() + _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _hitbox.setCorner1( newCorner1 );
+    glm::vec3 newCorner2 = _hitbox.getCorner2() + _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _hitbox.setCorner2( newCorner2 );
+
+
     //TODO : check for collision
 }
 
 void Player::moveBackward(){
-    _position -= _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
-    //TODO : check for collision
+    glm::vec3 displacement = _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _position -= displacement;
+
+    //PLAYER'S HITBOX MOVEMENT
+    glm::vec3 newCorner1 = _hitbox.getCorner1() - _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _hitbox.setCorner1( newCorner1 );
+    glm::vec3 newCorner2 = _hitbox.getCorner2() - _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
+    _hitbox.setCorner2( newCorner2 );
 }
 
 void Player::render(){
@@ -87,9 +117,9 @@ void Player::Inputs(GLFWwindow *window) {
 
 
 
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){ //Z
+    /*if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){ //Z
         moveForward();
-    }
+    }*/
 
 
     /*if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){

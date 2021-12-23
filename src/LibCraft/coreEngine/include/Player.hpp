@@ -32,48 +32,54 @@ public:
 
 
     void render();
-
     void Inputs(GLFWwindow* window);
 
     inline void display() const{
         std::cout << "player position is : " << " x : " << _position.x  <<" y : " << _position.y << " z : " << _position.z << std::endl;
     }
+    inline void inverseAbleToMove(){ _ableToMove = !_ableToMove; }
+    inline glm::vec3 getPosition() const{ return _position; }
+    inline glm::vec3 getOrientation() const{ return _orientation; }
+    inline char getFacingDirection() const { return _facingDirection; }
+    inline Hitbox getHitbox() const { return _hitbox; }
 
-    inline void inverseAbleToMove(){
-        _ableToMove = !_ableToMove;
-    }
-
-    glm::vec3 getPosition() const{
-        return _position;
-    }
-
-    glm::vec3 getOrientation() const{
-        return _orientation;
-    }
-
-    Hitbox getHitbox() const {
-        return _hitbox;
-    }
 
 private:
+    //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position;
+
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
-    float _orientationRot = -90.f;
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
-    float _hp;
-    Cube _mesh;
-    float _speed = 0.05f;
-    float _speedSide = 1.f;
-    float _speedJump = 0.01f;
+    float _orientationRot = -90.f;
 
     bool _ableToMove = true;
-    float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
+    //float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
+    /*
+     * CAN TAKE 4 DIFFERENTS VALUE:
+     * ----- N S W E ------
+     * it indicates which direction the player is facing (north, south, west, east)
+     * */
+    char _facingDirection;
 
-    bool _onGround = true;
+    //SPEEDS AND VALUE FOR THE MOVEMENT + JUMP OF THE PLAYER
+    float _speed = 0.05f;
+    float _speedSide = _speed;
+    float _speedJump = 0.01f;
     float _velocityY = 0.f;
     float _gravity = 0.2f;
+    bool _onGround = true;
 
+
+    //MESH OF THE CUBE (going to be a model soon)
+    Cube _mesh;
+
+    //HITBOX PART
     Hitbox _hitbox;
+
+    //PLAYER HEALTH
+    float _hp;
+
+
 
 
 

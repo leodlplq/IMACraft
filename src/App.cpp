@@ -75,7 +75,7 @@ void App::render(GLFWwindow* window)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //INPUTS
-    _player.Inputs(window);
+    inputs(window);
     _player.render();
 
     // Tell OpenGL which Shader Program we want to use
@@ -159,16 +159,32 @@ App::~App(){
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
     //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
+    /*int nextBlockPos;
+    if(key == 65 && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+        switch (_player.getFacingDirection()) {
+            case 'N': //WHEN GOING LEFT Z INCREASE
+                nextBlockPos = +1;
+                break;
+            case 'S': //WHEN GOING LEFT Z DECREASE
+                nextBlockPos = -1;
+                break;
+            default: // if it is not N or S then it's W or E and it's a 0;
+                nextBlockPos = 0;
+                break;
+        }
 
-    if(key == 65 && action == GLFW_PRESS){
         //TODO : we need to check if the player is able to move or if there is a collision
         _player.display();
         int x = static_cast<int>(round(_player.getPosition().x));
-        int y = static_cast<int>(round(_player.getPosition().z));
+        int y = static_cast<int>(round(_player.getPosition().z)) + nextBlockPos;
 
         int coord = static_cast<int>((x * sqrt(static_cast<double>(_map.getSecondFloor().size()))) + y);
         //std::cout << "sx : " << x << " sy : " << y << std::endl;
-        _map.getSecondFloor()[static_cast<unsigned long>(coord)].displayPosition();
+        Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
+        std::cout << (_player.getHitbox().intersect(blockHitbox) ?"collision" : "no collision")<< std::endl;
+
+
+        //_map.getSecondFloor()[static_cast<unsigned long>(coord)].displayPosition();
 
         //std::cout << "model " << _map.getSecondFloor()[static_cast<unsigned long>(coord)].getModel() << std::endl;
 
@@ -177,12 +193,15 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
         _player.moveLeft();
     }
 
-    if(key == 68 && action == GLFW_PRESS){
+    if(key == 68 && (action == GLFW_PRESS || action == GLFW_REPEAT)){
         _player.moveRight();
-        //_player.display();
     }
 
-    if(key == 32 && action == GLFW_PRESS){
+    if(key == 87 && (action == GLFW_PRESS || action == GLFW_REPEAT)){ //Z
+        _player.moveForward();
+    }
+    */
+    if(key == 32 && (action == GLFW_PRESS)){
         _player.startJump();
     }
 }
@@ -211,3 +230,165 @@ void App::size_callback(int width, int height)
     _width  = width;
     _height = height;
 }
+
+void App::inputs(GLFWwindow* window) {
+
+    int nextBlockPos;
+    int nextBlockNeighbour;
+
+    if(glfwGetKey(window, 65) == GLFW_PRESS){ // MOVEMENT TO THE LEFT
+        switch (_player.getFacingDirection()) {
+            case 'N': //WHEN GOING LEFT Z INCREASE
+                nextBlockPos = +1;
+                nextBlockNeighbour = 1;
+                break;
+            case 'S': //WHEN GOING LEFT Z DECREASE
+                nextBlockPos = -1;
+                nextBlockNeighbour = -1;
+                break;
+            default: // if it is not N or S then it's W or E and it's a 0;
+                nextBlockPos = 0;
+                nextBlockNeighbour = 0;
+                break;
+        }
+
+        double sizeMap = sqrt((static_cast<double>(_map.getSecondFloor().size())));
+
+        int xPlayer = static_cast<int>(round(_player.getPosition().x));
+        int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+        int x = xPlayer;
+        int y = yPlayer + nextBlockPos;
+        int coord = static_cast<int>((x * sizeMap) + y);
+        Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
+
+        int neiX = xPlayer + nextBlockNeighbour;
+        int neiY = yPlayer + nextBlockPos;
+        int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
+        Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
+
+        bool playerBlock = !_player.getHitbox().intersect(blockHitbox);
+        bool playerBlockNei = !_player.getHitbox().intersect(neiBlockHitbox);
+
+        if(playerBlock &&  playerBlockNei){
+            _player.moveLeft();
+        }
+
+        //TODO : we need to check if the player is turning while on intersection
+
+
+    }
+    if(glfwGetKey(window, 68) == GLFW_PRESS){ //GOING RIGHT
+
+
+        //DETECTING COLLISION
+        switch (_player.getFacingDirection()) {
+            case 'N': //WHEN GOING RIGHT Z DECREASE
+                nextBlockPos = -1;
+                nextBlockNeighbour = -1;
+                break;
+            case 'S': //WHEN GOING RIGHT Z INCREASE
+                nextBlockPos = 1;
+                nextBlockNeighbour = 1;
+                break;
+            default: // if it is not N or S then it's W or E and it's a 0;
+                nextBlockPos = 0;
+                break;
+        } // WHICH DIRECTION IT GOES
+
+        double sizeMap = sqrt((static_cast<double>(_map.getSecondFloor().size())));
+
+        int xPlayer = static_cast<int>(round(_player.getPosition().x));
+        int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+        int x = xPlayer;
+        int y = yPlayer + nextBlockPos;
+        int coord = static_cast<int>((x * sizeMap) + y);
+        Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
+
+        int neiX = xPlayer + nextBlockNeighbour;
+        int neiY = yPlayer + nextBlockPos;
+        int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
+        Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
+
+        bool playerBlock = !_player.getHitbox().intersect(blockHitbox);
+        bool playerBlockNei = !_player.getHitbox().intersect(neiBlockHitbox);
+
+        if(
+                (playerBlock &&  playerBlockNei) ||
+                (playerBlock &&  !playerBlockNei && blockHitbox.getCorner1().x == 10000.5)
+        ){
+            _player.moveRight();
+        }
+
+
+
+    }
+
+
+    if(glfwGetKey(window,87) == GLFW_PRESS){ //GOING FORWARD
+        switch (_player.getFacingDirection()) {
+            case 'N': //WHEN GOING RIGHT Z DECREASE
+                nextBlockPos = -1;
+                nextBlockNeighbour = 1;
+                break;
+            case 'S': //WHEN GOING RIGHT Z INCREASE
+                nextBlockPos = 1;
+                nextBlockNeighbour = 1;
+                break;
+            default: // if it is not N or S then it's W or E and it's a 0;
+                nextBlockPos = 0;
+                break;
+        } // WHICH DIRECTION IT GOES
+
+        double sizeMap = sqrt((static_cast<double>(_map.getSecondFloor().size())));
+
+        int xPlayer = static_cast<int>(round(_player.getPosition().x));
+        int yPlayer = static_cast<int>(round(_player.getPosition().z));
+        int x =  xPlayer + nextBlockPos;
+        int y = yPlayer;
+
+        int coord = static_cast<int>((x * sizeMap) + y);
+        Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
+
+        int neiX = xPlayer + nextBlockPos;
+        int neiY = yPlayer + nextBlockNeighbour;
+        int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
+        Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
+
+        int neiX2 = xPlayer + nextBlockPos;
+        int neiY2 = yPlayer - nextBlockNeighbour;
+        int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
+        Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
+
+        bool playerBlock = !_player.getHitbox().intersect(blockHitbox);
+        bool playerBlockNei = !_player.getHitbox().intersect(neiBlockHitbox);
+        bool playerBlockNei2 = !_player.getHitbox().intersect(neiBlockHitbox2);
+
+        if(
+                (playerBlock && playerBlockNei  && playerBlockNei2) ||
+                (playerBlock && playerBlockNei  && !playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5) ||
+                (playerBlock && !playerBlockNei  && playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5)
+
+            ){
+            _player.moveForward();
+        }
+
+
+    }
+
+    if(glfwGetKey(window,83) == GLFW_PRESS){ //GOING BACKWARD
+        _player.moveBackward();
+    }
+}
+
+// -------------------------------------------------------- PRESSE PAPIER ---------------------------------------------------------------
+
+/*std::cout << "------------ PLAYER -------------" << std::endl;
+        _player.getHitbox().display();
+        std::cout << "------------ BLOCK -------------" << std::endl;
+        blockHitbox.display();
+        std::cout << (_player.getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
+        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
+        neiBlockHitbox.display();
+        std::cout << (_player.getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;*/

@@ -34,6 +34,8 @@ public:
     void render(GLFWwindow* window);
     void init();
 
+    void inputs(GLFWwindow* window);
+
     void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
     void mouse_button_callback(int button, int action, int mods);
     void scroll_callback(double xOffset, double yOffset);

@@ -43,10 +43,11 @@ public:
         std::cout << "Hitbox corner2 : " << " x : " << _corner2.x  <<" y : " << _corner2.y << " z : " << _corner2.z << std::endl;
     }
 
+    inline glm::vec3 setCorner1(glm::vec3 newCorner){ return _corner1 = newCorner; }
+    inline glm::vec3 getCorner1(){ return _corner1; }
 
-
-
-
+    inline glm::vec3 setCorner2(glm::vec3 newCorner){ return _corner2 = newCorner; }
+    inline glm::vec3 getCorner2(){ return _corner2; }
 
 
 
