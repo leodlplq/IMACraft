@@ -11,6 +11,7 @@
 
 //TOOLS
 #include "LibCraft/tools/include/filePath.hpp"
+#include "LibCraft/tools/include/deleteElementsFromVector.hpp"
 //RENDER ENGINE
 #include "LibCraft/renderEngine/include/vbo.hpp"
 #include "LibCraft/renderEngine/include/vao.hpp"
@@ -37,13 +38,21 @@ public:
     void render(GLFWwindow* window);
     void init();
 
-    static void key_callback(int key, int scancode, int action, int mods);
+    void inputs(GLFWwindow* window);
+
+    void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
     void mouse_button_callback(int button, int action, int mods);
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
 
+    inline bool isGameRunning() const { return _running; }
+    inline void closeGame(){ _running = false; }
+
 private:
+    bool _running = true;
+
+    std::vector<Model> _models;
     Map _map;
     Shader _lightShader;
     Shader _skyboxShader;
@@ -51,9 +60,6 @@ private:
     GLint _uniId, _tex0Id{};
     FilePath _appPath;
     std::vector<TextureCube> _textures;
-    std::vector<Model> _models;
-    float _rotation;
-    double _prevTime;
     int _width;
     int _height;
     Camera _camera;
@@ -69,3 +75,5 @@ private:
 
     void Continue(GLFWwindow *window);
 };
+
+std::vector<Model> getAllModels(const FilePath &appPath);

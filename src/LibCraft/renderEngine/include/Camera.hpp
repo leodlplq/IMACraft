@@ -17,7 +17,7 @@ class Camera
 {
     public:
         glm::vec3 _position;
-        glm::vec3 _orientation = glm::vec3(0.0f,0.0f,-1.0f);
+        glm::vec3 _orientation;
         glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
 
         float _width;
@@ -37,6 +37,7 @@ class Camera
 
 
         Camera(int width , int height, Player &player);
+        ~Camera() =default;
         void Matrix(float FOVdeg, float nearPlane, float farPlane);
 
 
@@ -70,8 +71,8 @@ class Camera
     private:
         Player &_player;
         float _distanceFromCamera = 5.0f;
-        float _angleX = 10.f;
-        float _angleY = 10.f;
+        float _angleX = 30.f;
+        float _angleY = -90.f;
 
         //SENSITIVITY PART
         float _scrollSensitivity = 0.5;

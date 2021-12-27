@@ -11,7 +11,7 @@ static App& get_app(GLFWwindow* window)
     return *reinterpret_cast<App*>(glfwGetWindowUserPointer(window));
 }
 
-int main(int argc, char** argv)
+int main(__attribute__((unused)) int argc, char** argv)
 {
     /* Initialize the library */
     if (!glfwInit()) {
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     /* Hook user inputs to the App */
     glfwSetWindowUserPointer(window, reinterpret_cast<void*>(&app));
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        get_app(window).key_callback(key, scancode, action, mods);
+        get_app(window).key_callback(key, /*scancode,*/ action/*, mods*/);
     });
     glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
         get_app(window).mouse_button_callback(button, action, mods);
@@ -66,9 +66,10 @@ int main(int argc, char** argv)
     });
 
     app.init();
-    //std::cout << w << h << std::endl;
+
+    std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window) && app.isGameRunning()) {
 
         app.render(window);
 
@@ -80,11 +81,12 @@ int main(int argc, char** argv)
 
         if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
-            glfwTerminate();
+            app.closeGame();
         }
 
     }
 
     glfwTerminate();
+    app.~App();
     return 0;
 }

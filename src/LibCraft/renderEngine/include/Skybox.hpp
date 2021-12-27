@@ -30,6 +30,7 @@ public:
                     "assets/textures/skybox/back.jpg",
             };
     Skybox();
+    ~Skybox();
     void draw(){
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, _id);

@@ -4,7 +4,7 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 
 Cube::Cube(const float radius) :
-_placement(glm::mat4())
+_placement(glm::mat4(0)), _radius(radius)
 {
     build(radius);
 }

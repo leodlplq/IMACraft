@@ -71,3 +71,9 @@ void Skybox::setup(Shader& shader, Camera& camera, int width, int height)
     // Switch back to the normal depth function
     glDepthFunc(GL_LESS);
 }
+
+Skybox::~Skybox() {
+    _vao.deleteVao();
+    _vbo.deleteVbo();
+    _ibo.deleteIbo();
+}
