@@ -17,7 +17,7 @@ _placement(1)
 }
 
 void Cube::build (const float r){
-    vertices = {  //                        POSITION          |                     COLOR         |          TEXTURES COORDS
+    vertices = {  //                        POSITION          |                     NORMAL         |          TEXTURES COORDS
             Vertex(glm::vec3(-0.5*r, -0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 0        7--------6
             Vertex(glm::vec3(0.5*r, -0.5*r, 0.5*r),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 1        /|       /|
             Vertex(glm::vec3(0.5*r, -0.5*r, -0.5*r),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 2      4--------5 |

@@ -4,8 +4,8 @@
 #include <valarray>
 
 
-App::App(int window_width, int window_height, FilePath appPath) :
- _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+App::App(int window_width, int window_height, const FilePath& appPath) :
+ _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
  _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
  _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
  _uniId(0),
@@ -16,54 +16,61 @@ App::App(int window_width, int window_height, FilePath appPath) :
  _prevTime(0.0f),
  _width(window_width),
  _height(window_height),
- _steve(),
+ _camera(_width,_height,_player),
  _player(Cube(), glm::vec3(0.f, 1.0f, 0.f)),
- _camera(_width,_height,_player)
-
-
+ _steve(),
+ _collectibles(),
+ _enemies(),
+ _sun()
 {
     size_callback(window_width, window_height);
 }
 void App::init(){
 
-    // MAP
-    _map = Map(_appPath.dirPath() + "/assets/maps/map3.pgm");
-
-    // MESH DU CUBE ORIGINEL !!
-    Cube cube;
-
-    //TEXTURE PATH FOR THE GROUND
-    std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
-    std::string filePathGrassTop = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
-    std::string filePathGrassBottom = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
-
-    // MODEL OF THE GROUND
-    Mesh cube_mesh(cube, filePathGrassSide, filePathGrassSide, filePathGrassTop, filePathGrassBottom, filePathGrassSide, filePathGrassSide, GL_RGB);
-    _models.push_back(cube_mesh);
-
-    // TEST: ANOTHER CUBE Text
-    std::string filePathTest = ((std::string)_appPath.dirPath() + "/assets/textures/player/side.png");
-    Mesh cube_meshtest(cube, filePathTest, filePathTest, filePathTest, filePathTest, filePathTest, filePathTest, GL_RGBA);
-    _models.push_back(cube_meshtest);
-
-    //PLAYER
-    _player = Player(cube, glm::vec3(0.f, 1.0f, 0.f));
-    std::string filePathWood = ((std::string)_appPath.dirPath() + "/assets/textures/cobblestone/side.png");
-    TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
-    player.texUnit(_shaderProgram,"tex0",0);
-    _textures.push_back(player);
-
-    //Steve??AALLOOO??
-    std::string fileToSteve = (std::string)_appPath.dirPath()+"/assets/obj/space.obj";
-    _steveShader.activate();
-    _steve = new Model(&fileToSteve[0]);
+//    // MAP
+//    _map = Map(_appPath.dirPath() + "/assets/maps/map3.pgm");
+//
+//    // MESH DU CUBE ORIGINAL !!
+//    Cube cube;
+//
+//    //TEXTURE PATH FOR THE GROUND
+//    std::string filePathGrassSide = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/side.jpg");
+//    std::string filePathGrassTop = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/top.jpg");
+//    std::string filePathGrassBottom = ((std::string)_appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
 
     // CAMERA
+    // configure global opengl state
+    // -----------------------------
     glEnable(GL_DEPTH_TEST);
+    // load models
+    // -----------
+    Model steve(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
+    _models.push_back(steve);
+    std::cout << "Taille de Steve: " << steve.getHeight() << std::endl;
+    Model terrain(((std::string)_appPath.dirPath() + "/assets/obj/a_minecraft_village/scene.gltf").c_str());
+    _models.push_back(terrain);
+    Model hud(((std::string)_appPath.dirPath() + "/assets/obj/hud/scene.gltf").c_str());
+    _models.push_back(hud);
+    Model pickaxe(((std::string)_appPath.dirPath() + "/assets/obj/pickaxe/scene.gltf").c_str());
+    _models.push_back(pickaxe);
+    Model sun(((std::string)_appPath.dirPath() + "/assets/obj/cube/cube.obj").c_str());
+    _models.push_back(sun);
+
+    Enemy zombie(((std::string)_appPath.dirPath() + "/assets/obj/zombie/scene.gltf").c_str(),glm::vec3(-0.3,0.1,1),glm::vec3(0.027f, 0.027f, 0.027f));
+    _enemies.push_back(zombie);
+    Enemy creeper(((std::string)_appPath.dirPath() + "/assets/obj/creeper/scene.gltf").c_str(),glm::vec3(0,0.3,0),glm::vec3(0.03f, 0.03f, 0.03f));
+    _enemies.push_back(creeper);
+    Enemy enderMan(((std::string)_appPath.dirPath() + "/assets/obj/enderman/scene.gltf").c_str(),glm::vec3(0.5,-0.5,0.5),glm::vec3(0.025f, 0.025f, 0.025f));
+    _enemies.push_back(enderMan);
+
+    Collectible diamond(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(0.0f, 0.6f, 10.0f));
+    _collectibles.push_back(diamond);
 
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
+
+
 }
 
 void App::render(GLFWwindow* window)
@@ -72,76 +79,98 @@ void App::render(GLFWwindow* window)
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //INPUTS
-    _player.Inputs(window);
-    _player.render();
 
-
-
-    // Tell OpenGL which Shader Program we want to use
-    _shaderProgram.activate();
-    _camera.Matrix(45.0f,0.1f,100.0f);
-
-    int matrixID = glGetUniformLocation(_shaderProgram._id,"camMatrix");
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
-
-    // DRAW OUR PLAYER FOR TESTING
+    glm::vec4 lightColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+    glm::vec3 lightPos = glm::vec3(0.f,2.f,7.f);
+    //Light
+    _lightShader.activate();
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model,_player.getPosition());
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[0]._vao.bind();
-    _textures[0].bind();
-    //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-//    //TEST 2 CUBES
-    model = glm::translate(model,glm::vec3(2,0,0));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[0].draw();
-    model = glm::translate(model,glm::vec3(3,0,0));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[1].draw();
-
-    // Draw the map
-    for(auto &cube:_map.getMap()){
-        glm::mat4 model = glm::mat4 (1.0f);
-        model = cube.getObjectMatrix();
-        glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-        if(int(model[3][2]) % 2 == 0){
-            _models[0].draw();
-        }
-        else {
-            _models[1].draw();
+    model = glm::translate(model,lightPos);
+    model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+    glUniformMatrix4fv(glGetUniformLocation(_lightShader._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+    glUniformMatrix4fv(glGetUniformLocation(_lightShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    _models[4].Draw(_lightShader);
+    // Tell OpenGL which Shader Program we want to use
+    _steveShader.activate();
+    glUniform4f(glGetUniformLocation(_steveShader._id,"lightColor"),lightColor.x,lightColor.y,lightColor.z,lightColor.w);
+    glUniform3f(glGetUniformLocation(_steveShader._id,"lightPos"),lightPos.x,lightPos.y,lightPos.z);
+    _camera.Matrix(45.0f,0.1f,100.0f);
+    glUniform3f(glGetUniformLocation(_steveShader._id,"camPos"),_camera._position.x,_camera._position.y,_camera._position.z);
+    //HUD
+    if(_player.getDistanceToPlayer() != 0) {
+        //INPUTS
+        _player.Inputs(window);
+        _player.render();
+        _hud.DrawHUD(_steveShader,_models[2]);
+    }
+    else{ //Game Over
+        _hud.DrawGameOver(_steveShader,_models[3]);
+        if(glfwGetKey(window,GLFW_KEY_R) == GLFW_PRESS){
+            _player.setDistanceToPlayer(1.f);
+            std::cout << "Restart" << std::endl;
         }
     }
 
-
-    //Steve Part
+    //Player Part
     _steveShader.activate();
-    //glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    float scalef = 1.0f;
-    glm::mat4 scale = glm::scale(glm::mat4(1.0f),glm::vec3( scalef, scalef, scalef ));
-    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"scale"),1,GL_FALSE,glm::value_ptr(scale));
-    int matrixsteve = glGetUniformLocation(_steveShader._id,"camMatrix");
-    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(_camera.getModelMatrix()));
-    glUniformMatrix4fv(matrixsteve, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
-    _steve->draw();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model,_player.getPosition());
+    model = glm::rotate(model,glm::radians(-90.f),glm::vec3(1,0,0));
+    model = glm::scale(model, glm::vec3(0.013f, 0.013f, 0.013f));	// it's a bit too big for our scene, so scale it down
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    _models[0].Draw(_steveShader);
+    //Terrain
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, -0.8f, 0.0f)); // translate it down so it's at the center of the scene
+    model = glm::rotate(model,glm::radians(-90.f),glm::vec3(1,0,0));
+    model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));	// it's a bit too big for our scene, so scale it down
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+    glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+    _models[1].Draw(_steveShader);
 
+// Collectibles
+    for(unsigned int i = 0; i< _collectibles.size();i++){
+        _collectibles[i].Update(_player);
+        _collectibles[i].Draw(_steveShader, _camera);
+    }
+
+    //Enemies
+    for(unsigned int i = 0; i< _enemies.size();i++) {
+        _enemies[i].DrawEnemy(_player,_camera,_steveShader);
+    }
     // SKYBOX PART | SETUP AND DRAWING
     _skybox.setup(_skyboxShader,_camera,_width,_height);
+
+
+    //    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
+
+//      glm::mat4 model = glm::mat4(1.0f);
+//    // Draw the map
+//    for(auto &cube:_map.getMap()){
+//        model = glm::mat4 (1.0f);
+//        model = cube.getObjectMatrix();
+//        glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
+//        if(int(model[3][2]) % 2 == 0){
+//            _models[0].draw();
+//        }
+//        else {
+//            _models[1].draw();
+//        }
+//    }
 }
 
 App::~App(){
     _skybox._vao.deleteVao();
     _skybox._vbo.deleteVbo();
     _skybox._ibo.deleteIbo();
-    for(unsigned int i=0;i<_models.size();i++){
-        _models[0].del();
-    }
+//    for(unsigned int i=0;i<_models.size();i++){
+//        _models[0].del();
+//    }
     for(auto &item : _textures){
         item.deleteTex();
     }
-    _shaderProgram.deleteShader();
+    //_shaderProgram.deleteShader();
     _skyboxShader.deleteShader();
 
 }
@@ -155,19 +184,19 @@ void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
 {
 }
 
-void App::scroll_callback(double xoffset, double yoffset)
+void App::scroll_callback(double xOffset, double yOffset)
 {
-    _camera.scrollCallback(xoffset, -yoffset);
+    _camera.scrollCallback(xOffset, -yOffset);
 }
 
-void App::cursor_position_callback(double xpos, double ypos, GLFWwindow* window)
+void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
-    glfwSetCursorPos(window,(_width/2),(_height/2));
-    float rotx = _camera._sensitivity * (float)(ypos - ((float)_height/2))/(float)_height;
-    float roty = _camera._sensitivity * (float)(xpos- ((float)_width/2))/(float)_width;
+    glfwSetCursorPos(window,(float(_width)/2.f),(float(_height)/2.f));
+    float rotX = _camera._sensitivity * (float)(yPos - ((float)_height / 2)) / (float)_height;
+    float rotY = _camera._sensitivity * (float)(xPos - ((float)_width / 2)) / (float)_width;
 
-    _camera.rotateLeft(rotx);
-    _camera.rotateUp(roty);
+    _camera.rotateLeft(rotX);
+    _camera.rotateUp(rotY);
 }
 
 void App::size_callback(int width, int height)

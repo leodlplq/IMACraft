@@ -45,19 +45,19 @@ void Player::render(){
 
 void Player::Inputs(GLFWwindow *window) {
 
-    if(glfwGetKey(window,GLFW_KEY_I) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
         _position += _speed * _orientation;
     }
 
-    if(glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
         moveRight();
     }
 
-    if(glfwGetKey(window,GLFW_KEY_J) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){
         moveLeft();
     }
 
-    if(glfwGetKey(window,GLFW_KEY_COMMA) == GLFW_PRESS){ //press ; to get this until we use fps cam
+    if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS){ //press ; to get this until we use fps cam
         if(_onGround){
             startJump();
         }
@@ -65,11 +65,16 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-    if(glfwGetKey(window,GLFW_KEY_K) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
         _position -= _speed * _orientation;
 
     }
 
+    if(glfwGetKey(window,GLFW_KEY_Q) == GLFW_PRESS){
+        if(distanceToPlayer > 0.0f){
+            distanceToPlayer -= 1.f;
+        }
+    }
 
 
 }

@@ -9,7 +9,6 @@
 
 class Player {
 public:
-
     Player() = default;
     Player(const Cube &mesh, const glm::vec3 spawnPos);
     ~Player() = default;
@@ -32,6 +31,13 @@ public:
     const glm::vec3 getOrientation() const{
         return glm::vec3(_orientation.x, _orientation.y, _orientation.z);
     }
+    float getDistanceToPlayer() const{
+        return distanceToPlayer;
+    }
+
+    void setDistanceToPlayer(float distance){
+        distanceToPlayer = distance;
+    }
 
 private:
     glm::vec3 _position;
@@ -48,7 +54,5 @@ private:
 
     float _velocityY = 0.f;
     float _gravity = 0.2f;
-
-
-
+    float distanceToPlayer = 1.f;
 };
