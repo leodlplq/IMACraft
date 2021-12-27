@@ -131,10 +131,8 @@ void App::render(GLFWwindow* window)
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
-
-
-
     double sizeMap = sqrt((static_cast<double>(_map.getSecondFloor().size())));
+
     if(key == 65 && action == GLFW_PRESS){
         int xPlayer = static_cast<int>(round(_player.getPosition().x));
         int yPlayer = static_cast<int>(round(_player.getPosition().z));
@@ -196,6 +194,13 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     if(key == 32 && (action == GLFW_PRESS)){
         _player.startJump();
     }
+
+    //L == LOCKING THE CAMERA
+    if(key == 76 && (action == GLFW_PRESS)){
+        _camera.invertCamLock();
+    }
+
+    //std::cout << "key : " << key << std::endl;
 }
 
 void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
@@ -204,17 +209,24 @@ void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
 
 void App::scroll_callback(double xOffset, double yOffset)
 {
-    _camera.scrollCallback(xOffset, -yOffset);
+    if(!_camera.isCamLocked()) {
+        _camera.scrollCallback(xOffset, -yOffset);
+    }
 }
 
 void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
-    glfwSetCursorPos(window,(float)_width/2,(float)_height/2);
-    float rotX = _camera._sensitivity * (float)(yPos - ((float)_height/2))/(float)_height;
-    float rotY = _camera._sensitivity * (float)(xPos- ((float)_width/2))/(float)_width;
 
-    _camera.rotateLeft(rotY);
-    _camera.rotateUp(rotX);
+    glfwSetCursorPos(window,(float)_width/2,(float)_height/2);
+    //IT CAN ONLY ROTATE WHEN THE USER WANT
+    if(!_camera.isCamLocked()){
+        float rotX = _camera.getSensitivity() * (float)(yPos - ((float)_height/2))/(float)_height;
+        float rotY = _camera.getSensitivity() * (float)(xPos- ((float)_width/2))/(float)_width;
+
+        _camera.rotateLeft(rotY);
+        _camera.rotateUp(rotX);
+    }
+
 }
 
 void App::size_callback(int width, int height)
