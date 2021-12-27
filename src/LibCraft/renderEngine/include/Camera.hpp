@@ -25,32 +25,19 @@ public:
     //INPUTS EVENTS
     void scrollCallback(double xOffset, double yOffset); //move front camera
     void rotateLeft(float degree);
+    void rotateLeftNoMouse(float degree);
     void rotateUp(float degree);
 
-    glm::mat4 getModelMatrix() const{
-        return _model;
-    }
-    glm::mat4 getViewMatrix() const{
-        glm::vec3 shiftCamera = _player.getOrientation() * _distanceFromCamera;
-
-        glm::mat4 translate = glm::translate(glm::mat4(1.f), -shiftCamera);
-        glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
-        glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
-        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition());
-        glm::mat4 view = glm::mat4(translate * rotX * rotY * lookTo);
-
-        return view;
-
-    }
-    glm::mat4 getProjMatrix() const{
-        return _projection;
-    }
+    inline glm::mat4 getModelMatrix() const{ return _model; }
+    inline glm::mat4 getProjMatrix() const{ return _projection; }
+    glm::mat4 getViewMatrix() const;
 
     inline bool isCamLocked() const { return _isLocked; }
     inline void invertCamLock() {_isLocked = ! _isLocked; };
 
     inline bool isCamFPS() const { return _isFPS; }
     inline void invertCamMode() {_isFPS = !_isFPS; };
+    void resetAngle();
 
     //GETTERS OF THE VECTORS
     inline glm::vec3 getPosition() const { return _position; }
@@ -80,6 +67,7 @@ private:
     float _distanceFromCamera = 5.0f;
     float _angleX = 30.f;
     float _angleY = -90.f;
+    float _angleYWithoutMouseRotation = -90.f;
 
     float _width;
     float _height;

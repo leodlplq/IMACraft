@@ -157,6 +157,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
                     break;
             }
             _camera.rotateLeft(-90.f);
+            _camera.rotateLeftNoMouse(-90.f);
         }
 
 
@@ -187,6 +188,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
             }
 
             _camera.rotateLeft(90.f);
+            _camera.rotateLeftNoMouse(90.f);
         }
 
     }
@@ -198,6 +200,13 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     //L == LOCKING THE CAMERA
     if(key == 76 && (action == GLFW_PRESS)){
         _camera.invertCamLock();
+    }
+
+    //M == LOCKING THE CAMERA
+    if(key == 77 && (action == GLFW_PRESS)){
+
+        _camera.invertCamMode();
+        _camera.resetAngle();
     }
 
     //std::cout << "key : " << key << std::endl;

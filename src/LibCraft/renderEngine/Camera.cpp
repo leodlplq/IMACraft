@@ -5,10 +5,10 @@
 
 Camera::Camera(const int width , const int height, Player &player):
     _position(player.getPosition()),
-    _width((float)width),
-    _height((float)height),
+    _orientation(player.getOrientation()),
     _player(player),
-    _orientation(player.getOrientation())
+    _width(static_cast<float>(width)),
+    _height(static_cast<float>(height))
 {}
 
 void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane)
@@ -27,6 +27,49 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane)
     }*/
 }
 
+
+glm::mat4 Camera::getViewMatrix() const{
+
+    glm::mat4 view;
+
+    std::cout << "angle X : " << _angleX << " | " << " angle Y : " << _angleY << " | " << _angleYWithoutMouseRotation << std::endl;
+    if(_isFPS){
+        glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
+        glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
+
+        glm::vec3 whereToLookTo;
+        float distanceFromPlayer = 0.52f;
+        switch (_player.getFacingDirection()) {
+            case 'N':
+                whereToLookTo = glm::vec3(-1.f, 0.f,0.f) * distanceFromPlayer;
+                break;
+            case 'S':
+                whereToLookTo = glm::vec3(1.f, 0.f,0.f) * distanceFromPlayer;
+                break;
+            case 'E':
+                whereToLookTo = glm::vec3(0.f, 0.f,-1.f) * distanceFromPlayer;
+                break;
+            case 'W':
+                whereToLookTo = glm::vec3(0.f, 0.f,1.f) * distanceFromPlayer;
+                break;
+        }
+        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition() - whereToLookTo);
+
+        view = glm::mat4(rotX * rotY* lookTo);
+    } else {
+        glm::vec3 shiftCamera = _player.getOrientation() * _distanceFromCamera;
+
+        glm::mat4 translate = glm::translate(glm::mat4(1.f), -shiftCamera);
+        glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
+        glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
+        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition());
+        view = glm::mat4(translate * rotX * rotY * lookTo);
+    }
+
+    return view;
+
+}
+
 void Camera::scrollCallback(double xOffset, double yOffset){
     _distanceFromCamera += _scrollSensitivity * (float)yOffset;
 
@@ -42,10 +85,50 @@ void Camera::scrollCallback(double xOffset, double yOffset){
 }
 
 void Camera::rotateLeft(float degree){
-    _angleY += degree;
+    if(_isFPS){
+        if(_angleY > _angleYWithoutMouseRotation - 60.f && degree < 0){ //peut pas aller plus a droite
+
+            _angleY += degree;
+        }
+
+        if(_angleY < _angleYWithoutMouseRotation + 60.f && degree > 0){
+            _angleY += degree;
+        }
+    } else {
+        _angleY += degree;
+    }
+
+
+
 }
 void Camera::rotateUp(float degree){
-    _angleX += degree;
+
+    if(_isFPS){
+        if(_angleX > -65.f && degree < 0){ //peut pas aller plus en haut
+            _angleX += degree;
+        }
+
+        if(_angleX < 70.f && degree > 0){ //peut pas aller plus en haut
+            _angleX += degree;
+        }
+
+
+    } else {
+        _angleX += degree;
+    }
+
+}
+
+void Camera::resetAngle() {
+    if(_isFPS){
+        _angleX = 0.f;
+    } else {
+        _angleX = 30.f;
+    }
+}
+
+void Camera::rotateLeftNoMouse(float degree) {
+    _angleYWithoutMouseRotation += degree;
 }
 
 
