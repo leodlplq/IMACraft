@@ -121,6 +121,7 @@ void App::render(GLFWwindow* window)
         }
 
     }
+    
 
 
     // SKYBOX PART | SETUP AND DRAWING
@@ -156,8 +157,11 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
                     _player.setFacingOrientation('N');
                     break;
             }
-            _camera.rotateLeft(-90.f);
-            _camera.rotateLeftNoMouse(-90.f);
+            for(int i = 0; i < 9000; i++){
+                _camera.rotateLeft(static_cast<float>(-0.01));
+                _camera.rotateLeftNoMouse(static_cast<float>(-0.01));
+            }
+
         }
 
 
