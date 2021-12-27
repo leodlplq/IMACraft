@@ -37,7 +37,7 @@ std::vector<Model> getAllModels(const FilePath& appPath){
 
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(getAllModels(appPath)),
-     _map(appPath.dirPath() + "/assets/maps/map6.pgm", _models),
+     _map(appPath.dirPath() + "/assets/maps/map7.pgm", _models),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _appPath(appPath),
@@ -127,34 +127,7 @@ void App::render(GLFWwindow* window)
     _skybox.setup(_skyboxShader,_camera,_width,_height);
 }
 
-App::~App(){
-    //DELETING EVERYTHING
-    //SHADERS
-    _shaderProgram.deleteShader();
-    _shaderProgram.~Shader();
-    _skyboxShader.deleteShader();
-    _skyboxShader.~Shader();
-    //APP PATH
-    _appPath.~FilePath();
-    //TEXTURES
-    for(auto &item : _textures){
-        item.deleteTex();
-    }
-    _textures.erase(_textures.begin(), _textures.end());
-    _textures.shrink_to_fit();
-    //MODELS
-    for(auto &item : _models){
-        item.del();
-    }
-    _models.erase(_models.begin(), _models.end());
-    _models.shrink_to_fit();
-    //CAMERA
-    _camera.~Camera();
-    //SKYBOX
-    _skybox.~Skybox();
-    //PLAYER
-    _player.~Player();
-}
+
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
@@ -220,9 +193,6 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 
     }
 
-    /*if(key == 87 && (action == GLFW_PRESS || action == GLFW_REPEAT)){ //Z
-        _player.moveForward();
-    }*/
     if(key == 32 && (action == GLFW_PRESS)){
         _player.startJump();
     }
@@ -256,6 +226,7 @@ void App::size_callback(int width, int height)
 void App::inputs(GLFWwindow* window) {
 //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
 
+    //GOING FORWARD
     if(glfwGetKey(window,87) == GLFW_PRESS){ //GOING FORWARD
         int nextBlockPosX;
         int nextBlockPosY;
@@ -355,6 +326,7 @@ void App::inputs(GLFWwindow* window) {
 
     }
 
+    //GOING LEFT
     if(glfwGetKey(window, 65) == GLFW_PRESS){ // MOVEMENT TO THE LEFT
         int nextBlockPosX;
         int nextBlockPosY;
@@ -425,7 +397,10 @@ void App::inputs(GLFWwindow* window) {
                 (playerBlock &&  playerBlockNei) ||
                 (playerBlock &&  !playerBlockNei && blockHitbox.getCorner1().x == 10000.5)
                 ){
-            _player.moveLeft();
+            if(!_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+                _player.moveLeft();
+            }
+
         }
 
 
@@ -489,7 +464,9 @@ void App::inputs(GLFWwindow* window) {
                 (playerBlock &&  playerBlockNei) ||
                 (playerBlock &&  !playerBlockNei && blockHitbox.getCorner1().x == 10000.5)
         ){
-            _player.moveRight();
+            if(!_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+                _player.moveRight();
+            }
         }
 
 
@@ -499,6 +476,35 @@ void App::inputs(GLFWwindow* window) {
     if(glfwGetKey(window,83) == GLFW_PRESS){ //GOING BACKWARD
         _player.moveBackward();
     }
+}
+
+App::~App(){
+    //DELETING EVERYTHING
+    //SHADERS
+    _shaderProgram.deleteShader();
+    _shaderProgram.~Shader();
+    _skyboxShader.deleteShader();
+    _skyboxShader.~Shader();
+    //APP PATH
+    _appPath.~FilePath();
+    //TEXTURES
+    for(auto &item : _textures){
+        item.deleteTex();
+    }
+    _textures.erase(_textures.begin(), _textures.end());
+    _textures.shrink_to_fit();
+    //MODELS
+    for(auto &item : _models){
+        item.del();
+    }
+    _models.erase(_models.begin(), _models.end());
+    _models.shrink_to_fit();
+    //CAMERA
+    _camera.~Camera();
+    //SKYBOX
+    _skybox.~Skybox();
+    //PLAYER
+    _player.~Player();
 }
 
 // -------------------------------------------------------- PRESSE PAPIER ---------------------------------------------------------------

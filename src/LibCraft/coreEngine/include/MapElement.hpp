@@ -30,9 +30,6 @@ private:
 public:
     //CONSTRUCTORS
     MapElement() = default;
-    /*inline MapElement(int type, int texture, glm::vec3 position) :
-        _type(type), _texture(texture), _position(position)
-    {};*/
     inline MapElement(int modelType, glm::vec3 position, Model model, bool inter)
     {
         _modelType = int(modelType);
