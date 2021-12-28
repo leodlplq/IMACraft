@@ -11,7 +11,7 @@
 
 
 //RENDER ENGINE
-#include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/ModelCube.hpp"
 
 class MapElement {
 private:
@@ -30,7 +30,7 @@ private:
 public:
     //CONSTRUCTORS
     MapElement() = default;
-    inline MapElement(int modelType, glm::vec3 position, Model model, bool inter)
+    inline MapElement(int modelType, glm::vec3 position, ModelCube model, bool inter)
     {
         _modelType = int(modelType);
         _position = glm::vec3(position);

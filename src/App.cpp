@@ -1,9 +1,9 @@
 #include "App.hpp"
 
-std::vector<Model> getAllModels(const FilePath& appPath){
-    std::vector<Model> models;
+std::vector<ModelCube> getAllModels(const FilePath& appPath){
+    std::vector<ModelCube> models;
 
-    /*// MESH DU CUBE ORIGINAL !!
+    // MESH DU CUBE ORIGINAL !!
     Cube cube;
 
     //TEXTURE PATH FOR THE GROUND
@@ -12,23 +12,23 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     std::string filePathGrassBottom = ((std::string)appPath.dirPath() + "/assets/textures/grass_cube/bottom.jpg");
 
     // MODEL OF THE GROUND -- 0
-    Model cube_model(cube,filePathGrassSide,filePathGrassSide,filePathGrassTop,filePathGrassBottom,filePathGrassSide,filePathGrassSide,GL_RGB);
+    ModelCube cube_model(cube,filePathGrassSide,filePathGrassSide,filePathGrassTop,filePathGrassBottom,filePathGrassSide,filePathGrassSide,GL_RGB);
     models.push_back(cube_model);
 
     // TEST: ANOTHER CUBE Text -- 1
     std::string filePathTest = ((std::string)appPath.dirPath() + "/assets/textures/player/side.png");
-    Model cube_modeltest(cube,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,GL_RGBA);
+    ModelCube cube_modeltest(cube,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,filePathTest,GL_RGBA);
     models.push_back(cube_modeltest);
 
     // GOLD TEXTURE MODEL -- 2
     std::string filePathGold = ((std::string)appPath.dirPath() + "/assets/textures/gold/side.jpeg");
-    Model gold_cube(cube,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,GL_RGB);
+    ModelCube gold_cube(cube,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,filePathGold,GL_RGB);
     models.push_back(gold_cube);
 
     // REDSTONE TEXTURE MODEL -- 3
     std::string filePathRedstone = ((std::string)appPath.dirPath() + "/assets/textures/redstone/side.jpg");
-    Model redstone_cube(cube,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone, filePathRedstone,GL_RGB);
-    models.push_back(redstone_cube);*/
+    ModelCube redstone_cube(cube,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone, filePathRedstone,GL_RGB);
+    models.push_back(redstone_cube);
 
     //
 
@@ -36,8 +36,9 @@ std::vector<Model> getAllModels(const FilePath& appPath){
 }
 
 App::App(int window_width, int window_height, const FilePath& appPath) :
-     _models(getAllModels(appPath)),
-     _map(appPath.dirPath() + "/assets/maps/map7.pgm", _models),
+     _models(),
+     _modelsCube(getAllModels(appPath)),
+     _map(appPath.dirPath() + "/assets/maps/map7.pgm", _modelsCube),
      _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
@@ -46,8 +47,8 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _textures(),
      _width(window_width),
      _height(window_height),
-     _camera(_width,_height,_player),
      _player(Cube(), _map.getSpawnPoint()),
+     _camera(_width,_height,_player),
      _steve(),
      _collectibles(),
      _enemies(),
@@ -82,7 +83,7 @@ void App::init(){
     Model steve(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
     _models.push_back(steve);
     std::cout << "Taille de Steve: " << steve.getHeight() << std::endl;
-    Model terrain(((std::string)_appPath.dirPath() + "/assets/obj/a_minecraft_village/scene.gltf").c_str());
+    Model terrain(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
     _models.push_back(terrain);
     Model hud(((std::string)_appPath.dirPath() + "/assets/obj/hud/scene.gltf").c_str());
     _models.push_back(hud);
@@ -115,7 +116,12 @@ void App::render(GLFWwindow* window){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    glm::vec4 lightColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+    _shaderProgram.activate();
+    _camera.Matrix(45.0f,0.1f,100.0f);
+    inputs(window);
+    _player.render();
+    glm::mat4 model = glm::mat4(1.0f);
+    /*glm::vec4 lightColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
     glm::vec3 lightPos = glm::vec3(0.f,2.f,7.f);
     //Light
     _lightShader.activate();
@@ -131,7 +137,7 @@ void App::render(GLFWwindow* window){
     _steveShader.activate();
     glUniform4f(glGetUniformLocation(_steveShader._id,"lightColor"),lightColor.x,lightColor.y,lightColor.z,lightColor.w);
     glUniform3f(glGetUniformLocation(_steveShader._id,"lightPos"),lightPos.x,lightPos.y,lightPos.z);
-    _camera.Matrix(45.0f,0.1f,100.0f);
+
     glUniform3f(glGetUniformLocation(_steveShader._id,"camPos"),_camera._position.x,_camera._position.y,_camera._position.z);
 
     //HUD
@@ -176,7 +182,8 @@ void App::render(GLFWwindow* window){
 
     //Enemies
     for(unsigned int i = 0; i< _enemies.size();i++) {
-        _enemies[i].DrawEnemy(_player,_camera,_steveShader);
+        _enemies[i].DrawEnemy(_player, _camera, _steveShader);
+    }*/
 
     // Draw the map
     //FLOOR PART
@@ -184,7 +191,7 @@ void App::render(GLFWwindow* window){
         if(me.getModel() != -1){
             model = me.getObjectMatrix();
             glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-            _models[static_cast<unsigned long>(me.getModel())].draw();
+            _modelsCube[static_cast<unsigned long>(me.getModel())].draw();
         }
     }
     //SECOND FLOOR PART (WALL / JUMP OBSTACLE...)
@@ -192,7 +199,7 @@ void App::render(GLFWwindow* window){
         if(me.getModel() != -1){
             model = me.getObjectMatrix();
             glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-            _models[static_cast<unsigned long>(me.getModel())].draw();
+            _modelsCube[static_cast<unsigned long>(me.getModel())].draw();
         }
 
     }
@@ -588,7 +595,7 @@ App::~App(){
     _textures.erase(_textures.begin(), _textures.end());
     _textures.shrink_to_fit();
     //MODELS
-    for(auto &item : _models){
+    for(auto &item : _modelsCube){
         item.del();
     }
     _models.erase(_models.begin(), _models.end());

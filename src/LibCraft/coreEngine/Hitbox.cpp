@@ -4,7 +4,7 @@
 
 #include "LibCraft/coreEngine/include/Hitbox.hpp"
 
-Hitbox::Hitbox(Model &model,const glm::vec3 &position) {
+Hitbox::Hitbox(ModelCube &model,const glm::vec3 &position) {
     //TODO : define the good position of each corner.
     float heightModel = model.getHeight();
     float widthModel = 1;

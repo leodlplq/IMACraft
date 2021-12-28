@@ -24,6 +24,7 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/ModelCube.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -53,6 +54,8 @@ private:
     bool _running = true;
 
     std::vector<Model> _models;
+    std::vector<ModelCube> _modelsCube;
+
     Map _map;
     Shader _lightShader;
     Shader _skyboxShader;
@@ -73,8 +76,8 @@ private:
     HUD _hud;
     Cube _sun;
 
-    void Continue(GLFWwindow *window);
+    //void Continue(GLFWwindow *window);
 
 };
 
-std::vector<Model> getAllModels(const FilePath &appPath);
+std::vector<ModelCube> getAllModels(const FilePath &appPath);

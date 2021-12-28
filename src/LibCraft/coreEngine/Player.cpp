@@ -139,8 +139,8 @@ void Player::Inputs(GLFWwindow *window) {
 
 
     if(glfwGetKey(window,GLFW_KEY_Q) == GLFW_PRESS){
-        if(distanceToPlayer > 0.0f){
-            distanceToPlayer -= 1.f;
+        if(_distanceToPlayer > 0.0f){
+            _distanceToPlayer -= 1.f;
         }
     }
 

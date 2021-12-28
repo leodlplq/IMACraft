@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 
 //RENDER ENGINE
-#include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/ModelCube.hpp"
 
 
 
@@ -31,7 +31,7 @@ private:
 public:
     //CONSTRUCTORS & DESTRUCTORS
     Hitbox() =default;
-    Hitbox(Model &model, const glm::vec3 &position);
+    Hitbox(ModelCube &model, const glm::vec3 &position);
     Hitbox(const Cube &model, const glm::vec3 &position);
     ~Hitbox() = default;
 

@@ -5,7 +5,7 @@
 #include "include/Map.hpp"
 
 
-Map::Map(const FilePath &pathToMap, std::vector<Model> &models):
+Map::Map(const FilePath &pathToMap, std::vector<ModelCube> &models):
 _models(models)
 {
     generateCubeMap(pathToMap);
