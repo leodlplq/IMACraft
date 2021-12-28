@@ -28,6 +28,9 @@ public:
     void rotateLeftNoMouse(float degree);
     void rotateUp(float degree);
 
+    void turnLeft();
+    void turnRight();
+
     inline glm::mat4 getModelMatrix() const{ return _model; }
     inline glm::mat4 getProjMatrix() const{ return _projection; }
     glm::mat4 getViewMatrix() const;

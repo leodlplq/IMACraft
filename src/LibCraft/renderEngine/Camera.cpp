@@ -131,4 +131,14 @@ void Camera::rotateLeftNoMouse(float degree) {
     _angleYWithoutMouseRotation += degree;
 }
 
+void Camera::turnLeft() {
+    rotateLeft(-90.f);
+    rotateLeftNoMouse(-90.f);
+}
+
+void Camera::turnRight() {
+    rotateLeft(90.f);
+    rotateLeftNoMouse(90.f);
+}
+
 

@@ -22,6 +22,8 @@ private:
     std::vector<MapElement> _secondFloor;
     glm::vec3 _spawnPoint;
 
+    int _size;
+
 public:
 
     Map() = default;
@@ -41,4 +43,5 @@ public:
     inline glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
+    inline int getSize() { return _size; }
 };

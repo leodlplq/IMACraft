@@ -8,12 +8,15 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "../../renderEngine/include/Cube.hpp"
 #include "Hitbox.hpp"
+#include "Map.hpp"
 
 class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
     Player() = default;
-    Player(const Cube &mesh, const glm::vec3 &spawnPos);
+    inline Player(const Cube &mesh, const glm::vec3 &spawnPos, const Map& map):
+        _position(spawnPos), _facingDirection('N'), _mesh(mesh), _hitbox(mesh, spawnPos), _hp(10), _map(map)
+    {};
     ~Player() = default;
 
 
@@ -22,6 +25,9 @@ public:
     void moveRight();
     void moveForward();
     void moveBackward();
+
+    void turnLeft();
+    void turnRight();
 
     void startJump();
     void slide();
@@ -85,6 +91,9 @@ private:
 
     //PLAYER HEALTH
     float _hp;
+
+    //MAP TO GET COLLISION
+    Map _map;
 
 
 

@@ -29,21 +29,24 @@
 
 class App {
 public:
+    //CONSTRUCTORS & DESTRUCTORS
     App(int window_width, int window_height, const FilePath& appPath);
     ~App();
+
+    //USEFUL
     void render(GLFWwindow* window);
     void init();
+    inline bool isGameRunning() const { return _running; }
+    inline void closeGame(){ _running = false; }
 
-    void inputs(GLFWwindow* window);
-
+    //EVENT
     void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
     void mouse_button_callback(int button, int action, int mods);
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
 
-    inline bool isGameRunning() const { return _running; }
-    inline void closeGame(){ _running = false; }
+
 
 private:
     bool _running = true;
