@@ -89,5 +89,5 @@ private:
 
     //PLAYER HEALTH
     float _hp{};
-    float _distanceToPlayer = 1.f;
+    float _distanceToPlayer = 3.f;
 };

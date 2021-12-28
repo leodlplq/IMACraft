@@ -129,27 +129,18 @@ void App::render(GLFWwindow* window) {
     //Player Part
     _steveShader.activate();
     glUniformMatrix4fv(glGetUniformLocation(_steveShader._id, "camMatrix"), 1, GL_FALSE,glm::value_ptr(_camera.getProjMatrix() * _camera.getViewMatrix()));
-    //_player.Draw(_steveShader);
-
-    //
-    _shaderProgram.activate();
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(1.f));
-    model = glm::scale(model, glm::vec3(100000));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id, "camMatrix"), 1, GL_FALSE,glm::value_ptr(_camera.getProjMatrix() * _camera.getViewMatrix()));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    _player.getHitbox().Draw();
+    _player.Draw(_steveShader);
 
 // Collectibles
     for (unsigned int i = 0; i < _collectibles.size(); i++) {
         _collectibles[i].Update(_player);
         _collectibles[i].Draw(_steveShader, _camera);
     }
-//
-//    //Enemies
-//    for (unsigned int i = 0; i < _enemies.size(); i++) {
-//        _enemies[i].DrawEnemy(_player, _camera, _steveShader);
-//    }
+
+    //Enemies
+    for (unsigned int i = 0; i < _enemies.size(); i++) {
+        _enemies[i].DrawEnemy(_player, _camera, _steveShader);
+    }
 
 
     // Draw the map
