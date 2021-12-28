@@ -6,7 +6,7 @@
 #include "LibCraft/coreEngine/include/MapElement.hpp"
 #include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/tools/include/getFIleContent.hpp"
-#include "LibCraft/renderEngine/include/ModelCube.hpp"
+#include "LibCraft/renderEngine/include/Model.hpp"
 #include <vector>
 #include <fstream>
 
@@ -17,16 +17,17 @@ class Map {
 
 private:
     //std::vector<Cube> _map;
-    std::vector<ModelCube> _models;
+    std::vector<Model> _models;
 
     std::vector<MapElement> _floor;
     std::vector<MapElement> _secondFloor;
     glm::vec3 _spawnPoint;
+    float _scale;
 
 public:
 
     Map() = default;
-    Map(const FilePath &pathToMap, std::vector<ModelCube> &models);
+    Map(const FilePath &pathToMap, std::vector<Model> &models, float scale);
     ~Map() = default;
 
     //inline std::vector<Cube> getMap() const {return _map;}

@@ -10,8 +10,10 @@ Skybox::Skybox():_vao(),
                  _ibo({}, 0) {
     Cube skybox(2);
     _vao.bind();
-    _vbo = vbo(skybox.getDataPointer(),skybox.getVertexCount()*sizeof(Vertex));
-    _ibo = ibo(skybox.getIndices(), skybox.getVertexCount()*sizeof (GLuint));
+    _vbo = vbo(skybox.getDataPointer(),
+               static_cast<GLsizeiptr>(static_cast<unsigned long>(skybox.getVertexCount()) * sizeof(Vertex)));
+    _ibo = ibo(skybox.getIndices(),
+               static_cast<GLsizeiptr>(static_cast<unsigned long>(skybox.getVertexCount()) * sizeof(GLuint)));
     _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Position));
     _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Normal));
     _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, TexCoords));
@@ -63,7 +65,7 @@ void Skybox::setup(Shader& shader, Camera& camera, int width, int height)
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::mat4(glm::mat3(glm::lookAt(camera._position, camera._position + camera._orientation, camera._up)));
     glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)width / static_cast<float>(height), 0.1f, 100.0f);
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     _vao.bind();

@@ -17,6 +17,7 @@ class Cube {
 public:
     explicit Cube(float radius = 1.0);
     Cube(float x, float y, float z);
+    Cube(const float longueur, const float largeur, const float hauteur, int hit);
     Cube(const Cube& ) = default;
     ~Cube() = default;
 

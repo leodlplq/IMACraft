@@ -12,7 +12,8 @@ public :
     Model() {}
     void Draw(Shader &shader);
 
-    float getHeight();
+    float getHeight() const;
+    float getWidth() const;
     void loadModel(std::string path);
 
 private:

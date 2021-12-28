@@ -11,6 +11,7 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
 void Model::Draw(Shader &shader)
 {
     // Draw all meshes of model
+    shader.activate();
     for(unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
 }
@@ -125,7 +126,7 @@ std::vector<Textures> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType
     return textures;
 }
 
-float Model::getHeight() {
+float Model::getHeight() const{
     float maxHeight = 0;
     float minHeight = 0;
     for(unsigned int i =0; i<meshes.size();i++){
@@ -140,6 +141,23 @@ float Model::getHeight() {
         }
     }
     return maxHeight-minHeight;
+}
+
+float Model::getWidth() const {
+    float maxWidth = 0;
+    float minWidth = 0;
+    for(unsigned int i =0; i<meshes.size();i++){
+        std::vector<Vertex> vertices = meshes[i]._vertices;
+        for(unsigned int j=0; j<vertices.size();j++){
+            if (vertices[j].Position.z > maxWidth){
+                maxWidth=  vertices[j].Position.z;
+            }
+            if (vertices[j].Position.z < minWidth){
+                minWidth=  vertices[j].Position.z;
+            }
+        }
+    }
+    return maxWidth-minWidth;
 }
 
 // Function used in Model::loadMaterialTextures

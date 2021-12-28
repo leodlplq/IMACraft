@@ -7,8 +7,10 @@
 #include <glm/glm.hpp>
 
 //RENDER ENGINE
-#include "LibCraft/renderEngine/include/ModelCube.hpp"
-
+#include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/Cube.hpp"
+#include "LibCraft/renderEngine/include/vao.hpp"
+#include "LibCraft/renderEngine/include/vbo.hpp"
 
 
 class Hitbox {
@@ -31,8 +33,8 @@ private:
 public:
     //CONSTRUCTORS & DESTRUCTORS
     Hitbox() =default;
-    Hitbox(ModelCube &model, const glm::vec3 &position);
-    Hitbox(const Cube &model, const glm::vec3 &position);
+    Hitbox(Model &model, const glm::vec3 &position, const float &scale);
+    //Hitbox(const Cube &model, const glm::vec3 &position);
     ~Hitbox() = default;
 
     //METHODS
@@ -49,7 +51,10 @@ public:
     inline glm::vec3 setCorner2(glm::vec3 newCorner){ return _corner2 = newCorner; }
     inline glm::vec3 getCorner2(){ return _corner2; }
 
+    void Draw();
 
-
+    //Debug
+    vao _vao;
+    vbo _vbo;
 };
 

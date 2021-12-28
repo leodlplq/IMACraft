@@ -3,10 +3,33 @@
 //
 #include "include/Player.hpp"
 
-Player::Player(const Cube &mesh, const glm::vec3 &spawnPos):
-_position(spawnPos), _facingDirection('N'), _mesh(mesh), _hitbox(mesh, spawnPos), _hp(10)
+Player::Player( Model model, const glm::vec3 &spawnPos, float scale):
+_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(10)
 {
 }
+
+void Player::Draw(Shader &shader) {
+    shader.activate();
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, _position);
+    model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1, 0, 0));
+    switch(_facingDirection){
+        case 'N':
+            model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 0, 1));
+            break;
+        case 'S':
+            model = glm::rotate(model, glm::radians(90.f), glm::vec3(0, 0, 1));
+            break;
+        case 'E':
+            model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
+            break;
+    }
+    model = glm::scale(model,glm::vec3(_scale));
+    glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    _model.Draw(shader);
+}
+
+
 
 void Player::startJump(){
     if(_onGround){
@@ -61,9 +84,11 @@ void Player::moveBackward(){
 }
 
 void Player::render(){
+    //PLAYER ALWAYS RUN
+    //moveForward();
+
     //JUMP PART
     _velocityY -= _gravity;
-
     glm::vec3 displacementJump = (_speedJump * _velocityY) * glm::vec3(0.f, 1.f, 0.f);
     _position += displacementJump;
 
@@ -74,14 +99,14 @@ void Player::render(){
     _hitbox.setCorner2( newCorner2 );
 
 
-    if(_position.y < 1.f){ //STAYING ON THE GROUND AND NOT FALLING INTO INFINTY
+    if(_position.y < 1.3f){ //STAYING ON THE GROUND AND NOT FALLING INTO INFINTY
 
         glm::vec3 newCorner1 = glm::vec3(_hitbox.getCorner1().x, 1.5f, _hitbox.getCorner1().z);
         _hitbox.setCorner1( newCorner1 );
         glm::vec3 newCorner2 = glm::vec3(_hitbox.getCorner2().x, 0.5f, _hitbox.getCorner2().z);
         _hitbox.setCorner2( newCorner2 );
 
-        _position.y = 1.f;
+        _position.y = 1.3f;
         _velocityY = 0.f;
         _onGround = true;
     }

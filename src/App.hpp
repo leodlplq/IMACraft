@@ -24,7 +24,6 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
-#include "LibCraft/renderEngine/include/ModelCube.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -54,7 +53,7 @@ private:
     bool _running = true;
 
     std::vector<Model> _models;
-    std::vector<ModelCube> _modelsCube;
+    std::vector<Model> _modelsMap;
 
     Map _map;
     Shader _lightShader;
@@ -65,11 +64,9 @@ private:
     std::vector<TextureCube> _textures;
     int _width;
     int _height;
+    Player _player;
     Camera _camera;
     Skybox _skybox;
-
-    Player _player;
-    Model* _steve;
     float _angle =0;
     std::vector<Collectible> _collectibles;
     std::vector<Enemy> _enemies;
@@ -80,4 +77,4 @@ private:
 
 };
 
-std::vector<ModelCube> getAllModels(const FilePath &appPath);
+std::vector<Model> getAllModels(const FilePath &appPath);

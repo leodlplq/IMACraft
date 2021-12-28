@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include <LibCraft/coreEngine/include/Player.hpp>
+#include "LibCraft/coreEngine/include/Player.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -16,6 +16,7 @@
 class Camera
 {
     public:
+        Player &_player;
         glm::vec3 _position;
         glm::vec3 _orientation;
         glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
@@ -26,7 +27,7 @@ class Camera
         float _speed = 0.1f;
         float _rotationspeed = 1.5f;
         float _sensitivity = 50.0f;
-        glm::vec3 _rotaxis;
+        glm::vec3 _rotaxis{};
         glm::mat4 _model = glm::mat4(1.0f);
         glm::mat4 _view = glm::mat4(1.0f);
         glm::mat4 _projection = glm::mat4(1.0f);
@@ -36,7 +37,8 @@ class Camera
         bool _tpscam = true;
 
 
-        Camera(int width , int height, Player &player);
+        Camera(int width , int height, Player& player);
+
         ~Camera() =default;
         void Matrix(float FOVdeg, float nearPlane, float farPlane);
 
@@ -69,7 +71,7 @@ class Camera
 
 
     private:
-        Player &_player;
+
         float _distanceFromCamera = 5.0f;
         float _angleX = 30.f;
         float _angleY = -90.f;

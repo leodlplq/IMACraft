@@ -29,6 +29,19 @@ void Cube::build (const float r){
     };
 }
 
+Cube::Cube(const float longueur, const float largeur, const float hauteur, int hit){
+    vertices = {
+            Vertex(glm::vec3(0, 0, 0),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 0        7--------6
+            Vertex(glm::vec3(longueur, 0, 0),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 1        /|       /|
+            Vertex(glm::vec3(longueur, 0, largeur),glm::vec3(0, 0, 1), glm::vec2(0, 1)), // SOMMET 2      4--------5 |
+            Vertex(glm::vec3(0, 0, largeur),glm::vec3(0, 0, 1), glm::vec2(1, 1)), // SOMMET 3     | |      | |
+            Vertex(glm::vec3(0, hauteur, 0),glm::vec3(0, 0, 1), glm::vec2(0, 0)), // SOMMET 4       | 3------|-2
+            Vertex(glm::vec3(longueur, hauteur, 0),glm::vec3(0, 0, 1), glm::vec2(1, 0)), // SOMMET 5        |/       |/
+            Vertex(glm::vec3(longueur, hauteur, largeur),glm::vec3(0, 0, 1), glm::vec2(0, 0)), // SOMMET 6
+            Vertex(glm::vec3(0, hauteur, largeur),glm::vec3(0, 0, 1), glm::vec2(1, 0)) // SOMMET 7
+    };
+}
+
 
 
 

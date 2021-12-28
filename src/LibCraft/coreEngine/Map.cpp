@@ -5,8 +5,8 @@
 #include "include/Map.hpp"
 
 
-Map::Map(const FilePath &pathToMap, std::vector<ModelCube> &models):
-_models(models)
+Map::Map(const FilePath &pathToMap, std::vector<Model> &models, float scale):
+_models(models),_scale(scale)
 {
     generateCubeMap(pathToMap);
 }
@@ -34,34 +34,34 @@ void Map::generateCubeMap(const FilePath& pathToMap){
 
                 switch (stoi(line)) {
                     case 255: //FLOOR
-                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0], false));
-                        _secondFloor.push_back(MapElement(-1,glm::vec3(0),_models[0], false));
+                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0], false,_scale));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0),_models[0], false,_scale));
 
                         break;
                     case 240: //WALL
-                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0], false));
-                        _secondFloor.push_back(MapElement(1,glm::vec3(i,1,j), _models[1], false));
+                        _floor.push_back(MapElement(0,glm::vec3(i,0,j), _models[0], false,_scale));
+                        _secondFloor.push_back(MapElement(1,glm::vec3(i,1,j), _models[1], false,_scale));
 //
                         break;
                     case 15: //SPAWN POINT
-                        _floor.push_back(MapElement(3,glm::vec3(i,0,j), _models[3], false));
-                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], false));
+                        _floor.push_back(MapElement(3,glm::vec3(i,0,j), _models[3], false,_scale));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], false,_scale));
                         _spawnPoint = glm::vec3(i,1 ,j);
 //
                         break;
                     case 90: //INTERSECTION
-                        _floor.push_back(MapElement(2,glm::vec3(i,0,j), _models[2], true));
-                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], true));
+                        _floor.push_back(MapElement(2,glm::vec3(i,0,j), _models[2], true,_scale));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], true,_scale));
 //
                         break;
                     case 0: //VOID
-                        _floor.push_back(MapElement(-1,glm::vec3(0), _models[0], false));
-                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], false));
+                        _floor.push_back(MapElement(-1,glm::vec3(0), _models[0], false,_scale));
+                        _secondFloor.push_back(MapElement(-1,glm::vec3(0), _models[0], false,_scale));
 
                         break;
                     case 180: //OBSTACLE DOWN
-                        _floor.push_back(MapElement(-1,glm::vec3(0), _models[0], false));
-                        _secondFloor.push_back(MapElement(3,glm::vec3(i,1,j), _models[3], false));
+                        _floor.push_back(MapElement(-1,glm::vec3(0), _models[0], false,_scale));
+                        _secondFloor.push_back(MapElement(3,glm::vec3(i,1,j), _models[3], false,_scale));
                         break;
                     default:
                         //std::cout << "lol y a r" << std::endl;
@@ -91,4 +91,5 @@ void Map::display() const {
         //std::cout << std::endl;
     }
 }
+
 

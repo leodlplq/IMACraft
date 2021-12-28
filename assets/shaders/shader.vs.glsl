@@ -13,7 +13,6 @@ out vec3 vTexCoord;
 void main()
 {
     gl_Position = camMatrix * model* vec4(aPos,1.0);
-
     vColor = aColor;
-    vTexCoord = vec3(aPos.x, aPos.y, -aPos.z);
+    //vTexCoord = vec3(aPos.x, aPos.y, -aPos.z);
 }

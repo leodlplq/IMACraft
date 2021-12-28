@@ -3,13 +3,15 @@
 //
 #include "LibCraft/renderEngine/include/Camera.hpp"
 
-Camera::Camera(const int width , const int height, Player &player):
-    _position(player.getPosition()),
-    _width((float)width),
-    _height((float)height),
+Camera::Camera(const int width , const int height, Player& player):
     _player(player),
-    _orientation(player.getOrientation())
-{}
+    _position(player.getPosition()),
+    _orientation(player.getOrientation()),
+    _width((float)width),
+    _height((float)height)
+{
+    _player = player;
+}
 
 void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane)
 {

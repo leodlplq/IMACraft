@@ -11,7 +11,7 @@
 
 
 //RENDER ENGINE
-#include "LibCraft/renderEngine/include/ModelCube.hpp"
+#include "LibCraft/renderEngine/include/Model.hpp"
 
 class MapElement {
 private:
@@ -30,18 +30,18 @@ private:
 public:
     //CONSTRUCTORS
     MapElement() = default;
-    inline MapElement(int modelType, glm::vec3 position, ModelCube model, bool inter)
+    inline MapElement(int modelType, glm::vec3 position, Model model, bool inter, float scale)
     {
         _modelType = int(modelType);
         _position = glm::vec3(position);
         _isIntersection = inter;
 
         if(modelType != -1){
-            _hitbox = Hitbox(model, position);
+            _hitbox = Hitbox(model, position,scale);
         } else {
             //getting rid of void hitbox
             glm::vec3 voidPosition(10000.f, 10000.f, 10000.f);
-            _hitbox = Hitbox(model, voidPosition);
+            _hitbox = Hitbox(model, voidPosition,scale);
         }
     };
     ~MapElement() = default;

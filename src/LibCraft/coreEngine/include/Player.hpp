@@ -8,13 +8,19 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "../../renderEngine/include/Cube.hpp"
 #include "Hitbox.hpp"
+#include "../src/LibCraft/renderEngine/include/Model.hpp"
+#include <glm/gtc/type_ptr.hpp>
+
 
 class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
+
+    Player(Model model, const glm::vec3 &spawnPos, float scale);
     Player() = default;
-    Player(const Cube &mesh, const glm::vec3 &spawnPos);
     ~Player() = default;
+
+    void Draw(Shader &shader);
 
 
     //player movement.
@@ -43,19 +49,20 @@ public:
     inline glm::vec3 getPosition() const{ return _position; }
     inline glm::vec3 getOrientation() const{ return _orientation; }
     inline char getFacingDirection() const { return _facingDirection; }
-    inline Hitbox getHitbox() const { return _hitbox; }
-
+    inline Hitbox getHitbox() const { return _hitbox;}
+    inline float getScale() const { return  _scale;}
     //SETTERS
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
 
     inline float getDistanceToPlayer() const { return _distanceToPlayer; }
     inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
+    inline void setScale(float scale){_scale = scale;}
 
 private:
     //POSITION & MOVEMENT OF THE PLAYER
-    glm::vec3 _position;
-
+    glm::vec3 _position{};
+    float _scale{};
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
     float _orientationRot = -90.f;
@@ -67,7 +74,7 @@ private:
      * ----- N S W E ------
      * it indicates which direction the player is facing (north, south, west, east)
      * */
-    char _facingDirection;
+    char _facingDirection{};
 
     //SPEEDS AND VALUE FOR THE MOVEMENT + JUMP OF THE PLAYER
     float _speed = 0.1f;
@@ -76,20 +83,11 @@ private:
     float _velocityY = 0.f;
     float _gravity = 0.2f;
     bool _onGround = true;
-
-
-    //MESH OF THE CUBE (going to be a model soon)
-    Cube _mesh;
-
+    Model _model;
     //HITBOX PART
     Hitbox _hitbox;
 
     //PLAYER HEALTH
-    float _hp;
-
-
-
-
-
+    float _hp{};
     float _distanceToPlayer = 1.f;
 };
