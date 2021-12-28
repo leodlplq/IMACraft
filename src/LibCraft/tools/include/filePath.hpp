@@ -11,7 +11,7 @@ class FilePath {
 #endif
 
         FilePath() = default;
-
+        ~FilePath() = default;
         FilePath(const char* filepath): m_FilePath(filepath) {
             format();
         }

@@ -15,9 +15,13 @@
 
 class Cube {
 public:
-    Cube(const float radius = 1.0);
-    Cube(const float x, const float y, const float z);
-    void build(const float radius =1.0);
+    explicit Cube(float radius = 1.0);
+    Cube(float x, float y, float z);
+    Cube(const float longueur, const float largeur, const float hauteur, int hit);
+    Cube(const Cube& ) = default;
+    ~Cube() = default;
+
+    void build(float radius =1.0);
     //renvoie ptr sur data
     Vertex* getDataPointer() {
         return &vertices[0];
@@ -36,7 +40,12 @@ public:
         return &indices[0];
     }
 
+    float getHeight() const{
+        return _radius;
+    }
+
 private:
+    float _radius;
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices = {
             // Right

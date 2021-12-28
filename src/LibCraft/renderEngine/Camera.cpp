@@ -3,11 +3,21 @@
 //
 #include "LibCraft/renderEngine/include/Camera.hpp"
 
-Camera::Camera(const int width , const int height, const glm::vec3 position):_position(position),_width((float)width),_height((float)height){}
+Camera::Camera(const int width , const int height, Player &player, Map &map):
+    _map(map),
+    _position(player.getPosition()),
+    _orientation(player.getOrientation()),
+    _player(player),
+    _width(static_cast<float>(width)),
+    _height(static_cast<float>(height))
+{}
 
-void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader)
+void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane)
 {
     _projection = glm::perspective(glm::radians(FOVdeg), (float)_width/(float)_height,nearPlane,farPlane);
+
+
+    /*_projection = glm::perspective(glm::radians(FOVdeg), (float)_width/(float)_height,nearPlane,farPlane);
     if(_tpscam)
     {
         _view = glm::lookAt(_position, glm::vec3(0.0,0.0,0.0) , _up); // CAM TPS
@@ -15,98 +25,139 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
     else
     {
         _view = glm::lookAt(_position, _position + _orientation , _up);
-    }
+    }*/
 }
 
-void Camera::Inputs(GLFWwindow *window)
-{
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-    {
-        _tpscam = false;
-        glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
 
-        if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
-        {
-            _position += _speed * glm::vec3(_orientation.x,0.0f,_orientation.z);
-        }
-        if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS)
-        {
-            //_rotaxis = glm::vec3(0.0f,1.0f,0.0f);   ROTATION DU MODELE PEUT ETRE UTILE POUR PLAYER.CPP
-            //_model = glm::rotate(_model,glm::radians(_rotationspeed), _rotaxis);
-            _position += _speed * -glm::normalize(glm::cross(_orientation,_up));
-        }
-        if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS)
-        {
-            _position -= _speed * glm::vec3(_orientation.x,0.0f,_orientation.z);
+glm::mat4 Camera::getViewMatrix() const{
 
-        }
-        if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS)
-        {
-            _position += _speed * glm::normalize(glm::cross(_orientation,_up));
-        }
-        if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        {
-            _speed = 0.3f;
-        }
-        if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-        {
-            _speed = 0.1f;
-        }
+    glm::mat4 view;
 
-        if(glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            _position += _speed * _up;
-        }
+    //std::cout << "angle X : " << _angleX << " | " << " angle Y : " << _angleY << " | " << _angleYWithoutMouseRotation << std::endl;
+    if(_isFPS){
+        glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
+        glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
 
-        if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        {
-            _position -= _speed * _up;
+        glm::vec3 whereToLookTo;
+        float distanceFromPlayer = 0.52f;
+        switch (_player.getFacingDirection()) {
+            case 'N':
+                whereToLookTo = glm::vec3(-1.f, 0.f,0.f) * distanceFromPlayer;
+                break;
+            case 'S':
+                whereToLookTo = glm::vec3(1.f, 0.f,0.f) * distanceFromPlayer;
+                break;
+            case 'E':
+                whereToLookTo = glm::vec3(0.f, 0.f,-1.f) * distanceFromPlayer;
+                break;
+            case 'W':
+                whereToLookTo = glm::vec3(0.f, 0.f,1.f) * distanceFromPlayer;
+                break;
         }
+        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition() - whereToLookTo);
 
-        if(_firstClick == true)
-        {
-            glfwSetCursorPos(window,(_width/2),(_height/2));
-            _position = glm::vec3(0.0f,0.0f,5.0f);
-            _orientation = glm::vec3(0.0f,0.0f,-1.0f);
-            _firstClick = false;
-        }
-        double mouseX;
-        double mouseY;
-        glfwGetCursorPos(window,&mouseX,&mouseY);
-        float rotx = _sensitivity * (float)(mouseY - (_height/2))/_height;
-        float roty = _sensitivity * (float)(mouseX - (_width/2))/_width;
+        view = glm::mat4(rotX * rotY* lookTo);
+    } else {
+        glm::vec3 shiftCamera = _player.getOrientation() * _distanceFromCamera;
 
-
-        glm::vec3 newOrientation = glm::rotate(_orientation,glm::radians(-rotx),glm::normalize(glm::cross(_orientation,_up)));
-        if (abs(glm::angle(newOrientation, _up) - glm::radians(90.0f)) <= glm::radians(85.0f))
-        {
-            _orientation = newOrientation;
-        }
-        // Rotates the Orientation left and right
-        _orientation = glm::rotate(_orientation, glm::radians(-roty), _up);
-        glfwSetCursorPos(window,(_width/2),(_height/2));
+        glm::mat4 translate = glm::translate(glm::mat4(1.f), -shiftCamera);
+        glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
+        glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
+        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition());
+        view = glm::mat4(translate * rotX * rotY * lookTo);
     }
 
-    else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-    {
-        _tpscam = true;
-        if(_firstClick == false)
-        {
-            _position = glm::vec3(0.0f,0.0f,3.0f);
-            _firstClick = true;
-        }
-        glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
+    return view;
 
-        double mouseX;
-        double mouseY;
-        glfwGetCursorPos(window,&mouseX,&mouseY);
-        float rotx = _sensitivity * (float)(mouseY - (_height/2))/(float)_height;
-        float roty = _sensitivity * (float)(mouseX - (_width/2))/_width;
-        _rotaxis = glm::vec3(1.0f,0.0f,0.0f);
-        _position = glm::rotate(_position,glm::radians(rotx), _rotaxis);
-        _rotaxis = glm::vec3(0.0f,1.0f,0.0f);
-        _position = glm::rotate(_position,glm::radians(roty), _rotaxis);
-        glfwSetCursorPos(window,(_width/2),(_height/2));
+}
+
+void Camera::scrollCallback(double xOffset, double yOffset){
+    _distanceFromCamera += _scrollSensitivity * (float)yOffset;
+
+    //SCROLL LIMIT
+    if(_distanceFromCamera < 3){
+        _distanceFromCamera = 3;
+    }
+
+    if(_distanceFromCamera > 40) {
+        _distanceFromCamera = 40;
     }
 
 }
+
+void Camera::rotateLeft(float degree){
+    if(_isFPS){
+        if(_angleY > _angleYWithoutMouseRotation - 60.f && degree < 0){ //peut pas aller plus a droite
+
+            _angleY += degree;
+        }
+
+        if(_angleY < _angleYWithoutMouseRotation + 60.f && degree > 0){
+            _angleY += degree;
+        }
+    } else {
+        _angleY += degree;
+    }
+
+
+
+}
+void Camera::rotateUp(float degree){
+
+    if(_isFPS){
+        if(_angleX > -65.f && degree < 0){ //peut pas aller plus en haut
+            _angleX += degree;
+        }
+
+        if(_angleX < 70.f && degree > 0){ //peut pas aller plus en haut
+            _angleX += degree;
+        }
+
+
+    } else {
+        _angleX += degree;
+    }
+
+}
+
+void Camera::resetAngle() {
+    if(_isFPS){
+        _angleX = 0.f;
+    } else {
+        _angleX = 30.f;
+    }
+}
+
+void Camera::rotateLeftNoMouse(float degree) {
+    _angleYWithoutMouseRotation += degree;
+}
+
+void Camera::turnLeft() {
+
+    int xPlayer = static_cast<int>(round(_player.getPosition().x));
+    int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+    int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
+
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+        setTurningLeft(true);
+        rotateLeftNoMouse(-90.f);
+    }
+
+}
+
+void Camera::turnRight() {
+
+    int xPlayer = static_cast<int>(round(_player.getPosition().x));
+    int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+    int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
+
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+        setTurningRight(true);
+        rotateLeftNoMouse(90.f);
+    }
+
+}
+
+

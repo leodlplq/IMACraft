@@ -6,7 +6,7 @@
 
 
 
-Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPath) {
+Shader::Shader(const char *vertexFile, const char *fragmentFile, const FilePath& appPath) {
     std::string vertexCode = get_file_contents(appPath.dirPath() + vertexFile);
     std::string fragmentCode = get_file_contents(appPath.dirPath() + fragmentFile);
 
@@ -15,7 +15,7 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPat
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     // Attach Vertex Shader source to the Vertex Shader Object
-    glShaderSource(vertexShader, 1, &vertexSource, NULL);
+    glShaderSource(vertexShader, 1, &vertexSource, nullptr);
     // Compile the Vertex Shader into machine code
     glCompileShader(vertexShader);
     compileErrors(vertexShader, "VERTEX");
@@ -23,7 +23,7 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPat
     // Create Fragment Shader Object and get its reference
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     // Attach Fragment Shader source to the Fragment Shader Object
-    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
     // Compile the Vertex Shader into machine code
     glCompileShader(fragmentShader);
     compileErrors(fragmentShader, "FRAGMENT");
@@ -42,11 +42,11 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile, FilePath appPat
     glDeleteShader(fragmentShader);
 }
 
-void Shader::activate() {
+void Shader::activate() const {
     glUseProgram(_id);
 }
 
-void Shader::deleteShader() {
+void Shader::deleteShader() const {
     glDeleteProgram(_id);
 }
 
@@ -62,7 +62,7 @@ void Shader::compileErrors(unsigned int shader, const char* type)
         glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
-            glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+            glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n" << infoLog << std::endl;
         }
     }
@@ -71,7 +71,7 @@ void Shader::compileErrors(unsigned int shader, const char* type)
         glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
-            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+            glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "SHADER_LINKING_ERROR for:" << type << "\n" << infoLog << std::endl;
         }
     }

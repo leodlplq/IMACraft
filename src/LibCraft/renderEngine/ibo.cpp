@@ -10,6 +10,7 @@ ibo::ibo(GLuint *vertices, GLsizeiptr size) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
+
 void ibo::bind() {
     glBindBuffer(GL_ARRAY_BUFFER, _id);
 }

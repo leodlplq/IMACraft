@@ -26,7 +26,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 add_subdirectory(lib)
 target_link_libraries(${PROJECT_NAME} PUBLIC lib)
 
-
+set(ASSIMP_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp)
+find_library(assimp assimp ${ASSIMP_DIRECTORY})
+target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
 
 
 # Copy the assets to the output folder (where the executable is created)

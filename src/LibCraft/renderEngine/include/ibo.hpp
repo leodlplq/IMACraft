@@ -10,7 +10,6 @@ public:
 
     GLuint _id;
     ibo(GLuint* indices, GLsizeiptr size);
-
     void bind();
     void unbind();
     void deleteIbo();
