@@ -167,8 +167,8 @@ void Player::Inputs(GLFWwindow *window) {
         int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
         Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
 
-        display();
-        std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
+        //display();
+        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);
@@ -233,13 +233,13 @@ void Player::Inputs(GLFWwindow *window) {
         int y = yPlayer + nextBlockPosY;
         int coord = static_cast<int>((x * sizeMap) + y);
         Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
-        std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
+        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
         int neiX = xPlayer + nextBlockNeighbourX;
         int neiY = yPlayer + nextBlockNeighbourY;
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
 
-        std::cout << "------------ PLAYER -------------" << std::endl;
+        /*std::cout << "------------ PLAYER -------------" << std::endl;
         getHitbox().display();
         std::cout << "------------ BLOCK -------------" << std::endl;
         blockHitbox.display();
@@ -247,7 +247,7 @@ void Player::Inputs(GLFWwindow *window) {
         std::cout << "------------ OTHER BLOCK -------------" << std::endl;
         neiBlockHitbox.display();
         std::cout << (getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
-
+*/
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);
@@ -308,7 +308,7 @@ void Player::Inputs(GLFWwindow *window) {
 
         int xPlayer = static_cast<int>(round(getPosition().x));
         int yPlayer = static_cast<int>(round(getPosition().z));
-        std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
+        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
         int x = xPlayer + nextBlockPosX;
         int y = yPlayer + nextBlockPosY;
         int coord = static_cast<int>((x * sizeMap) + y);

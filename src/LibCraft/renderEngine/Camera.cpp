@@ -3,7 +3,8 @@
 //
 #include "LibCraft/renderEngine/include/Camera.hpp"
 
-Camera::Camera(const int width , const int height, Player &player):
+Camera::Camera(const int width , const int height, Player &player, Map &map):
+    _map(map),
     _position(player.getPosition()),
     _orientation(player.getOrientation()),
     _player(player),
@@ -32,7 +33,7 @@ glm::mat4 Camera::getViewMatrix() const{
 
     glm::mat4 view;
 
-    std::cout << "angle X : " << _angleX << " | " << " angle Y : " << _angleY << " | " << _angleYWithoutMouseRotation << std::endl;
+    //std::cout << "angle X : " << _angleX << " | " << " angle Y : " << _angleY << " | " << _angleYWithoutMouseRotation << std::endl;
     if(_isFPS){
         glm::mat4 rotX = glm::rotate(glm::mat4(1.f), glm::radians(_angleX), glm::vec3(1, 0, 0));
         glm::mat4 rotY =  glm::rotate(glm::mat4(1.f), glm::radians(_angleY), glm::vec3(0, 1, 0));
@@ -132,13 +133,31 @@ void Camera::rotateLeftNoMouse(float degree) {
 }
 
 void Camera::turnLeft() {
-    rotateLeft(-90.f);
-    rotateLeftNoMouse(-90.f);
+
+    int xPlayer = static_cast<int>(round(_player.getPosition().x));
+    int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+    int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
+
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+        setTurningLeft(true);
+        rotateLeftNoMouse(-90.f);
+    }
+
 }
 
 void Camera::turnRight() {
-    rotateLeft(90.f);
-    rotateLeftNoMouse(90.f);
+
+    int xPlayer = static_cast<int>(round(_player.getPosition().x));
+    int yPlayer = static_cast<int>(round(_player.getPosition().z));
+
+    int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
+
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+        setTurningRight(true);
+        rotateLeftNoMouse(90.f);
+    }
+
 }
 
 

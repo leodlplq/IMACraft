@@ -17,7 +17,7 @@ class Camera
 {
 public:
     //CONSTRUCTORS
-    Camera(int width , int height, Player &player);
+    Camera(int width , int height, Player &player, Map &map);
     ~Camera() =default;
     void Matrix(float FOVdeg, float nearPlane, float farPlane);
 
@@ -51,9 +51,24 @@ public:
     inline float getSensitivity() const { return _sensitivity; }
 
 
+    //ANIMATION PART
+    inline bool isTurningLeft() const { return _turningLeft; }
+    inline void setTurningLeft(bool value) { _turningLeft = value; }
+
+    inline bool isTurningRight() const { return _turningRight; }
+    inline void setTurningRight(bool value) { _turningRight = value; }
+
+    inline void setCurrentAngleX(float value){ _angleXCurrent = value; }
+    inline float getCurrentAngleX() const { return _angleXCurrent; }
 
 
 private:
+
+    //ANIMATION PART
+    Map _map;
+    bool _turningLeft = false;
+    bool _turningRight = false;
+    float _angleXCurrent = 0;
 
     //VECTORS OF THE CAMERA
     glm::vec3 _position;
@@ -88,6 +103,10 @@ private:
     //CHOICE OF THE CAM PART
     bool _isFPS = false;
     bool _firstClick = true;
+
+
+
+
 
 
 

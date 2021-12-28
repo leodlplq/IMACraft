@@ -44,7 +44,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _textures(),
      _width(window_width),
      _height(window_height),
-     _camera(_width,_height,_player),
+     _camera(_width,_height,_player, _map),
      _player(Cube(), _map.getSpawnPoint(), _map)
 {
     size_callback(window_width, window_height);
@@ -94,14 +94,6 @@ void App::render(GLFWwindow* window)
     _textures[0].bind();
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
-    //TEST 2 CUBES
-    /*model = glm::translate(model,glm::vec3(2,0,0));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[0].draw();
-    model = glm::translate(model,glm::vec3(3,0,0));
-    glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
-    _models[1].draw();*/
-
 
     // Draw the map
     //FLOOR PART
@@ -112,6 +104,7 @@ void App::render(GLFWwindow* window)
             _models[static_cast<unsigned long>(me.getModel())].draw();
         }
     }
+
     //SECOND FLOOR PART (WALL / JUMP OBSTACLE...)
     for(auto &me:_map.getSecondFloor()){
         if(me.getModel() != -1){
@@ -119,7 +112,25 @@ void App::render(GLFWwindow* window)
             glUniformMatrix4fv(glGetUniformLocation(_shaderProgram._id,"model"),1,GL_FALSE,glm::value_ptr(model));
             _models[static_cast<unsigned long>(me.getModel())].draw();
         }
+    }
 
+    /* VERIF SI ON EST EN TRAIN DE TOURNER
+     *
+     * SI OUI -- ON AUGMENTE X PAR X JUSQU'A MAX 90
+     * SI NON -- ON FAIT RIEN.
+     *
+     * */
+    float valueToRotatePerFrame = 5.f;
+    if(_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90){
+        _camera.rotateLeft(-valueToRotatePerFrame);
+        _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
+    } else if(_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
+        _camera.rotateLeft(valueToRotatePerFrame);
+        _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
+    } else {
+        _camera.setCurrentAngleX(0.f);
+        _camera.setTurningLeft(false);
+        _camera.setTurningRight(false);
     }
 
     // SKYBOX PART | SETUP AND DRAWING
