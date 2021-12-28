@@ -49,11 +49,8 @@ public:
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
 
-
-
-    void setDistanceToPlayer(float distance){
-        distanceToPlayer = distance;
-    }
+    inline float getDistanceToPlayer() const { return _distanceToPlayer; }
+    inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
 
 private:
     //POSITION & MOVEMENT OF THE PLAYER
@@ -94,5 +91,5 @@ private:
 
 
 
-    float distanceToPlayer = 1.f;
+    float _distanceToPlayer = 1.f;
 };

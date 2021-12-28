@@ -9,10 +9,10 @@
 #include "vbo.hpp"
 #include "vao.hpp"
 #include "ibo.hpp"
-#include <assimp-5.0.1/include/assimp/Importer.hpp>
-#include <assimp-5.0.1/include/assimp/scene.h>
-#include <assimp-5.0.1/include/assimp/postprocess.h>
-#include <assimp-5.0.1/include/assimp/pbrmaterial.h>
+#include <assimp/include/assimp/Importer.hpp>
+#include <assimp/include/assimp/scene.h>
+#include <assimp/include/assimp/postprocess.h>
+#include <assimp/include/assimp/pbrmaterial.h>
 
 #include <glm/glm.hpp>
 #include "../lib/stb/stb_image.h"

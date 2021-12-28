@@ -56,8 +56,8 @@ private:
     Map _map;
     Shader _lightShader;
     Shader _skyboxShader;
+    Shader _shaderProgram;
     Shader _steveShader;
-    GLint _uniId, _tex0Id{};
     FilePath _appPath;
     std::vector<TextureCube> _textures;
     int _width;
@@ -74,6 +74,7 @@ private:
     Cube _sun;
 
     void Continue(GLFWwindow *window);
+
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);

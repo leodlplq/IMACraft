@@ -3,7 +3,7 @@
 std::vector<Model> getAllModels(const FilePath& appPath){
     std::vector<Model> models;
 
-    // MESH DU CUBE ORIGINAL !!
+    /*// MESH DU CUBE ORIGINAL !!
     Cube cube;
 
     //TEXTURE PATH FOR THE GROUND
@@ -28,7 +28,7 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     // REDSTONE TEXTURE MODEL -- 3
     std::string filePathRedstone = ((std::string)appPath.dirPath() + "/assets/textures/redstone/side.jpg");
     Model redstone_cube(cube,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone,filePathRedstone, filePathRedstone,GL_RGB);
-    models.push_back(redstone_cube);
+    models.push_back(redstone_cube);*/
 
     //
 
@@ -38,14 +38,20 @@ std::vector<Model> getAllModels(const FilePath& appPath){
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(getAllModels(appPath)),
      _map(appPath.dirPath() + "/assets/maps/map7.pgm", _models),
-     _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+     _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
+     _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+     _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
      _appPath(appPath),
      _textures(),
      _width(window_width),
      _height(window_height),
      _camera(_width,_height,_player),
-     _player(Cube(), _map.getSpawnPoint())
+     _player(Cube(), _map.getSpawnPoint()),
+     _steve(),
+     _collectibles(),
+     _enemies(),
+     _sun()
 {
     size_callback(window_width, window_height);
 }
@@ -55,29 +61,6 @@ void App::init(){
     TextureCube player(&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0],&filePathWood[0], GL_RGBA);
     player.texUnit(_shaderProgram,"tex0",0);
     _textures.push_back(player);
-
-App::App(int window_width, int window_height, const FilePath& appPath) :
- _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
- _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
- _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
- _uniId(0),
- _appPath(appPath),
- _textures(),
- _models(),
- _rotation(0.0f),
- _prevTime(0.0f),
- _width(window_width),
- _height(window_height),
- _camera(_width,_height,_player),
- _player(Cube(), glm::vec3(0.f, 1.0f, 0.f)),
- _steve(),
- _collectibles(),
- _enemies(),
- _sun()
-{
-    size_callback(window_width, window_height);
-}
-void App::init(){
 
 //    // MAP
 //    _map = Map(_appPath.dirPath() + "/assets/maps/map3.pgm");
@@ -126,14 +109,11 @@ void App::init(){
 
 }
 
-void App::render(GLFWwindow* window)
-{
+void App::render(GLFWwindow* window){
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //INPUTS
-    inputs(window);
 
     glm::vec4 lightColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
     glm::vec3 lightPos = glm::vec3(0.f,2.f,7.f);
@@ -145,16 +125,19 @@ void App::render(GLFWwindow* window)
     glUniformMatrix4fv(glGetUniformLocation(_lightShader._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
     glUniformMatrix4fv(glGetUniformLocation(_lightShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[4].Draw(_lightShader);
+
+
     // Tell OpenGL which Shader Program we want to use
     _steveShader.activate();
     glUniform4f(glGetUniformLocation(_steveShader._id,"lightColor"),lightColor.x,lightColor.y,lightColor.z,lightColor.w);
     glUniform3f(glGetUniformLocation(_steveShader._id,"lightPos"),lightPos.x,lightPos.y,lightPos.z);
     _camera.Matrix(45.0f,0.1f,100.0f);
     glUniform3f(glGetUniformLocation(_steveShader._id,"camPos"),_camera._position.x,_camera._position.y,_camera._position.z);
+
     //HUD
     if(_player.getDistanceToPlayer() != 0) {
         //INPUTS
-        _player.Inputs(window);
+        inputs(window);
         _player.render();
         _hud.DrawHUD(_steveShader,_models[2]);
     }
@@ -175,6 +158,7 @@ void App::render(GLFWwindow* window)
     glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"camMatrix"), 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()*_camera.getViewMatrix()));
     glUniformMatrix4fv(glGetUniformLocation(_steveShader._id,"model"),1,GL_FALSE,glm::value_ptr(model));
     _models[0].Draw(_steveShader);
+
     //Terrain
     model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, -0.8f, 0.0f)); // translate it down so it's at the center of the scene
