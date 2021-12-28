@@ -17,11 +17,8 @@ class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
 
-    Player(Model model, const glm::vec3 &spawnPos, float scale);
+    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map);
     Player() = default;
-    inline Player(const Cube &mesh, const glm::vec3 &spawnPos, const Map& map):
-        _position(spawnPos), _facingDirection('N'), _mesh(mesh), _hitbox(mesh, spawnPos), _hp(10), _map(map)
-    {};
     ~Player() = default;
 
     void Draw(Shader &shader);

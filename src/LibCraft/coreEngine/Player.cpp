@@ -3,8 +3,8 @@
 //
 #include "include/Player.hpp"
 
-Player::Player( Model model, const glm::vec3 &spawnPos, float scale):
-_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(10)
+Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map):
+_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(10), _map(map)
 {
 }
 
