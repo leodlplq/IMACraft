@@ -63,9 +63,9 @@ void Skybox::setup(Shader& shader, Camera& camera, int width, int height)
     glDepthFunc(GL_LEQUAL);
     shader.activate();
     glm::mat4 view = glm::mat4(1.0f);
-    view = glm::mat4(glm::mat3(glm::lookAt(camera._position, camera._position + camera._orientation, camera._up)));
+    view = glm::mat4(glm::mat3(glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getOrientation(), camera.getUpVector())));
     glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)width / static_cast<float>(height), 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "view"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     _vao.bind();

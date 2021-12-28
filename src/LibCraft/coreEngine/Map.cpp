@@ -22,6 +22,7 @@ void Map::generateCubeMap(const FilePath& pathToMap){
             std::getline(image, line);
             if(i == 2){
                 size = stoi(line);
+                _size = size;
             }
         }
 

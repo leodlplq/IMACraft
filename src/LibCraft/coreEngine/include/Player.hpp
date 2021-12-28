@@ -10,6 +10,7 @@
 #include "Hitbox.hpp"
 #include "../src/LibCraft/renderEngine/include/Model.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include "Map.hpp"
 
 
 class Player {
@@ -18,6 +19,9 @@ public:
 
     Player(Model model, const glm::vec3 &spawnPos, float scale);
     Player() = default;
+    inline Player(const Cube &mesh, const glm::vec3 &spawnPos, const Map& map):
+        _position(spawnPos), _facingDirection('N'), _mesh(mesh), _hitbox(mesh, spawnPos), _hp(10), _map(map)
+    {};
     ~Player() = default;
 
     void Draw(Shader &shader);
@@ -28,6 +32,9 @@ public:
     void moveRight();
     void moveForward();
     void moveBackward();
+
+    void turnLeft();
+    void turnRight();
 
     void startJump();
     void slide();
@@ -88,6 +95,8 @@ private:
     Hitbox _hitbox;
 
     //PLAYER HEALTH
-    float _hp{};
+    float _hp;
+    //MAP TO GET COLLISION
+    Map _map;
     float _distanceToPlayer = 3.f;
 };

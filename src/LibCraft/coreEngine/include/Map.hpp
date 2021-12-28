@@ -24,6 +24,8 @@ private:
     glm::vec3 _spawnPoint;
     float _scale;
 
+    int _size;
+
 public:
 
     Map() = default;
@@ -43,4 +45,5 @@ public:
     inline glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
+    inline int getSize() { return _size; }
 };
