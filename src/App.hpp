@@ -38,8 +38,17 @@ public:
     ~App();
 
     //USEFUL
-    void render(GLFWwindow* window);
     void init();
+    void render(GLFWwindow* window);
+
+    //ALL THE SCENE*
+    void renderMainMenu(GLFWwindow* window);
+    void renderGame(GLFWwindow* window);
+    void renderPauseMenu(GLFWwindow* window);
+    void renderLooseScreen(GLFWwindow* window);
+    void renderWinScreen(GLFWwindow* window);
+
+
     inline bool isGameRunning() const { return _running; }
     inline void closeGame(){ _running = false; }
 
@@ -49,6 +58,11 @@ public:
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
+
+
+    //SCENE SELECTION
+    inline unsigned int getScene() const { return _selectedScene; }
+    inline void setScene(unsigned int value) { _selectedScene = value; }
 
 
 
@@ -78,6 +92,7 @@ private:
 
     //void Continue(GLFWwindow *window);
 
+    unsigned int _selectedScene = 1;
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
