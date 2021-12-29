@@ -42,7 +42,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
     size_callback(window_width, window_height);
 }
 void App::init(){
-
+    std::cout << "Salut, c'est Léo :) Je voulais vous prévenir qu'en appuyrant sur les chiffres en haut de vos claviers \n vous pouvez maintenant changer de scences (menu, pause etc...) ca va de 1 à 5." << std::endl;
     // CAMERA
     // configure global opengl state
     // -----------------------------
@@ -114,35 +114,38 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
 
     //SCENE SELECTION
-    switch (key) {
-        case 49:
-            //SET TO MAIN MENU SCENE
-            std::cout << "scene menu" << std::endl;
-            setScene(0);
-            break;
-        case 50:
-            //SET GAME SCENE
-            std::cout << "scene jeu" << std::endl;
-            setScene(1);
-            break;
-        case 51:
-            //SET PAUSE MENU SCENE
-            std::cout << "scene pause" << std::endl;
-            setScene(2);
-            break;
-        case 52:
-            //SET LOOSE SCENE
-            std::cout << "scene loose" << std::endl;
-            setScene(3);
-            break;
-        case 53:
-            //SET WIN SCENE
-            std::cout << "scene win" << std::endl;
-            setScene(4);
-            break;
+    if(action == GLFW_PRESS){
+        switch (key) {
+            case 49:
+                //SET TO MAIN MENU SCENE
+                //std::cout << "scene menu" << std::endl;
+                setScene(0);
+                break;
+            case 50:
+                //SET GAME SCENE
+//                std::cout << "scene jeu" << std::endl;
+                setScene(1);
+                break;
+            case 51:
+                //SET PAUSE MENU SCENE
+//                std::cout << "scene pause" << std::endl;
+                setScene(2);
+                break;
+            case 52:
+                //SET LOOSE SCENE
+//                std::cout << "scene loose" << std::endl;
+                setScene(3);
+                break;
+            case 53:
+                //SET WIN SCENE
+//                std::cout << "scene win" << std::endl;
+                setScene(4);
+                break;
+        }
     }
 
-    std::cout << key << std::endl;
+
+//    std::cout << key << std::endl;
     if(key == 65 && action == GLFW_PRESS){
         _player.turnLeft();
         _camera.turnLeft();
