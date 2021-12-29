@@ -23,3 +23,4 @@ target_link_libraries(${PROJECT_NAME} INTERFACE glm)
 # ---Add assimp ---
 add_subdirectory(assimp) # trouve assimp au chemin spécifié, ici lib/assimp par exemple ; et comme leur CMakeLists.txt est dans un dossier code on met le chemin vers ce dossier
 target_link_libraries(${PROJECT_NAME} INTERFACE assimp::assimp) # Déclare que notre projet utilise assimp ; ça va faire les bons include directories etc, nous on a rien de plus à faire que cette ligne là
+

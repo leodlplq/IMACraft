@@ -15,5 +15,6 @@ void main()
     TexCoords = aTexCoords;
     gl_Position = camMatrix * model* vec4(aPos,1.0);
     crtPos = vec3(model* vec4(aPos,1.0f));
-    Normal = aNormal;
+    Normal = mat3(transpose(inverse(model))) * aNormal;
+//    Normal = aNormal;
 }

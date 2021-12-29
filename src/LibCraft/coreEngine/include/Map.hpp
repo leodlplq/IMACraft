@@ -10,6 +10,7 @@
 #include <vector>
 #include <fstream>
 
+
 #include <iostream>
 #include <array>
 
@@ -23,7 +24,7 @@ private:
     std::vector<MapElement> _secondFloor;
     glm::vec3 _spawnPoint;
     float _scale;
-
+    FilePath _appPath;
     int _size;
 
 public:
@@ -35,15 +36,15 @@ public:
     //inline std::vector<Cube> getMap() const {return _map;}
 
 
-    inline std::vector<MapElement> getFloor() const {return _floor;}
-    inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
+    [[nodiscard]] inline std::vector<MapElement> getFloor() const {return _floor;}
+    [[nodiscard]] inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
 
 
     void generateCubeMap(const FilePath &pathToMap);
     void display() const;
 
-    inline glm::vec3 getSpawnPoint() const{
+    [[nodiscard]] inline glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
-    inline int getSize() { return _size; }
+    [[nodiscard]] inline int getSize() const { return _size; }
 };

@@ -52,14 +52,13 @@ void App::init(){
     Model steve(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
     _models.push_back(steve);
     std::cout << "Taille de Steve: " << steve.getHeight() << std::endl;
-    Model terrain(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
-    _models.push_back(terrain);
+    Model diamond (((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str());
+    _models.push_back(diamond);
     Model hud(((std::string)_appPath.dirPath() + "/assets/obj/hud/scene.gltf").c_str());
     _models.push_back(hud);
-    Model pickaxe(((std::string)_appPath.dirPath() + "/assets/obj/pickaxe/scene.gltf").c_str());
-    _models.push_back(pickaxe);
-    Model sun(((std::string)_appPath.dirPath() + "/assets/obj/cube/cube.obj").c_str());
-    _models.push_back(sun);
+    Model cube(((std::string)_appPath.dirPath() + "/assets/obj/cube/cube.obj").c_str());
+    _models.push_back(cube);
+
 
     Enemy zombie(((std::string)_appPath.dirPath() + "/assets/obj/zombie/scene.gltf").c_str(),glm::vec3(1.3,0.1,-1),glm::vec3(0.06f, 0.06f, 0.06f));
     _enemies.push_back(zombie);
@@ -69,12 +68,15 @@ void App::init(){
     _enemies.push_back(enderMan);
     std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
-    Collectible diamond(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(0.0f, 0.6f, 10.0f));
-    _collectibles.push_back(diamond);
+    for(unsigned int i = 0; i<10;i++){
+        _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 10.f);
+    }
 
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
+
+
 
 
 }
@@ -104,7 +106,7 @@ void App::render(GLFWwindow* window) {
             renderWinScreen(window);
             break;
         default:
-            assert("pas possible");
+            assert((bool) "pas possible");
             break;
     }
 
@@ -170,7 +172,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 
 }
 
-void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
+void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/) const
 {
     switch (getScene()) {
         case 0:
@@ -194,7 +196,7 @@ void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/)
 
             break;
         default:
-            assert("pas possible");
+            assert((bool) "pas possible");
             break;
     }
 }
@@ -225,7 +227,7 @@ void App::scroll_callback(double xOffset, double yOffset)
 
             break;
         default:
-            assert("pas possible");
+            assert((bool) "pas possible");
             break;
     }
 
@@ -264,7 +266,7 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 
             break;
         default:
-            assert("pas possible");
+            assert((bool) "pas possible");
             break;
     }
 

@@ -24,6 +24,7 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/Light.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -54,7 +55,7 @@ public:
 
     //EVENT
     void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
-    void mouse_button_callback(int button, int action, int mods);
+    void mouse_button_callback(int button, int action, int mods) const;
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
@@ -88,9 +89,6 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<Enemy> _enemies;
     HUD _hud;
-    Cube _sun;
-
-    //void Continue(GLFWwindow *window);
 
     unsigned int _selectedScene = 1;
 };
