@@ -98,8 +98,5 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _camera.setTurningLeft(false);
         _camera.setTurningRight(false);
     }
-    // SKYBOX PART | SETUP AND DRAWING
-    _skybox.setup(_skyboxShader, _camera, _width, _height);
-
 }
 
