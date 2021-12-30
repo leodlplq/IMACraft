@@ -63,6 +63,9 @@ public:
     inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
     inline void setScale(float scale){_scale = scale;}
 
+    inline float getScore(){return _score;}
+    inline void winScore(float value){_score+=value;}
+
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
@@ -96,4 +99,5 @@ private:
     //MAP TO GET COLLISION
     Map _map;
     float _distanceToPlayer = 3.f;
+    float _score = 0.f;
 };

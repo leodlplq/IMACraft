@@ -4,9 +4,8 @@
 
 #include "LibCraft/coreEngine/include/HUD.hpp"
 
-void HUD::DrawHUD(Shader &shader, Model hud){
+void HUD::DrawHUD(Shader &shader, Model hud, Model icon, float score){
     shader.activate();
-    glDepthFunc(GL_LEQUAL);
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model,
                            glm::vec3(0.0f, -0.9f, 0.0f)); // translate it down so it's at the center of the scene
@@ -18,7 +17,21 @@ void HUD::DrawHUD(Shader &shader, Model hud){
                        glm::value_ptr(glm::mat4(1.0f)));
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
     hud.Draw(shader);
-    glDepthFunc(GL_LESS);
+
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.9f, 0.76f, 0.0f)); // _position de l'icone de score
+    model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 1, 0));
+    _angle += 1;
+    model = glm::rotate(model, glm::radians(_angle), glm::vec3(0, 1, 0));
+    model = glm::scale(model,glm::vec3(0.016f, 0.02f, 0.016f));    // it's a bit too big for our scene, so scale it down
+    glUniformMatrix4fv(glGetUniformLocation(shader._id, "camMatrix"), 1, GL_FALSE,glm::value_ptr(glm::mat4(1.0f)));
+    glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    icon.Draw(shader);
+
+    // DRAW THE ACTUAL SCORE
+
+    //model = glm::mat4(1.0f);
+    //model = glm::translate(model, glm::vec3(0.85f, 0.76f, 0.0f)); // _position du score
 }
 
 void HUD::DrawGameOver(Shader &shader, Model gameOver){

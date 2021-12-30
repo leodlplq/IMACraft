@@ -7,9 +7,11 @@
 
 
 void App::renderGame(GLFWwindow *window, double FPS) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glm::mat4 model = glm::mat4(1.f);
 
 
 
@@ -19,39 +21,20 @@ void App::renderGame(GLFWwindow *window, double FPS) {
     _steveShader.activate();
     _camera.Matrix(45.0f, 0.1f, 100.0f);
 
+    //LIGHT
+    Light light(_steveShader,_lightShader,_camera,_models[3]);
 
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    glm::vec3 lightPos = glm::vec3(0.f, 2.f, 7.f);
-    //Light
-    _lightShader.activate();
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, lightPos);
-    model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));    // it's a bit too big for our scene, so scale it down
-    glUniformMatrix4fv(glGetUniformLocation(_lightShader._id, "camMatrix"), 1, GL_FALSE,glm::value_ptr(_camera.getProjMatrix() * _camera.getViewMatrix()));
-    glUniformMatrix4fv(glGetUniformLocation(_lightShader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    _models[4].Draw(_lightShader);
-
-
-    // Tell OpenGL which Shader Program we want to use
     _steveShader.activate();
-    glUniform4f(glGetUniformLocation(_steveShader._id, "lightColor"), lightColor.x, lightColor.y, lightColor.z,lightColor.w);
-    glUniform3f(glGetUniformLocation(_steveShader._id, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-    glUniform3f(glGetUniformLocation(_steveShader._id, "camPos"), _camera.getPosition().x, _camera.getPosition().y,_camera.getPosition().z);
-
     //HUD
     if (_player.getDistanceToPlayer() != 0) {
         //INPUTS
         _player.Inputs(window);
         _player.render();
-        _hud.DrawHUD(_steveShader, _models[2]);
-    } else { //Game Over
-        _hud.DrawGameOver(_steveShader, _models[3]);
-        if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-            _player.setDistanceToPlayer(1.f);
-            std::cout << "Restart" << std::endl;
-        }
+        _hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore());
     }
+    else { //Switch to GameOver Scene
+        setScene(3);
+        }
 
     //Player Part
     _steveShader.activate();
@@ -59,16 +42,15 @@ void App::renderGame(GLFWwindow *window, double FPS) {
     _player.Draw(_steveShader);
 
 // Collectibles
-    for (unsigned int i = 0; i < _collectibles.size(); i++) {
-        _collectibles[i].Update(_player);
-        _collectibles[i].Draw(_steveShader, _camera);
+    for (auto & _collectible : _collectibles) {
+        _collectible.Update(_player);
+        _collectible.Draw(_steveShader, _camera);
     }
 
     //Enemies
-    for (unsigned int i = 0; i < _enemies.size(); i++) {
-        _enemies[i].DrawEnemy(_player, _camera, _steveShader);
+    for (auto & _enemie : _enemies) {
+        _enemie.DrawEnemy(_player, _camera, _steveShader);
     }
-
 
     // Draw the map
     //FLOOR PART
@@ -116,6 +98,8 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _camera.setTurningLeft(false);
         _camera.setTurningRight(false);
     }
+    // SKYBOX PART | SETUP AND DRAWING
+    _skybox.setup(_skyboxShader, _camera, _width, _height);
 
 }
 
