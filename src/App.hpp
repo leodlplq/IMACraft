@@ -42,11 +42,11 @@ public:
 
     //USEFUL
     void init();
-    void render(GLFWwindow* window);
+    void render(GLFWwindow* window, double FPS);
 
     //ALL THE SCENE*
-    void renderMainMenu(GLFWwindow* window);
-    void renderGame(GLFWwindow* window);
+    void renderMainMenu(GLFWwindow* window, double FPS);
+    void renderGame(GLFWwindow* window, double FPS);
     void renderPauseMenu(GLFWwindow* window);
     void renderLooseScreen(GLFWwindow* window);
     void renderWinScreen(GLFWwindow* window);
@@ -66,6 +66,10 @@ public:
     //SCENE SELECTION
     inline unsigned int getScene() const { return _selectedScene; }
     inline void setScene(unsigned int value) { _selectedScene = value; }
+
+    //FPS
+    inline void invertFPSShow() { _showingFPS = !_showingFPS; }
+
 
 
 
@@ -98,6 +102,8 @@ private:
 
     unsigned int _selectedScene = 1;
 
+    //FPS
+    bool _showingFPS = false;
     //FREETYPE
     Text _textArial;
     Text _textMinecraft;

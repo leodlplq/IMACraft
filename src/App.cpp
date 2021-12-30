@@ -85,17 +85,17 @@ void App::init(){
 
 }
 
-void App::render(GLFWwindow* window) {
+void App::render(GLFWwindow* window, double FPS) {
     //CODE IN GAMESCENE.cpp
 
     switch (getScene()) {
         case 0:
             //mENU OF THE GAME
-            renderMainMenu(window);
+            renderMainMenu(window, FPS);
             break;
         case 1:
             //GAME ITSELF
-            renderGame(window);
+            renderGame(window, FPS);
             break;
         case 2:
             //PAUSE MENU
@@ -151,7 +151,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     }
 
 
-//    std::cout << key << std::endl;
+ std::cout << key << std::endl;
     if(key == 65 && action == GLFW_PRESS){
         _player.turnLeft();
         _camera.turnLeft();
@@ -172,6 +172,9 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 
         _camera.invertCamMode();
         _camera.resetAngle();
+    }
+    if(key == 292 && action == GLFW_PRESS){
+        invertFPSShow();
     }
 
 }

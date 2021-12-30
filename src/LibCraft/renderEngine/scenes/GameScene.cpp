@@ -6,14 +6,12 @@
 
 
 
-void App::renderGame(GLFWwindow *window) {
+void App::renderGame(GLFWwindow *window, double FPS) {
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //PRINTING FPS
-    std::string toPrintFPS = "FPS : " + window.getFPS
-    _textArial.renderText(_textShader, ,25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
 
     // SKYBOX PART | SETUP AND DRAWING
     _skybox.setup(_skyboxShader, _camera, _width, _height);
@@ -92,6 +90,13 @@ void App::renderGame(GLFWwindow *window) {
             _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
         }
     }
+
+    //PRINTING FPS
+    if(_showingFPS){
+        std::string toPrintFPS = "FPS : " + std::to_string(FPS);
+        _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    }
+
 
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *

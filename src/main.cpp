@@ -66,12 +66,24 @@ int main(__attribute__((unused)) int argc, char** argv)
     });
 
     app.init();
-
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
+    double FPS = 0;
     std::cout << w << h << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && app.isGameRunning()) {
 
-        app.render(window);
+
+        // Measure speed
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            FPS = 1000.0/double(nbFrames);
+            nbFrames = 0;
+            lastTime += 1.0;
+        }
+        app.render(window, FPS);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
