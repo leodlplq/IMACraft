@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 //TOOLS
 #include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/tools/include/deleteElementsFromVector.hpp"
@@ -24,6 +25,8 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
+
+#include "LibCraft/renderEngine/include/Text.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -77,6 +80,7 @@ private:
     Shader _skyboxShader;
     Shader _shaderProgram;
     Shader _steveShader;
+    Shader _textShader;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
     int _width;
@@ -93,6 +97,10 @@ private:
     //void Continue(GLFWwindow *window);
 
     unsigned int _selectedScene = 1;
+
+    //FREETYPE
+    Text _textArial;
+    Text _textMinecraft;
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);

@@ -11,6 +11,10 @@ void App::renderGame(GLFWwindow *window) {
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //PRINTING FPS
+    std::string toPrintFPS = "FPS : " + window.getFPS
+    _textArial.renderText(_textShader, ,25.0f, 25.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+
     // SKYBOX PART | SETUP AND DRAWING
     _skybox.setup(_skyboxShader, _camera, _width, _height);
 
