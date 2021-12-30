@@ -40,6 +40,10 @@ public:
 
     void init(const FilePath &filePath);
     void renderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
+    float textWidth(std::string text, const float scale);
+    float textHeight(std::string text, const float scale);
+
+
 private:
     int _wHeight, _wWidth;
     std::string _fontName;

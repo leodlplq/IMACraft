@@ -166,3 +166,35 @@ void Text::renderText(Shader &s, std::string text, float x, float y, float scale
     glDisable(GL_BLEND);
 }
 
+float Text::textWidth(std::string text,const float scale){
+    float totalWidth = 0;
+
+    std::string::const_iterator c;
+    int i = 0;
+    for (c = text.begin(); c != text.end(); c++)
+    {
+        Character ch = Characters[*c];
+        float w = static_cast<float>(ch.Size.x) * scale;
+        /*std::cout << "|"<<text[i] << "| size : " << w << std::endl;
+        i++;*/
+        totalWidth += w;
+    }
+
+    return totalWidth;
+}
+
+float Text::textHeight(std::string text,const float scale){
+    float totalHeight = 0;
+
+    std::string::const_iterator c;
+    for (c = text.begin(); c != text.end(); c++)
+    {
+        Character ch = Characters[*c];
+        float h = static_cast<float>(ch.Size.y) * scale;
+
+        if(totalHeight < h) totalHeight = h;
+    }
+
+    return totalHeight;
+}
+
