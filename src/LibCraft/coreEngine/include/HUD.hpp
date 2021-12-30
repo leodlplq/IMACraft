@@ -12,8 +12,10 @@
 class HUD: public Model{
 public:
     HUD() = default;
-    void DrawHUD(Shader &shader, Model hud);
+    void DrawHUD(Shader &shader, Model hud, Model icon, float score);
     void DrawGameOver(Shader &shader, Model gameOver);
+private:
+    float _angle = 0;
 };
 
 

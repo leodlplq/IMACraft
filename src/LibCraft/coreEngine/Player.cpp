@@ -117,6 +117,7 @@ void Player::render(){
 void Player::Inputs(GLFWwindow *window) {
 
     //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
+    //glfwGetKey(window,87) == GLFW_PRESS  OR TRUE
 
     //GOING FORWARD
     if(glfwGetKey(window,87) == GLFW_PRESS){ //GOING FORWARD

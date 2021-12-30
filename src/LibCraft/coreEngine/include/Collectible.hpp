@@ -12,10 +12,11 @@
 class Collectible {
 public:
     bool _alive = true;
-    Collectible(const char *path, glm::vec3 position){
+    Collectible(const char *path, glm::vec3 position, float value){
         Model model(path);
         _model = model;
         _position = position;
+        _value = value;
     }
 
     Model getModel(){
@@ -27,11 +28,16 @@ public:
 
     void Draw(Shader &shader, Camera &camera);
 
+    //void Draw(Shader &shader);
+
     void Update(Player &player);
+    void setAngle(float a){_angle = a;}
+    [[nodiscard]] float getAngle() const { return _angle;}
 
 private:
     Model _model;
     glm::vec3 _position = glm::vec3(0,0,0);
     float _angle =0.0f;
+    float _value;
 };
 

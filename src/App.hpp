@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 //TOOLS
 #include "LibCraft/tools/include/filePath.hpp"
 #include "LibCraft/tools/include/deleteElementsFromVector.hpp"
@@ -24,6 +25,8 @@
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/Mesh.hpp"
 #include "LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/Light.hpp"
+#include "LibCraft/renderEngine/include/Text.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -39,11 +42,11 @@ public:
 
     //USEFUL
     void init();
-    void render(GLFWwindow* window);
+    void render(GLFWwindow* window, double FPS);
 
     //ALL THE SCENE*
-    void renderMainMenu(GLFWwindow* window);
-    void renderGame(GLFWwindow* window);
+    void renderMainMenu(GLFWwindow* window, double FPS);
+    void renderGame(GLFWwindow* window, double FPS);
     void renderPauseMenu(GLFWwindow* window);
     void renderLooseScreen(GLFWwindow* window);
     void renderWinScreen(GLFWwindow* window);
@@ -54,7 +57,7 @@ public:
 
     //EVENT
     void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
-    void mouse_button_callback(int button, int action, int mods);
+    void mouse_button_callback(int button, int action, int mods) const;
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
@@ -63,6 +66,10 @@ public:
     //SCENE SELECTION
     inline unsigned int getScene() const { return _selectedScene; }
     inline void setScene(unsigned int value) { _selectedScene = value; }
+
+    //FPS
+    inline void invertFPSShow() { _showingFPS = !_showingFPS; }
+
 
 
 
@@ -77,6 +84,7 @@ private:
     Shader _skyboxShader;
     Shader _shaderProgram;
     Shader _steveShader;
+    Shader _textShader;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
     int _width;
@@ -88,11 +96,14 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<Enemy> _enemies;
     HUD _hud;
-    Cube _sun;
-
-    //void Continue(GLFWwindow *window);
 
     unsigned int _selectedScene = 1;
+
+    //FPS
+    bool _showingFPS = false;
+    //FREETYPE
+    Text _textArial;
+    Text _textMinecraft;
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
