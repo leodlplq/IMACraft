@@ -33,8 +33,8 @@
 #include "LibCraft/coreEngine/include/Player.hpp"
 #include "LibCraft/coreEngine/include/Collectible.hpp"
 #include "LibCraft/coreEngine/include/Enemy.hpp"
-#include "LibCraft/coreEngine/include/HUD.hpp"
-#include "LibCraft/coreEngine/include/Sauvegarde.hpp"
+#include "LibCraft/renderEngine/include/HUD.hpp"
+#include "LibCraft/renderEngine/include/Sauvegarde.hpp"
 
 class App {
 public:

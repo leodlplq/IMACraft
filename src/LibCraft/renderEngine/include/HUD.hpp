@@ -2,12 +2,12 @@
 // Created by valentin on 26/12/2021.
 //
 #pragma once
-#include "../src/LibCraft/renderEngine/include/Model.hpp"
+#include "LibCraft/renderEngine/include/Model.hpp"
 #include "glm/glm.hpp"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "../src/LibCraft/renderEngine/include/Shader.hpp"
-#include "../src/LibCraft/renderEngine/include/Text.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "LibCraft/renderEngine/include/Shader.hpp"
+#include "LibCraft/renderEngine/include/Text.hpp"
 
 
 class HUD: public Model{

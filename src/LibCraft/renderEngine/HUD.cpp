@@ -2,7 +2,7 @@
 // Created by valentin on 26/12/2021.
 //
 
-#include "LibCraft/coreEngine/include/HUD.hpp"
+#include "LibCraft/renderEngine/include/HUD.hpp"
 
 void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, Text text, Shader &textShader){
     shader.activate();

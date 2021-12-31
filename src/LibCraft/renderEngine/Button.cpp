@@ -108,9 +108,9 @@ bool Button::isHovered(double& xPos, double& yPos) {
     glm::vec2 cornerTopLeft = {_x - width/2, _y - (height/2) - _paddingHeight};
     glm::vec2 cornerBottomRight = {_x + width/2, _y + (height/2) - _paddingHeight};
 
-    std::cout << "x : " << xPos << " y : " << yPos << std::endl;
-    std::cout << "x Corner1 " << cornerTopLeft.x << " y : " << cornerTopLeft.y << std::endl;
-    std::cout << "x Corner2 " << cornerBottomRight.x << " y : " << cornerBottomRight.y << std::endl;
+//    std::cout << "x : " << xPos << " y : " << yPos << std::endl;
+//    std::cout << "x Corner1 " << cornerTopLeft.x << " y : " << cornerTopLeft.y << std::endl;
+//    std::cout << "x Corner2 " << cornerBottomRight.x << " y : " << cornerBottomRight.y << std::endl;
 
 
     if(

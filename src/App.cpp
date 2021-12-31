@@ -44,7 +44,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _hud(_width,_height),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
-     _sauv(((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt").c_str(),((std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt").c_str(),(std::string)appPath.dirPath() + "/assets/sauvegarde.txt"),
+     _sauv((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/sauvegarde.txt"),
      _buttons()
 {
     size_callback(window_width, window_height);
