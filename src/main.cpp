@@ -53,7 +53,7 @@ int main(__attribute__((unused)) int argc, char** argv)
         get_app(window).key_callback(key, /*scancode,*/ action/*, mods*/);
     });
     glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
-        get_app(window).mouse_button_callback(button, action, mods);
+        get_app(window).mouse_button_callback(button, action, mods, window);
     });
     glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
         get_app(window).scroll_callback(xoffset, yoffset);

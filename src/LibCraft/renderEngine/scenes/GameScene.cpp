@@ -94,5 +94,49 @@ void App::displayGame(){
             _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
         }
     }
+
+
+    //PRINTING FPS
+    if(_showingFPS){
+        std::string toPrintFPS = "FPS : " + std::to_string(FPS);
+        _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+    }
+
+    Button playButton("Lancer la partie !",
+                      _height,
+                      _width,
+                      _width/2,
+                      100.f,
+                      40.f,
+                      20.f,
+                      1.f,
+                      glm::vec3(0.f,0.f,0.f),
+                      glm::vec3(1.f,1.f,1.f),
+                      _textArial,
+                      _textShader,
+                      _buttonShader);
+
+    playButton.render();
+
+
+    /* VERIF SI ON EST EN TRAIN DE TOURNER
+     *
+     * SI OUI -- ON AUGMENTE X PAR X JUSQU'A MAX 90
+     * SI NON -- ON FAIT RIEN.
+     *
+     * */
+    float valueToRotatePerFrame = 5.f;
+    if(_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90){
+        _camera.rotateLeft(-valueToRotatePerFrame);
+        _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
+    } else if(_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
+        _camera.rotateLeft(valueToRotatePerFrame);
+        _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
+    } else {
+        _camera.setCurrentAngleX(0.f);
+        _camera.setTurningLeft(false);
+        _camera.setTurningRight(false);
+    }
+
 }
 
