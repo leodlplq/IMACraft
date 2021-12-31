@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include "Hitbox.hpp"
+#include <chrono>
+#include <random>
 
 
 //RENDER ENGINE
@@ -26,6 +28,7 @@ private:
     glm::vec3 _position;
     Hitbox _hitbox;
     bool _isIntersection;
+    float _rand;
 
 public:
     //CONSTRUCTORS
@@ -38,6 +41,7 @@ public:
 
         if(modelType != -1){
             _hitbox = Hitbox(model, position,scale);
+            randomCollectible();
         } else {
             //getting rid of void hitbox
             glm::vec3 voidPosition(10000.f, 10000.f, 10000.f);
@@ -82,7 +86,16 @@ public:
 
     inline bool isIntersection() const { return _isIntersection; }
 
+    void randomCollectible(){
+        // select seed from time
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::mt19937 generator(seed);
+        // uniform real distribution
+        std::uniform_real_distribution<float> uniformRealDistribution(0,1);
+        _rand =uniformRealDistribution(generator);
+    }
 
+    inline float getRand() const { return _rand;}
 
 };
 

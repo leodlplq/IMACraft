@@ -39,12 +39,12 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _textures(),
      _width(window_width),
      _height(window_height),
-     _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
+     _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
      _camera(_width,_height,_player, _map),
      _hud(_width,_height),
+     _sauv((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
-     _sauv((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/sauvegarde.txt"),
      _buttons()
 {
     size_callback(window_width, window_height);
@@ -76,14 +76,22 @@ void App::init(){
     _enemies.push_back(enderMan);
     std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
-    for(unsigned int i = 0; i<10;i++){
-        if(i%2){
-            _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0, 10);
+
+
+    for (auto &me: _map.getFloor()) {
+        if (me.getModel() != -1 && me.isIntersection() == false) {
+            if(me.getRand()<0.13f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 10);
+            }
+            if(me.getRand()>0.95f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 50);
+            }
+            if(me.getRand()>0.98f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 1);
+            }
         }
-        else
-        _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0,50);
     }
-    _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), glm::vec3(114.0f, 0.6f, 10.0f), 1);
+    //_collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), glm::vec3(114.0f, 0.6f, 10.0f), 1);
 
     initButtons();
     // SKYBOX SHADER BINDING

@@ -34,18 +34,19 @@ void Collectible::Draw(Shader &shader , Camera &camera){
 }
 
 void Collectible::Update(Player &player) {
-    if (player.getPosition().x > _position.x - 0.1 && player.getPosition().x < _position.x + 0.1) {
-        if (player.getPosition().z > _position.z - 0.1 && player.getPosition().z < _position.z + 0.1) {
-            _alive = false;
-            _position = glm::vec3(0,0,0);
-            if(_type == 0){
-                player.winScore(_value);
+    if (player.getPosition().x > _position.x - 0.4 && player.getPosition().x < _position.x + 0.4) {
+        if (player.getPosition().z > _position.z - 0.4 && player.getPosition().z < _position.z + 0.4) {
+            if (player.getPosition().y > _position.y - 1 && player.getPosition().y < _position.y + 1) {
+                _alive = false;
+                _position = glm::vec3(0, 0, 0);
+                if (_type == 0) {
+                    player.winScore(_value);
+                }
+                if (_type == 1) {
+                    player.gainHP();
+                    std::cout << "Hp du bonhomme : " << player.getHp() << std::endl;
+                }
             }
-            if(_type == 1){
-                player.gainHP();
-                std::cout << "Hp du bonhomme : "<< player.getHp() << std::endl;
-            }
-
         }
     }
 }

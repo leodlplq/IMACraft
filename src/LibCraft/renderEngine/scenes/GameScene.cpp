@@ -47,6 +47,10 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _camera.setTurningLeft(false);
         _camera.setTurningRight(false);
     }
+
+    if(_player.getHp() == 0){
+        _player.die();
+    }
 }
 
 void App::displayGame(double FPS){

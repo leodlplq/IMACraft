@@ -17,7 +17,7 @@ class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
 
-    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map);
+    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map, Model modelDead);
     Player() = default;
     ~Player() = default;
 
@@ -39,6 +39,7 @@ public:
     //HP PLAYER
     inline void looseHP(){if(_hp>0)_hp-=1;};
     inline void gainHP(){if(_hp < _hpMax)_hp+=1;};
+    void die();
 
 
     void render();
@@ -98,6 +99,7 @@ private:
     float _gravity = 0.2f;
     bool _onGround = true;
     Model _model;
+    Model _modelDead;
     //HITBOX PART
     Hitbox _hitbox;
 
@@ -108,6 +110,4 @@ private:
     Map _map;
     float _distanceToPlayer = 3.f;
     int _score = 0;
-
-    void HasCollided();
 };

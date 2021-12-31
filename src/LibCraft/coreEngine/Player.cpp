@@ -3,9 +3,14 @@
 //
 #include "include/Player.hpp"
 
-Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map):
-_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(8), _map(map)
+Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map,Model modelDead):
+_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _modelDead(modelDead),_hitbox(model, spawnPos,scale), _hp(8),_map(map)
 {
+}
+
+void Player::die() {
+    _hp = 0;
+    _model = _modelDead;
 }
 
 void Player::Draw(Shader &shader) {
@@ -24,7 +29,16 @@ void Player::Draw(Shader &shader) {
             model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
             break;
     }
-    model = glm::scale(model,glm::vec3(_scale));
+    if(_hp == 0){
+        model = glm::rotate(model, glm::radians(90.f), glm::vec3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
+        model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 1, 0));
+        model = glm::scale(model,glm::vec3(0.07f));
+    }
+    else{
+        model = glm::scale(model,glm::vec3(_scale));
+    }
+
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
     _model.Draw(shader);
 }
@@ -130,7 +144,7 @@ void Player::Inputs(GLFWwindow *window) {
     //glfwGetKey(window,87) == GLFW_PRESS  OR TRUE
 
     //GOING FORWARD
-    if(true){ //GOING FORWARD
+    if(_hp!=0){ //GOING FORWARD
         int nextBlockPosX;
         int nextBlockPosY;
         int nextBlockNeighbourRX;
@@ -232,7 +246,7 @@ void Player::Inputs(GLFWwindow *window) {
     }
 
     //GOING LEFT
-    if(glfwGetKey(window, 65) == GLFW_PRESS){ // MOVEMENT TO THE LEFT
+    if(glfwGetKey(window, 65) == GLFW_PRESS && _hp!=0){ // MOVEMENT TO THE LEFT
         int nextBlockPosX;
         int nextBlockPosY;
         int nextBlockNeighbourX;
@@ -311,7 +325,7 @@ void Player::Inputs(GLFWwindow *window) {
 
 
     }
-    if(glfwGetKey(window, 68) == GLFW_PRESS){ //GOING RIGHT
+    if(glfwGetKey(window, 68) == GLFW_PRESS && _hp!=0){ //GOING RIGHT
 
         int nextBlockPosX;
         int nextBlockPosY;
@@ -376,7 +390,7 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-    if(glfwGetKey(window,83) == GLFW_PRESS){ //GOING BACKWARD
+    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
         moveBackward();
     }
 
