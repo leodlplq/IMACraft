@@ -57,6 +57,8 @@ int main(int argc, char** argv)
         get_app(window).size_callback(width, height);
     });
 
+    std::cout << "Bon courage à toi qui utilises ce template, ne perds pas espoir tu vas y arriver !" << std::endl;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
 
