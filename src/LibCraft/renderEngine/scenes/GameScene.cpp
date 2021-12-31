@@ -79,6 +79,22 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
     }
 
+    Button playButton("Lancer la partie !",
+                      _height,
+                      _width,
+                      _width/2,
+                      100.f,
+                      40.f,
+                      20.f,
+                      1.f,
+                      glm::vec3(0.f,0.f,0.f),
+                      glm::vec3(1.f,1.f,1.f),
+                      _textArial,
+                      _textShader,
+                      _buttonShader);
+
+    playButton.render();
+
 
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *

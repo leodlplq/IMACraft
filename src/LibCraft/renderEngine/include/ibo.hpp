@@ -8,6 +8,7 @@
 class ibo {
 public:
 
+    ibo() = default;
     GLuint _id;
     ibo(GLuint* indices, GLsizeiptr size);
     void bind();

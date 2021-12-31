@@ -136,6 +136,7 @@ void Text::renderText(Shader &s, std::string text, float x, float y, float scale
 
         float w = ch.Size.x * scale;
         float h = ch.Size.y * scale;
+
         // update VBO for each character
         float vertices[6][4] = {
                 { xpos,     ypos + h,   0.0f, 0.0f },
@@ -175,8 +176,8 @@ float Text::textWidth(std::string text,const float scale){
     {
         Character ch = Characters[*c];
         float w = static_cast<float>(ch.Size.x) * scale;
-        /*std::cout << "|"<<text[i] << "| size : " << w << std::endl;
-        i++;*/
+//        std::cout << "|"<<text[i] << "| size : " << w << std::endl;
+//        i++;
         totalWidth += w;
     }
 

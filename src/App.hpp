@@ -27,6 +27,7 @@
 #include "LibCraft/renderEngine/include/Model.hpp"
 #include "LibCraft/renderEngine/include/Light.hpp"
 #include "LibCraft/renderEngine/include/Text.hpp"
+#include "LibCraft/renderEngine/include/Button.hpp"
 //CORE ENGINE
 #include "LibCraft/coreEngine/include/Map.hpp"
 #include "LibCraft/coreEngine/include/Player.hpp"
@@ -57,7 +58,7 @@ public:
 
     //EVENT
     void key_callback(int key, /*int scancode,*/ int action/*, int mods*/);
-    void mouse_button_callback(int button, int action, int mods) const;
+    void mouse_button_callback(int button, int action, int mods, GLFWwindow* window);
     void scroll_callback(double xOffset, double yOffset);
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
@@ -69,6 +70,9 @@ public:
 
     //FPS
     inline void invertFPSShow() { _showingFPS = !_showingFPS; }
+
+    //BUTTONS
+    void initButtons();
 
 
 
@@ -85,6 +89,7 @@ private:
     Shader _shaderProgram;
     Shader _steveShader;
     Shader _textShader;
+    Shader _buttonShader;
     FilePath _appPath;
     std::vector<TextureCube> _textures;
     int _width;
@@ -104,6 +109,9 @@ private:
     //FREETYPE
     Text _textArial;
     Text _textMinecraft;
+
+    //BUTTONS
+    std::vector<Button> _buttons;
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
