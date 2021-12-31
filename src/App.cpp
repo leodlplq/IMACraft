@@ -24,6 +24,7 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     return models;
 }
 
+
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(),
      _modelsMap(getAllModels(appPath)),
@@ -33,6 +34,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
      _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
      _textShader("assets/shaders/textShader.vs.glsl", "assets/shaders/textShader.fs.glsl", appPath),
+     _buttonShader("assets/shaders/buttonShader.vs.glsl", "assets/shaders/buttonShader.fs.glsl", appPath),
      _appPath(appPath),
      _textures(),
      _width(window_width),
@@ -40,7 +42,8 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
      _camera(_width,_height,_player, _map),
      _textArial(appPath, _width, _height, "arial"),
-     _textMinecraft(appPath, _width, _height, "Minecraft")
+     _textMinecraft(appPath, _width, _height, "Minecraft"),
+     _buttons()
 {
     size_callback(window_width, window_height);
 }
@@ -75,6 +78,7 @@ void App::init(){
         _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 10.f);
     }
 
+    initButtons();
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
@@ -178,8 +182,28 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 
 }
 
-void App::mouse_button_callback(int /*button*/, int /*action*/, int /*mods*/) const
+void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* window)
 {
+
+    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xPos, yPos;
+        //getting cursor position
+        glfwGetCursorPos(window, &xPos, &yPos);
+
+        for(auto &b:_buttons){
+            double y = _height - yPos;
+            if(b.isHovered(xPos, y)){
+                std::cout << "hovered" << std::endl;
+
+                b.changeBackgroundColor(glm::vec3(1,0,0));
+            } else {
+                b.changeBackgroundColor(glm::vec3(0.f));
+            }
+        }
+    }
+
+
     switch (getScene()) {
         case 0:
             //mENU OF THE GAME
@@ -242,9 +266,23 @@ void App::scroll_callback(double xOffset, double yOffset)
 void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
 
+    //yPos = _height - yPos;
+
+    for(auto &b:_buttons){
+        double y = _height - yPos;
+        if(b.isHovered(xPos, y)){
+            std::cout << "hovered" << std::endl;
+
+            b.changeBackgroundColor(glm::vec3(0.5f));
+        } else {
+            b.changeBackgroundColor(glm::vec3(0.f));
+        }
+    }
+
+
     switch (getScene()) {
         case 0:
-            //mENU OF THE GAME
+            //MENU OF THE GAME
 
             break;
         case 1:
@@ -285,6 +323,13 @@ void App::size_callback(int width, int height)
     _height = height;
 }
 
+void App::initButtons(){
+
+    Button playButton("Lancer la partie !",_height,_width,_width/2,100.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader);
+
+    _buttons.push_back(playButton);
+}
+
 App::~App(){
     //DELETING EVERYTHING
     //SHADERS
@@ -313,6 +358,8 @@ App::~App(){
     //PLAYER
     _player.~Player();
 }
+
+
 
 // -------------------------------------------------------- PRESSE PAPIER ---------------------------------------------------------------
 

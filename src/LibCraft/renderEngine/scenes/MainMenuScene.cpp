@@ -7,7 +7,7 @@
 void App::renderMainMenu(GLFWwindow *window, double FPS) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glClearColor(0.f, 0.f, 1.f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     float textHeightTitle = _textMinecraft.textHeight("IMACRAFT", 2.f);
     float textWidthTitle = _textMinecraft.textWidth("IMACRAFT", 2.f) + 20;
@@ -22,6 +22,11 @@ void App::renderMainMenu(GLFWwindow *window, double FPS) {
     float yPosBaseline = 10;
     float xPosBaseline = (static_cast<float>(_width) / 2) - (textWidthBaseline / 2);
     _textArial.renderText(_textShader, baseline ,xPosBaseline, yPosBaseline, scaleBaseline, glm::vec3(0.5, 0.8f, 0.2f));
+
+
+
+    _buttons[0].render();
+
 
 }
 
