@@ -30,6 +30,7 @@ void App::renderMainMenu(GLFWwindow *window, double FPS) {
 
 
     _buttons[0].render();
+    _buttons[1].render();
 
 
 }
