@@ -12,11 +12,12 @@
 class Collectible {
 public:
     bool _alive = true;
-    Collectible(const char *path, glm::vec3 position, float value){
+    Collectible(const char *path, glm::vec3 position, unsigned int type, float value =0){
         Model model(path);
         _model = model;
         _position = position;
         _value = value;
+        _type = type;
     }
 
     Model getModel(){
@@ -38,6 +39,7 @@ private:
     Model _model;
     glm::vec3 _position = glm::vec3(0,0,0);
     float _angle =0.0f;
-    float _value;
+    int _value;
+    unsigned int _type; // 0 : piece | 1 : apple
 };
 

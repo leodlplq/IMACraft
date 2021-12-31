@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 cmake_policy(SET CMP0112 NEW) # Required by copy_folder_to_output()
 
 project(IMACraft)
-add_executable(${PROJECT_NAME})
+add_executable(${PROJECT_NAME} src/LibCraft/coreEngine/Sauvegarde.cpp src/LibCraft/coreEngine/include/Sauvegarde.hpp src/LibCraft/renderEngine/KeyBoardListener.cpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
 
 # Enable many good warnings

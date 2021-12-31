@@ -37,8 +37,8 @@ public:
     void slide();
 
     //HP PLAYER
-    void looseHP();
-    void gainHP();
+    inline void looseHP(){if(_hp>0)_hp-=1;};
+    inline void gainHP(){if(_hp < _hpMax)_hp+=1;};
 
 
     void render();
@@ -55,6 +55,7 @@ public:
     inline char getFacingDirection() const { return _facingDirection; }
     inline Hitbox getHitbox() const { return _hitbox;}
     inline float getScale() const { return  _scale;}
+    inline int getHp() const {return _hp;}
     //SETTERS
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
@@ -63,8 +64,11 @@ public:
     inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
     inline void setScale(float scale){_scale = scale;}
 
-    inline float getScore(){return _score;}
-    inline void winScore(float value){_score+=value;}
+    inline int getScore(){return _score;}
+    inline void winScore(int value){_score+=value;}
+
+    inline void inMenu(bool b){_isInMenu = b;}
+    inline bool* getIsMenu(){return &_isInMenu;}
 
 private:
     //POSITION & MOVEMENT OF THE PLAYER
@@ -75,6 +79,9 @@ private:
     float _orientationRot = -90.f;
 
     bool _ableToMove = true;
+    bool _isColliding = false;
+    bool _hasCollided = false;
+    bool _isInMenu = true;
     //float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
     /*
      * CAN TAKE 4 DIFFERENTS VALUE:
@@ -95,9 +102,12 @@ private:
     Hitbox _hitbox;
 
     //PLAYER HEALTH
-    float _hp;
+    int _hpMax = 10;
+    int _hp;
     //MAP TO GET COLLISION
     Map _map;
     float _distanceToPlayer = 3.f;
-    float _score = 0.f;
+    int _score = 0;
+
+    void HasCollided();
 };
