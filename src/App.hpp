@@ -49,9 +49,9 @@ public:
     //ALL THE SCENE*
     void renderMainMenu(GLFWwindow* window, double FPS);
     void renderGame(GLFWwindow* window, double FPS);
-    void renderPauseMenu(GLFWwindow* window);
-    void renderLooseScreen(GLFWwindow* window);
-    void renderWinScreen(GLFWwindow* window);
+    void renderPauseMenu(GLFWwindow* window, double FPS);
+    void renderLooseScreen(GLFWwindow* window, double FPS);
+    void renderWinScreen(GLFWwindow* window, double FPS);
 
 
     inline bool isGameRunning() const { return _running; }
@@ -120,7 +120,7 @@ private:
     Text _textMinecraft;
 
 
-    void displayGame();
+    void displayGame(double FPS);
 
     unsigned int _i = 0;
     int _key = _keypressed;

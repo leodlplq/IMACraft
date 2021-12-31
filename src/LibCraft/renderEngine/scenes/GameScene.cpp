@@ -12,7 +12,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
     // Clean the back buffer and assign the new color to it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _player.inMenu(false);
-    displayGame();
+    displayGame(FPS);
     _steveShader.activate();
     //HUD
     if (_player.getDistanceToPlayer() != 0) {
@@ -49,7 +49,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
     }
 }
 
-void App::displayGame(){
+void App::displayGame(double FPS){
     glm::mat4 model = glm::mat4(1.f);
 
     // SKYBOX PART | SETUP AND DRAWING

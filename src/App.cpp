@@ -46,7 +46,6 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _textMinecraft(appPath, _width, _height, "Minecraft"),
      _sauv(((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt").c_str(),((std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt").c_str(),(std::string)appPath.dirPath() + "/assets/sauvegarde.txt"),
      _buttons()
-main
 {
     size_callback(window_width, window_height);
 }
@@ -106,15 +105,15 @@ void App::render(GLFWwindow* window, double FPS) {
             break;
         case 2:
             //PAUSE MENU
-            renderPauseMenu(window);
+            renderPauseMenu(window, FPS);
             break;
         case 3:
             //END GAME (LOOSE CASE)
-            renderLooseScreen(window);
+            renderLooseScreen(window, FPS);
             break;
         case 4:
             //END GAME (WIN CASE)
-            renderWinScreen(window);
+            renderWinScreen(window, FPS);
             break;
         default:
             assert((bool) "pas possible");

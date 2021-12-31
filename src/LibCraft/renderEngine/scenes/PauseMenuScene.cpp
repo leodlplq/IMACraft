@@ -4,12 +4,12 @@
 
 #include "App.hpp"
 
-void App::renderPauseMenu(GLFWwindow *window) {
+void App::renderPauseMenu(GLFWwindow *window, double FPS) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glClearColor(0.f, 1.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _player.inMenu(true);
-    displayGame();
+    displayGame(FPS);
 
     float textHeightTitle = _textMinecraft.textHeight("PAUSE", 2.f);
     float textWidthTitle = _textMinecraft.textWidth("PAUSE", 2.f) + 20;

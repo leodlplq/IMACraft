@@ -35,7 +35,7 @@ _pathScore(scorePath),_pathPseudo(pseudoPath),_path(std::move(pathFileCreated))
     {
         _fileContent.push_back(str3);
     }
-};
+}
 
 
 int Sauvegarde::getLowerScore(){
