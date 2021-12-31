@@ -16,7 +16,8 @@ Button::Button(std::string text,
                glm::vec3 colorText,
                Text &font,
                Shader &shaderText,
-               Shader &shaderBackground
+               Shader &shaderBackground,
+               std::function<void()> &func
                 ) :
     _windowHeight(windowHeight),
     _windowWidth(windowWidth),
@@ -33,7 +34,8 @@ Button::Button(std::string text,
     _shaderBackground(shaderBackground),
     _vao(),
     _vbo(),
-    _ibo()
+    _ibo(),
+    _clickCallback(func)
 {
 }
 
@@ -108,9 +110,9 @@ bool Button::isHovered(double& xPos, double& yPos) {
     glm::vec2 cornerTopLeft = {_x - width/2, _y - (height/2) - _paddingHeight};
     glm::vec2 cornerBottomRight = {_x + width/2, _y + (height/2) - _paddingHeight};
 
-    std::cout << "x : " << xPos << " y : " << yPos << std::endl;
-    std::cout << "x Corner1 " << cornerTopLeft.x << " y : " << cornerTopLeft.y << std::endl;
-    std::cout << "x Corner2 " << cornerBottomRight.x << " y : " << cornerBottomRight.y << std::endl;
+//    std::cout << "x : " << xPos << " y : " << yPos << std::endl;
+//    std::cout << "x Corner1 " << cornerTopLeft.x << " y : " << cornerTopLeft.y << std::endl;
+//    std::cout << "x Corner2 " << cornerBottomRight.x << " y : " << cornerBottomRight.y << std::endl;
 
 
     if(

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <functional>
 
 //TOOLS
 #include "LibCraft/tools/include/countSpaceInString.hpp"
@@ -21,7 +22,7 @@ class Button {
 public:
     //CONSTRUCTORS AND DESTRUCTORS
     Button() = default;
-    Button(std::string text, int &windowHeight, int &windowWidth, int x, int y, float paddingWidth, float paddingHeight, float scale, glm::vec3 colorBackground, glm::vec3 colorText, Text &font, Shader &shaderText, Shader &shaderBackground);
+    Button(std::string text, int &windowHeight, int &windowWidth, int x, int y, float paddingWidth, float paddingHeight, float scale, glm::vec3 colorBackground, glm::vec3 colorText, Text &font, Shader &shaderText, Shader &shaderBackground, std::function<void()> &func);
     ~Button() = default;
 
     //USEFUL
@@ -36,10 +37,11 @@ public:
     inline void changeBackgroundColor(glm::vec3 newBg) {_backgroundColor = newBg; }
     inline void changeFontColor(glm::vec3 newBg) {_textColor = newBg;}
 
-
-
     //EVENT
     bool isHovered(double &xPos,double &yPos);
+
+    //CLICK EVENT
+    std::function<void()> _clickCallback;
 
 private:
     int _windowHeight, _windowWidth;
@@ -55,4 +57,6 @@ private:
     vao _vao;
     vbo _vbo;
     ibo _ibo;
+
+
 };
