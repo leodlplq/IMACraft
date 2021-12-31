@@ -36,6 +36,8 @@
 #include "LibCraft/coreEngine/include/Enemy.hpp"
 #include "LibCraft/coreEngine/include/HUD.hpp"
 #include "LibCraft/coreEngine/include/Sauvegarde.hpp"
+#include "LibCraft/coreEngine/include/HP.hpp"
+
 
 class App {
 public:
@@ -131,6 +133,10 @@ private:
     //BUTTONS
     std::vector<Button> _buttons;
 
+    //HP
+    HP _hp;
+    Shader _hpShader;
+    std::string _filePathHP;
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);

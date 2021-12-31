@@ -32,6 +32,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+     _hpShader("assets/shaders/hp.vs.glsl","assets/shaders/hp.fs.glsl",appPath),
      _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
      _textShader("assets/shaders/textShader.vs.glsl", "assets/shaders/textShader.fs.glsl", appPath),
      _buttonShader("assets/shaders/buttonShader.vs.glsl", "assets/shaders/buttonShader.fs.glsl", appPath),
@@ -41,6 +42,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _height(window_height),
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
      _camera(_width,_height,_player, _map),
+     _hp(),
      _hud(_width,_height),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
@@ -89,6 +91,9 @@ void App::init(){
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
+
+    _filePathHP = ((std::string)_appPath.dirPath() + "/assets/textures/hp/heart.png");
+    _hp.genTexHP(_filePathHP);
 }
 
 void App::render(GLFWwindow* window, double FPS) {

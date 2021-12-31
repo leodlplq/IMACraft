@@ -29,6 +29,20 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
         _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
     }
+
+    //PRINTING HP
+    _hpShader.activate();
+    if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+    {
+        _hp.lossHP();
+    }
+    for (float i = 0; i < _hp.getHP() ; i++) {
+        glm::mat4 modelHP = glm::mat4(1.0f);
+        modelHP = glm::translate(modelHP ,glm::vec3(0.0f+i/10,-0.5f,0.0f));
+        glUniformMatrix4fv(glGetUniformLocation(_hpShader._id,"modelHP"),1,GL_FALSE,glm::value_ptr(modelHP));
+        _hp.drawHP();
+    }
+
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *
      * SI OUI -- ON AUGMENTE X PAR X JUSQU'A MAX 90
