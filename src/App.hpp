@@ -33,6 +33,7 @@
 #include "LibCraft/coreEngine/include/Collectible.hpp"
 #include "LibCraft/coreEngine/include/Enemy.hpp"
 #include "LibCraft/coreEngine/include/HUD.hpp"
+#include "LibCraft/coreEngine/include/Sauvegarde.hpp"
 
 class App {
 public:
@@ -69,7 +70,7 @@ public:
 
     //FPS
     inline void invertFPSShow() { _showingFPS = !_showingFPS; }
-
+    void KeyBoardListener(GLFWwindow *window);
 
 
 
@@ -96,14 +97,25 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<Enemy> _enemies;
     HUD _hud;
+    bool _scoreRegister = false;
 
-    unsigned int _selectedScene = 1;
+    unsigned int _selectedScene = 0;
+    Sauvegarde _sauv;
+    std::string _pseudo;
+    int _keypressed;
 
     //FPS
     bool _showingFPS = false;
     //FREETYPE
     Text _textArial;
     Text _textMinecraft;
+
+    void displayGame();
+
+    unsigned int _i = 0;
+    int _key = _keypressed;
+
+
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);

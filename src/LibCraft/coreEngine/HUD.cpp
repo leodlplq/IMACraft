@@ -4,7 +4,7 @@
 
 #include "LibCraft/coreEngine/include/HUD.hpp"
 
-void HUD::DrawHUD(Shader &shader, Model hud, Model icon, float score){
+void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, Text text, Shader &textShader){
     shader.activate();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model,
@@ -29,9 +29,16 @@ void HUD::DrawHUD(Shader &shader, Model hud, Model icon, float score){
     icon.Draw(shader);
 
     // DRAW THE ACTUAL SCORE
+    std::stringstream ss;
+    ss << score;
+    std::string scoreTxt = ss.str();
+    _score = scoreTxt;
+    float textHeight = text.textHeight(scoreTxt, 2.f);
+    float textWidth = text.textWidth(scoreTxt, 2.f) + 20;
+    float yPos = (static_cast<float>(_height) - textHeight) - 20;
+    float xPos = (static_cast<float>(_width)) - (textWidth) - 120;
+    text.renderText(textShader, scoreTxt, xPos, yPos , 2.f, _colorHud);
 
-    //model = glm::mat4(1.0f);
-    //model = glm::translate(model, glm::vec3(0.85f, 0.76f, 0.0f)); // _position du score
 }
 
 void HUD::DrawGameOver(Shader &shader, Model gameOver){

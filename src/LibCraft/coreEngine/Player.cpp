@@ -4,7 +4,7 @@
 #include "include/Player.hpp"
 
 Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map):
-_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(10), _map(map)
+_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(8), _map(map)
 {
 }
 
@@ -112,6 +112,16 @@ void Player::render(){
         _onGround = true;
     }
 
+    if(_isColliding){
+        if(_hasCollided != _isColliding){
+            looseHP();
+            std::cout << "Hp du bonhomme : "<< getHp() << std::endl;
+            _hasCollided = _isColliding;
+        }
+    }
+    else
+        _hasCollided = false;
+
 }
 
 void Player::Inputs(GLFWwindow *window) {
@@ -120,7 +130,7 @@ void Player::Inputs(GLFWwindow *window) {
     //glfwGetKey(window,87) == GLFW_PRESS  OR TRUE
 
     //GOING FORWARD
-    if(glfwGetKey(window,87) == GLFW_PRESS){ //GOING FORWARD
+    if(true){ //GOING FORWARD
         int nextBlockPosX;
         int nextBlockPosY;
         int nextBlockNeighbourRX;
@@ -212,8 +222,10 @@ void Player::Inputs(GLFWwindow *window) {
 
                 ){
             moveForward();
+            _isColliding = false;
         } else {
-            //closeGame(); COMMENTED WHILE WORKING ON THE GAME.
+            _isColliding = true;
+
         }
 
 
@@ -362,8 +374,6 @@ void Player::Inputs(GLFWwindow *window) {
             }
         }
 
-
-
     }
 
     if(glfwGetKey(window,83) == GLFW_PRESS){ //GOING BACKWARD
@@ -378,7 +388,7 @@ void Player::turnLeft() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()) {
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _isInMenu == false) {
         setOrientationRotation(90.f);
         switch (getFacingDirection()) {
             case 'N':
@@ -403,7 +413,7 @@ void Player::turnRight() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()) {
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _isInMenu == false) {
         setOrientationRotation(-90.f);
         switch (getFacingDirection()) {
             case 'N':
@@ -421,4 +431,3 @@ void Player::turnRight() {
         }
     }
 }
-

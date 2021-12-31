@@ -39,8 +39,10 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _height(window_height),
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
      _camera(_width,_height,_player, _map),
+     _hud(_width,_height),
      _textArial(appPath, _width, _height, "arial"),
-     _textMinecraft(appPath, _width, _height, "Minecraft")
+     _textMinecraft(appPath, _width, _height, "Minecraft"),
+     _sauv(((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt").c_str(),((std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt").c_str(),(std::string)appPath.dirPath() + "/assets/sauvegarde.txt")
 {
     size_callback(window_width, window_height);
 }
@@ -72,16 +74,17 @@ void App::init(){
     std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
     for(unsigned int i = 0; i<10;i++){
-        _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 10.f);
+        if(i%2){
+            _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0, 10);
+        }
+        else
+        _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0,50);
     }
+    _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), glm::vec3(114.0f, 0.6f, 10.0f), 1);
 
     // SKYBOX SHADER BINDING
     _skyboxShader.activate();
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
-
-
-
-
 }
 
 void App::render(GLFWwindow* window, double FPS) {
@@ -284,6 +287,7 @@ void App::size_callback(int width, int height)
     _width  = width;
     _height = height;
 }
+
 
 App::~App(){
     //DELETING EVERYTHING
