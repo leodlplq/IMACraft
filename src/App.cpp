@@ -91,7 +91,6 @@ void App::init(){
             }
         }
     }
-    //_collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), glm::vec3(114.0f, 0.6f, 10.0f), 1);
 
     initButtons();
     // SKYBOX SHADER BINDING
@@ -190,7 +189,6 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     if(key == 292 && action == GLFW_PRESS){
         invertFPSShow();
     }
-
 }
 
 void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* window)

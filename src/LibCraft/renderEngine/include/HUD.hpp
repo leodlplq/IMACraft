@@ -13,16 +13,18 @@
 class HUD: public Model{
 public:
     HUD(int width, int height):_width(width),_height(height){};
-    void DrawHUD(Shader &shader, Model hud, Model icon, int score, Text text, Shader &textShader);
-    void DrawGameOver(Shader &shader, Model gameOver);
+    void DrawHUD(Shader &shader, Model hud, Model icon, int score, const Text& text, Shader &textShader);
+    //void DrawGameOver(Shader &shader, Model gameOver);
     inline std::string getScore() const{ return _score;}
     inline glm::vec3 getFontColor() const {return _colorHud;}
+    void DrawOnlyScore(Shader &shader, Model &icon, int score, Text text, Shader &textShader);
 private:
     float _angle = 0;
     int _width;
     int _height;
     std::string _score;
     glm::vec3 _colorHud = glm::vec3(255.f/255.f, 255.f/255.f, 255.f/255.f);
+
 
 
 };

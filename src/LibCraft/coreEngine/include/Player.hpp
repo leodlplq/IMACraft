@@ -71,9 +71,20 @@ public:
     inline void inMenu(bool b){_isInMenu = b;}
     inline bool* getIsMenu(){return &_isInMenu;}
 
+    inline void restart(){
+        _hp = _hpMax;
+        _score = 0;
+        _position = _spawnPos;
+        _model = _modelAlive;
+        setFacingOrientation('N');
+        _hitbox = Hitbox(_model,_position,_scale);
+        _orientationRot = -90;
+    }
+
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
+    glm::vec3 _spawnPos{};
     float _scale{};
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
@@ -100,6 +111,7 @@ private:
     bool _onGround = true;
     Model _model;
     Model _modelDead;
+    Model _modelAlive;
     //HITBOX PART
     Hitbox _hitbox;
 

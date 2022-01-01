@@ -78,7 +78,14 @@ public:
     //BUTTONS
     void initButtons();
 
-
+    void restart(){
+        _restart = !_restart;
+        _camera.restart();
+        _player.restart();
+        for(auto & _collectible : _collectibles){
+            _collectible.reset();
+        }
+    }
 
 
 
@@ -107,6 +114,7 @@ private:
     std::vector<Enemy> _enemies;
     HUD _hud;
     bool _scoreRegister = false;
+    bool _restart = false;
 
     unsigned int _selectedScene = 0;
     Sauvegarde _sauv;

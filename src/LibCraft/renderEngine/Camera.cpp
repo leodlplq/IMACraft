@@ -157,7 +157,13 @@ void Camera::turnRight() {
         setTurningRight(true);
         rotateLeftNoMouse(90.f);
     }
+}
 
+void Camera::restart(){
+    _distanceFromCamera = 5.0f;
+    _angleX = 30.f;
+    _angleY = -90.f;
+    _angleYWithoutMouseRotation = -90.f;
 }
 
 

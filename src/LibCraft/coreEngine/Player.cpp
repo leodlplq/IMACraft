@@ -4,7 +4,7 @@
 #include "include/Player.hpp"
 
 Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map,Model modelDead):
-_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _modelDead(modelDead),_hitbox(model, spawnPos,scale), _hp(8),_map(map)
+_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _modelDead(modelDead),_modelAlive(model),_hitbox(model, spawnPos,scale), _hp(10),_map(map),_spawnPos(spawnPos)
 {
 }
 
@@ -99,8 +99,6 @@ void Player::moveBackward(){
 }
 
 void Player::render(){
-    //PLAYER ALWAYS RUN
-    //moveForward();
 
     //JUMP PART
     _velocityY -= _gravity;
@@ -296,15 +294,6 @@ void Player::Inputs(GLFWwindow *window) {
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
 
-        /*std::cout << "------------ PLAYER -------------" << std::endl;
-        getHitbox().display();
-        std::cout << "------------ BLOCK -------------" << std::endl;
-        blockHitbox.display();
-        std::cout << (getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
-        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
-        neiBlockHitbox.display();
-        std::cout << (getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
-*/
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);

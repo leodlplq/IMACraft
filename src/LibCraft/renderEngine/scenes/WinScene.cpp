@@ -54,7 +54,5 @@ void App::renderWinScreen(GLFWwindow *window, double FPS) {
                 _textMinecraft.renderText(_textShader, _sauv.getContent()[i], xPos, yPos, 2.f, _hud.getFontColor());
             }
         }
-
-
-}
+    }
 

@@ -19,15 +19,15 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         //INPUTS
         _player.Inputs(window);
         _player.render();
-        _hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore(), _textMinecraft,_textShader);
-    }
-    else { //Switch to GameOver Scene
+        _hud.DrawHUD(_shaderProgram, _models[2], _models[1], _player.getScore(), _textMinecraft, _textShader);
+    } else { //Switch to GameOver Scene
         setScene(3);
     }
     //PRINTING FPS
-    if(_showingFPS){
+    if (_showingFPS) {
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
-        _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        _textArial.renderText(_textShader, toPrintFPS, 25.f, static_cast<float>(_height) - 50.f, 0.5f,
+                              glm::vec3(0.5, 0.8f, 0.2f));
     }
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *
@@ -36,10 +36,10 @@ void App::renderGame(GLFWwindow *window, double FPS) {
      *
      * */
     float valueToRotatePerFrame = 5.f;
-    if(_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90){
+    if (_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90) {
         _camera.rotateLeft(-valueToRotatePerFrame);
         _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
-    } else if(_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
+    } else if (_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
         _camera.rotateLeft(valueToRotatePerFrame);
         _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
     } else {
@@ -48,11 +48,28 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _camera.setTurningRight(false);
     }
 
-    if(_player.getHp() == 0){
+    if (_player.getHp() == 0) {
         _player.die();
+        setScene(3);
     }
-}
 
+    double sizeMap = sqrt((static_cast<double>(_map.getFloor().size())));
+    int x = static_cast<int>(round(_player.getPosition().x));
+    int y = static_cast<int>(round(_player.getPosition().z));
+    int coord = static_cast<int>((x * sizeMap) + y);
+
+    for (auto &me: _map.getSecondFloor()) {
+
+        int xMe = static_cast<int>(round(me.getPosition().x));
+        int yMe = static_cast<int>(round(me.getPosition().z));
+        int coordMe = static_cast<int>((xMe * sizeMap) + yMe);
+
+        if (coord == coordMe && me.getModel() == 1) {
+            _player.die();
+        }
+    }
+
+}
 void App::displayGame(double FPS){
     glm::mat4 model = glm::mat4(1.f);
 
