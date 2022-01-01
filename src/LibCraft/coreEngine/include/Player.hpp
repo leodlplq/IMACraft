@@ -55,6 +55,7 @@ public:
     inline glm::vec3 getOrientation() const{ return _orientation; }
     inline char getFacingDirection() const { return _facingDirection; }
     inline Hitbox getHitbox() const { return _hitbox;}
+    inline Hitbox getHitbox2() const { return _hitbox2;}
     inline float getScale() const { return  _scale;}
     inline int getHp() const {return _hp;}
     //SETTERS
@@ -78,6 +79,7 @@ public:
         _model = _modelAlive;
         setFacingOrientation('N');
         _hitbox = Hitbox(_model,_position,_scale);
+        _hitbox2 = Hitbox(_model,_position + glm::vec3(0.f,1.f,0.f),_scale);
         _orientationRot = -90;
     }
 
@@ -114,6 +116,7 @@ private:
     Model _modelAlive;
     //HITBOX PART
     Hitbox _hitbox;
+    Hitbox _hitbox2;
 
     //PLAYER HEALTH
     int _hpMax = 10;

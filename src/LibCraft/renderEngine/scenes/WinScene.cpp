@@ -18,7 +18,7 @@ void App::renderWinScreen(GLFWwindow *window, double FPS) {
     float yPosTitle = (static_cast<float>(_height) - textHeightTitle) - 50;
     float xPosTitle = (static_cast<float>(_width) / 2) - (textWidthTitle / 2) ;
     _textMinecraft.renderText(_textShader, "SCORE: "+_hud.getScore(), xPosTitle, yPosTitle , 2.f, _hud.getFontColor());
-    _buttons[1].render();
+
     KeyBoardListener(window);
 // AFFICHAGE DU SCORE BOARD
     if(_player.getScore() > _sauv.getLowerScore()){
@@ -54,5 +54,10 @@ void App::renderWinScreen(GLFWwindow *window, double FPS) {
                 _textMinecraft.renderText(_textShader, _sauv.getContent()[i], xPos, yPos, 2.f, _hud.getFontColor());
             }
         }
-    }
+
+
+    //BUTTONS
+    _buttons[6].render();
+    _buttons[7].render();
+}
 

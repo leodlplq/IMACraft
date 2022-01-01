@@ -69,6 +69,12 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         }
     }
 
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isFinishLine()){
+        setScene(4);
+    }
+
+
+
 }
 void App::displayGame(double FPS){
     glm::mat4 model = glm::mat4(1.f);
@@ -96,6 +102,8 @@ void App::displayGame(double FPS){
     for (auto & _enemie : _enemies) {
         _enemie.DrawEnemy(_player, _camera, _steveShader);
     }
+
+
     // Draw the map
     //FLOOR PART
     for (auto &me: _map.getFloor()) {
@@ -106,8 +114,18 @@ void App::displayGame(double FPS){
             _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
         }
     }
-    //SECOND FLOOR PART (WALL / JUMP OBSTACLE...)
+    //SECOND FLOOR PART (WALL / DOWN OBSTACLE...)
     for(auto &me:_map.getSecondFloor()){
+        if(me.getModel() != -1){
+            model = me.getObjectMatrix();
+            model = glm::scale(model,glm::vec3(0.5f, 0.5f, 0.5f));
+            glUniformMatrix4fv(glGetUniformLocation(_steveShader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
+        }
+    }
+
+    //SECOND FLOOR PART (UP OBSTACLES)
+    for(auto &me:_map.getThirdFloor()){
         if(me.getModel() != -1){
             model = me.getObjectMatrix();
             model = glm::scale(model,glm::vec3(0.5f, 0.5f, 0.5f));
