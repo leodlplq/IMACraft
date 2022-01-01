@@ -34,8 +34,8 @@
 #include "LibCraft/coreEngine/include/Player.hpp"
 #include "LibCraft/coreEngine/include/Collectible.hpp"
 #include "LibCraft/coreEngine/include/Enemy.hpp"
-#include "LibCraft/coreEngine/include/HUD.hpp"
-#include "LibCraft/coreEngine/include/Sauvegarde.hpp"
+#include "LibCraft/renderEngine/include/HUD.hpp"
+#include "LibCraft/renderEngine/include/Sauvegarde.hpp"
 
 class App {
 public:
@@ -79,7 +79,14 @@ public:
     //BUTTONS
     void initButtons();
 
-
+    void restart(){
+        _restart = !_restart;
+        _camera.restart();
+        _player.restart();
+        for(auto & _collectible : _collectibles){
+            _collectible.reset();
+        }
+    }
 
 
 
@@ -108,6 +115,7 @@ private:
     std::vector<Enemy> _enemies;
     HUD _hud;
     bool _scoreRegister = false;
+    bool _restart = false;
 
     unsigned int _selectedScene = 0;
     Sauvegarde _sauv;

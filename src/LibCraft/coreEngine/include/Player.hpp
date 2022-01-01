@@ -17,7 +17,7 @@ class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
 
-    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map);
+    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map, Model modelDead);
     Player() = default;
     ~Player() = default;
 
@@ -39,6 +39,7 @@ public:
     //HP PLAYER
     inline void looseHP(){if(_hp>0)_hp-=1;};
     inline void gainHP(){if(_hp < _hpMax)_hp+=1;};
+    void die();
 
 
     void render();
@@ -70,9 +71,20 @@ public:
     inline void inMenu(bool b){_isInMenu = b;}
     inline bool* getIsMenu(){return &_isInMenu;}
 
+    inline void restart(){
+        _hp = _hpMax;
+        _score = 0;
+        _position = _spawnPos;
+        _model = _modelAlive;
+        setFacingOrientation('N');
+        _hitbox = Hitbox(_model,_position,_scale);
+        _orientationRot = -90;
+    }
+
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
+    glm::vec3 _spawnPos{};
     float _scale{};
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
@@ -98,6 +110,8 @@ private:
     float _gravity = 0.2f;
     bool _onGround = true;
     Model _model;
+    Model _modelDead;
+    Model _modelAlive;
     //HITBOX PART
     Hitbox _hitbox;
 
@@ -108,6 +122,4 @@ private:
     Map _map;
     float _distanceToPlayer = 3.f;
     int _score = 0;
-
-    void HasCollided();
 };

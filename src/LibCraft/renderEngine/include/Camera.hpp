@@ -61,6 +61,7 @@ public:
     inline void setCurrentAngleX(float value){ _angleXCurrent = value; }
     inline float getCurrentAngleX() const { return _angleXCurrent; }
 
+    void restart();
 
 private:
 
@@ -103,18 +104,6 @@ private:
     //CHOICE OF THE CAM PART
     bool _isFPS = false;
     bool _firstClick = true;
-
-
-
-
-
-
-
-
-
-
-
-
 
 };
 

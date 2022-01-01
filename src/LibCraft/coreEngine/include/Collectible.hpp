@@ -18,6 +18,7 @@ public:
         _position = position;
         _value = value;
         _type = type;
+        _pos = position;
     }
 
     Model getModel(){
@@ -28,6 +29,10 @@ public:
     }
 
     void Draw(Shader &shader, Camera &camera);
+    void reset(){
+        _alive = true;
+        _position = _pos;
+    }
 
     //void Draw(Shader &shader);
 
@@ -38,6 +43,7 @@ public:
 private:
     Model _model;
     glm::vec3 _position = glm::vec3(0,0,0);
+    glm::vec3 _pos;
     float _angle =0.0f;
     int _value;
     unsigned int _type; // 0 : piece | 1 : apple

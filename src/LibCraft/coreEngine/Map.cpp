@@ -22,7 +22,7 @@ void Map::generateCubeMap(const FilePath& pathToMap){
             std::getline(image, line);
             if(i == 2){
                 size = stoi(line);
-                _size = size;
+                _size = static_cast<int>(size);
             }
         }
 
@@ -37,7 +37,6 @@ void Map::generateCubeMap(const FilePath& pathToMap){
                     case 255: //FLOOR
                         _floor.emplace_back(0,glm::vec3(i,0,j), _models[0], false,_scale);
                         _secondFloor.emplace_back(-1,glm::vec3(0),_models[0], false,_scale);
-                        //_collectibles.emplace_back(((std::string)_appPath.dirPath() +"/assets/obj/diamond/scene.gltf").c_str(),glm::vec3(i,1,j));
 
                         break;
                     case 240: //WALL

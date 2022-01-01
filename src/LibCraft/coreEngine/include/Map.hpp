@@ -9,15 +9,12 @@
 #include "LibCraft/renderEngine/include/Model.hpp"
 #include <vector>
 #include <fstream>
-
-
 #include <iostream>
 #include <array>
 
 class Map {
 
 private:
-    //std::vector<Cube> _map;
     std::vector<Model> _models;
 
     std::vector<MapElement> _floor;
@@ -47,4 +44,5 @@ public:
         return _spawnPoint;
     }
     [[nodiscard]] inline int getSize() const { return _size; }
+
 };
