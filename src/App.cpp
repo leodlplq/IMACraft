@@ -189,6 +189,10 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     if(key == 292 && action == GLFW_PRESS){
         invertFPSShow();
     }
+
+    if(key == 256 && action == GLFW_PRESS){
+        setScene(2);
+    }
 }
 
 void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* window)
@@ -203,8 +207,8 @@ void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* wi
         for(auto &b:_buttons){
             double y = _height - yPos;
             if(b.isHovered(xPos, y)){
-                std::cout << "hovered" << std::endl;
-
+                std::cout << "clicked" << std::endl;
+                b._clickCallback();
                 b.changeBackgroundColor(glm::vec3(1,0,0));
             } else {
                 b.changeBackgroundColor(glm::vec3(0.f));
@@ -333,11 +337,24 @@ void App::size_callback(int width, int height)
 }
 
 
+
 void App::initButtons(){
 
-    Button playButton("Lancer la partie !",_height,_width,_width/2,100.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader);
-
+    std::function<void (void)> functionPlay = [=]() {
+        std::cout << 'lel' << std::endl;
+        this->setScene(1);
+    };
+    Button playButton("Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
     _buttons.push_back(playButton);
+
+    std::function<void (void)> functionLeave = [=]() {
+        this->closeGame();
+    };
+    Button leaveButton("Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButton);
+
+    Button resumeButton("Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    _buttons.push_back(resumeButton);
 }
 
 

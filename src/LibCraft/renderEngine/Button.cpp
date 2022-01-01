@@ -16,7 +16,8 @@ Button::Button(std::string text,
                glm::vec3 colorText,
                Text &font,
                Shader &shaderText,
-               Shader &shaderBackground
+               Shader &shaderBackground,
+               std::function<void()> &func
                 ) :
     _windowHeight(windowHeight),
     _windowWidth(windowWidth),
@@ -33,7 +34,8 @@ Button::Button(std::string text,
     _shaderBackground(shaderBackground),
     _vao(),
     _vbo(),
-    _ibo()
+    _ibo(),
+    _clickCallback(func)
 {
 }
 
