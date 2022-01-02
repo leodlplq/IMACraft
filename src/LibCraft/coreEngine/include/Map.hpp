@@ -19,6 +19,8 @@ private:
 
     std::vector<MapElement> _floor;
     std::vector<MapElement> _secondFloor;
+    std::vector<MapElement> _thirdFloor;
+
     glm::vec3 _spawnPoint;
     float _scale;
     FilePath _appPath;
@@ -35,6 +37,7 @@ public:
 
     [[nodiscard]] inline std::vector<MapElement> getFloor() const {return _floor;}
     [[nodiscard]] inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
+    [[nodiscard]] inline std::vector<MapElement> getThirdFloor() const {return _thirdFloor;}
 
 
     void generateCubeMap(const FilePath &pathToMap);

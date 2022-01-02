@@ -28,16 +28,18 @@ private:
     glm::vec3 _position;
     Hitbox _hitbox;
     bool _isIntersection;
+    bool _isFinishLine;
     float _rand;
 
 public:
     //CONSTRUCTORS
     MapElement() = default;
-    inline MapElement(int modelType, glm::vec3 position, Model model, bool inter, float scale)
+    inline MapElement(int modelType, glm::vec3 position, Model model, bool inter, float scale, bool finishLine)
     {
         _modelType = int(modelType);
         _position = glm::vec3(position);
         _isIntersection = inter;
+        _isFinishLine= finishLine;
 
         if(modelType != -1){
             _hitbox = Hitbox(model, position,scale);
@@ -85,6 +87,7 @@ public:
     }
 
     inline bool isIntersection() const { return _isIntersection; }
+    inline bool isFinishLine() const { return _isFinishLine; }
 
     void randomCollectible(){
         // select seed from time
