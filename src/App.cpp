@@ -76,7 +76,6 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
     size_callback(window_width, window_height);
 }
 void App::init(){
-    std::cout << "Salut, c'est Léo :) Je voulais vous prévenir qu'en appuyrant sur les chiffres en haut de vos claviers \n vous pouvez maintenant changer de scences (menu, pause etc...) ca va de 1 à 5." << std::endl;
     // CAMERA
     // configure global opengl state
     // -----------------------------
@@ -99,7 +98,6 @@ void App::init(){
     _enemies.push_back(creeper);
     Enemy enderMan(((std::string)_appPath.dirPath() + "/assets/obj/enderman/scene.gltf").c_str(),glm::vec3(1.8,-0.5,1),glm::vec3(0.05f, 0.05f, 0.05f));
     _enemies.push_back(enderMan);
-    std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
 
 
@@ -162,27 +160,22 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
         switch (key) {
             case 49:
                 //SET TO MAIN MENU SCENE
-                //std::cout << "scene menu" << std::endl;
                 setScene(0);
                 break;
             case 50:
                 //SET GAME SCENE
-//                std::cout << "scene jeu" << std::endl;
                 setScene(1);
                 break;
             case 51:
                 //SET PAUSE MENU SCENE
-//                std::cout << "scene pause" << std::endl;
                 setScene(2);
                 break;
             case 52:
                 //SET LOOSE SCENE
-//                std::cout << "scene loose" << std::endl;
                 setScene(3);
                 break;
             case 53:
                 //SET WIN SCENE
-//                std::cout << "scene win" << std::endl;
                 setScene(4);
                 break;
         }
@@ -415,8 +408,8 @@ void App::handleHoverEvent(double xPos, double yPos) {
 App::~App(){
     //DELETING EVERYTHING
     //SHADERS
-//    _shaderProgram.deleteShader();
-//    _shaderProgram.~Shader();
+    _shaderProgram.deleteShader();
+    _shaderProgram.~Shader();
     _skyboxShader.deleteShader();
     _skyboxShader.~Shader();
     //APP PATH

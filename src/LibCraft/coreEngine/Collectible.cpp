@@ -44,7 +44,6 @@ void Collectible::Update(Player &player) {
                 }
                 if (_type == 1) {
                     player.gainHP();
-                    std::cout << "Hp du bonhomme : " << player.getHp() << std::endl;
                 }
             }
         }

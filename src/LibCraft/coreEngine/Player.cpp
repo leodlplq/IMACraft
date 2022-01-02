@@ -157,7 +157,6 @@ void Player::render(){
     if(_isColliding){
         if(_hasCollided != _isColliding){
             looseHP();
-            std::cout << "Hp du bonhomme : "<< getHp() << std::endl;
             _hasCollided = _isColliding;
         }
     }
@@ -329,21 +328,10 @@ void Player::Inputs(GLFWwindow *window) {
         int y = yPlayer + nextBlockPosY;
         int coord = static_cast<int>((x * sizeMap) + y);
         Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
-        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
         int neiX = xPlayer + nextBlockNeighbourX;
         int neiY = yPlayer + nextBlockNeighbourY;
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
-
-        std::cout << "------------ PLAYER -------------" << std::endl;
-        getHitbox().display();
-        std::cout << "------------ BLOCK -------------" << std::endl;
-        blockHitbox.display();
-        std::cout << (getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
-        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
-        neiBlockHitbox.display();
-        std::cout << (getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
-
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);

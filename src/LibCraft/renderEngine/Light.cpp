@@ -10,16 +10,15 @@ Light::Light(Shader &shader, Camera &camera, std::vector<glm::vec3> position): _
     glUniform3f(glGetUniformLocation(shader._id, "viewPos"),camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
     // directional light
     glUniform3f(glGetUniformLocation(shader._id, "dirLight.direction"),-0.2f, -1.0f, -0.3f);
-    glUniform3f(glGetUniformLocation(shader._id, "dirLight.ambient"),0.1f, 0.1f, 0.1f);
-    glUniform3f(glGetUniformLocation(shader._id, "dirLight.diffuse"),0.4f, 0.4f, 0.4f);
+    glUniform3f(glGetUniformLocation(shader._id, "dirLight.ambient"),0.2f, 0.2f, 0.2f);
+    glUniform3f(glGetUniformLocation(shader._id, "dirLight.diffuse"),0.6f, 0.6f, 0.6f);
     for(unsigned int i =0; i<_pointLightPositions.size();i++){
         std::stringstream ss;
         ss << i;
         std::string indice = ss.str();
-        //std::cout << ("pointLights[" + indice +"].position").c_str() << std::endl;
         glUniform3f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].position").c_str()), _pointLightPositions[i].x, _pointLightPositions[i].y,_pointLightPositions[i].z);
         glUniform3f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].ambiant").c_str()), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].diffuse").c_str()),  0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].diffuse").c_str()),  0.9f, 0.65f, 0.0f);
         glUniform3f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].specular").c_str()),   1.0f, 1.0f, 1.0f);
         glUniform1f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].constant").c_str()),1.0f);
         glUniform1f(glGetUniformLocation(shader._id, ("pointLights[" + indice +"].linear").c_str()),0.09f);
@@ -29,7 +28,7 @@ Light::Light(Shader &shader, Camera &camera, std::vector<glm::vec3> position): _
 
 void Light::Draw(Shader &shader, Model &modelLampe, Camera &camera) {
     shader.activate();
-    for (unsigned int i = 0; i < 3; i++) {
+    for (unsigned int i = 0; i < _pointLightPositions.size(); i++) {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, _pointLightPositions[i]);
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down

@@ -32,9 +32,6 @@ public:
     Map(const FilePath &pathToMap, std::vector<Model> &models, float scale);
     ~Map() = default;
 
-    //inline std::vector<Cube> getMap() const {return _map;}
-
-
     [[nodiscard]] inline std::vector<MapElement> getFloor() const {return _floor;}
     [[nodiscard]] inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
     [[nodiscard]] inline std::vector<MapElement> getThirdFloor() const {return _thirdFloor;}
