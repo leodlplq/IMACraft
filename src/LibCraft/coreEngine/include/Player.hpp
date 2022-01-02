@@ -83,6 +83,10 @@ public:
         _orientationRot = -90;
     }
 
+    void setPosX(float d){_position.x = d;};
+
+    void setPosZ(float d){_position.z = d;};
+
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
@@ -109,7 +113,7 @@ private:
     float _speedSide = _speed;
     float _speedJump = 0.01f;
     float _velocityY = 0.f;
-    float _gravity = 0.2f;
+    float _gravity = 0.3f;
     bool _onGround = true;
     Model _model;
     Model _modelDead;

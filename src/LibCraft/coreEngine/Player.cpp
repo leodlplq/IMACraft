@@ -429,9 +429,9 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
-        moveBackward();
-    }
+//    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
+//        moveBackward();
+//    }
 
 }
 
@@ -487,6 +487,7 @@ void Player::turnRight() {
 
 
 
+
 /*--------------------- PRESSE PAPIER ------------------*/
 
 /*display();
@@ -513,3 +514,4 @@ void Player::turnRight() {
         std::cout << "------------ OTHER BLOCK B -------------" << std::endl;
         neiBlockHitbox2.display();
         std::cout << (getHitbox().intersect(neiBlockHitbox2) ? "collision" : "no collision")<< std::endl;*/
+

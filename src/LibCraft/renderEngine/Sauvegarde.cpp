@@ -57,25 +57,22 @@ void Sauvegarde::SetNewScore(int playerScore,std::string newPseudo) {
     std::string pseudo = pp.str();
 
     if(playerScore >= _scoreInt[0]){
-        _score[2] = _score[1];
-        _score[1] = _score[0];
         _score[0] = scoreTxt;
-
-        _pseudo[2] = _pseudo[1];
-        _pseudo[1] = _pseudo[0];
         _pseudo[0] = pseudo;
 
     }
     if(playerScore >= _scoreInt[1] && playerScore < _scoreInt[0]){
-        _score[2] = _score[1];
-        _score[1] = scoreTxt;
 
-        _pseudo[2] = _pseudo[1];
+//        std::string sco = _score[1];
+//        std::string pse = _pseudo[1];
+//        _score[2] = sco;
+//        _pseudo[2] = pse;
+
+        _score[1] = scoreTxt;
         _pseudo[1] = pseudo;
     }
     if(playerScore >= _scoreInt[2] && playerScore < _scoreInt[1]){
         _score[2] = scoreTxt;
-
         _pseudo[2] = pseudo;
 
     }

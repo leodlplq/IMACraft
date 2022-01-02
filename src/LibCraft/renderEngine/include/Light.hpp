@@ -8,5 +8,11 @@
 
 class Light{
 public:
-    Light(Shader &shader, Shader &shader2 ,Camera &camera, Model &modelLampe);
+    Light() = default;
+    Light(Shader &shader,Camera &camera,std::vector<glm::vec3> position);
+
+    void Draw(Shader &shader, Model &modelLampe, Camera &camera);
+
+private:
+    std::vector<glm::vec3>_pointLightPositions;
 };

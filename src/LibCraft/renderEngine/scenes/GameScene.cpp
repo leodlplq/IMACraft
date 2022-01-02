@@ -19,7 +19,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         //INPUTS
         _player.Inputs(window);
         _player.render();
-        _hud.DrawHUD(_shaderProgram, _models[2], _models[1], _player.getScore(), _textMinecraft, _textShader);
+        _hud.DrawHUD(_shaderProgram, _models[2], _models[1], _player.getScore(), _textMinecraft, _textShader,_player.getHp());
     } else { //Switch to GameOver Scene
         setScene(3);
     }
@@ -62,6 +62,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
 
         int xMe = static_cast<int>(round(me.getPosition().x));
         int yMe = static_cast<int>(round(me.getPosition().z));
+
         int coordMe = static_cast<int>((xMe * sizeMap) + yMe);
 
         if (coord == coordMe && me.getModel() == 1) {
@@ -86,7 +87,7 @@ void App::displayGame(double FPS){
     _camera.Matrix(45.0f, 0.1f, 100.0f);
 
     //LIGHT
-    Light light(_steveShader,_lightShader,_camera,_models[3]);
+    _light.Draw(_shaderProgram,_models[3],_camera);
 
     //Player Part
     _steveShader.activate();
