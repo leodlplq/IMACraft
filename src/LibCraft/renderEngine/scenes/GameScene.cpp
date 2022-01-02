@@ -67,6 +67,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
 
         if (coord == coordMe && me.getModel() == 1) {
             _player.die();
+
         }
     }
 
