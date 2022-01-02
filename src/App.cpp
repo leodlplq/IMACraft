@@ -106,11 +106,11 @@ void App::init(){
             if(me.getRand()<0.13f){
                 _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 10);
             }
-            if(me.getRand()>0.95f){
+            if(me.getRand()>0.95f && me.getRand()<0.98f){
                 _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 50);
             }
             if(me.getRand()>0.98f){
-                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 1);
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 1,0);
             }
         }
     }
