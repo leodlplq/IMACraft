@@ -42,7 +42,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _height(window_height),
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
      _camera(_width,_height,_player, _map),
-     _hp(),
+     _hpHUD(),
      _hud(_width,_height),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
@@ -93,7 +93,7 @@ void App::init(){
     glUniform1i(glGetUniformLocation(_skyboxShader._id,"skybox"),0);
 
     _filePathHP = ((std::string)_appPath.dirPath() + "/assets/textures/hp/heart.png");
-    _hp.genTexHP(_filePathHP);
+    _hpHUD.genTexHP(_filePathHP);
 }
 
 void App::render(GLFWwindow* window, double FPS) {

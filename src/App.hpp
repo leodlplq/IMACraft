@@ -134,7 +134,7 @@ private:
     std::vector<Button> _buttons;
 
     //HP
-    HP _hp;
+    HP _hpHUD;
     Shader _hpShader;
     std::string _filePathHP;
 };
