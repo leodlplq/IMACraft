@@ -19,10 +19,13 @@ void App::renderLooseScreen(GLFWwindow *window, double FPS) {
     float xPosTitle = (static_cast<float>(_width) / 2) - (textWidthTitle /2);
     _textMinecraft.renderText(_textShader, "WASTED", xPosTitle, yPosTitle , 3.f, glm::vec3(0.5, 0.8f, 0.2f));
 
-    if(glfwGetKey(window,GLFW_KEY_ENTER) == GLFW_PRESS && _player.getHp()==0){
-        std::cout << "restart" << std::endl;
-        restart();
-        setScene(1);
-    }
+    //if(glfwGetKey(window,GLFW_KEY_ENTER) == GLFW_PRESS && _player.getHp()==0){
+   //     std::cout << "restart" << std::endl;
+   //     restart();
+   //     setScene(1);
+  //  }
+    //BUTTONS
+    _buttons[4].render();
+    _buttons[5].render();
 }
 

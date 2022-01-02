@@ -225,48 +225,35 @@ void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* wi
 
     if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
-        double xPos, yPos;
-        //getting cursor position
-        glfwGetCursorPos(window, &xPos, &yPos);
-
-        for(auto &b:_buttons){
-            double y = _height - yPos;
-            if(b.isHovered(xPos, y)){
-                std::cout << "clicked" << std::endl;
-                b._clickCallback();
-                b.changeBackgroundColor(glm::vec3(1,0,0));
-            } else {
-                b.changeBackgroundColor(glm::vec3(0.f));
-            }
+        switch (getScene()) {
+            case 0:
+                //mENU OF THE GAME
+                handleClickEvent(window);
+                break;
+            case 1:
+                //GAME ITSELF
+                handleClickEvent(window);
+                break;
+            case 2:
+                //PAUSE MENU
+                handleClickEvent(window);
+                break;
+            case 3:
+                //END GAME (LOOSE CASE)
+                handleClickEvent(window);
+                break;
+            case 4:
+                //END GAME (WIN CASE)
+                handleClickEvent(window);
+                break;
+            default:
+                assert((bool) "pas possible");
+                break;
         }
     }
 
 
-    switch (getScene()) {
-        case 0:
-            //mENU OF THE GAME
 
-            break;
-        case 1:
-            //GAME ITSELF
-
-            break;
-        case 2:
-            //PAUSE MENU
-
-            break;
-        case 3:
-            //END GAME (LOOSE CASE)
-
-            break;
-        case 4:
-            //END GAME (WIN CASE)
-
-            break;
-        default:
-            assert((bool) "pas possible");
-            break;
-    }
 }
 
 void App::scroll_callback(double xOffset, double yOffset)
@@ -305,23 +292,10 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
 
     //yPos = _height - yPos;
-
-    for(auto &b:_buttons){
-        double y = _height - yPos;
-        if(b.isHovered(xPos, y)){
-            std::cout << "hovered" << std::endl;
-
-            b.changeBackgroundColor(glm::vec3(0.5f));
-        } else {
-            b.changeBackgroundColor(glm::vec3(0.f));
-        }
-    }
-
-
     switch (getScene()) {
         case 0:
             //MENU OF THE GAME
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 1:
             //GAME ITSELF
@@ -337,15 +311,15 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
             break;
         case 2:
             //PAUSE MENU
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 3:
             //END GAME (LOOSE CASE)
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 4:
             //END GAME (WIN CASE)
-
+            handleHoverEvent(xPos, yPos);
             break;
         default:
             assert((bool) "pas possible");
@@ -365,21 +339,76 @@ void App::size_callback(int width, int height)
 
 void App::initButtons(){
 
+
     std::function<void (void)> functionPlay = [=]() {
-        std::cout << 'lel' << std::endl;
         this->setScene(1);
     };
-    Button playButton("Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
-    _buttons.push_back(playButton);
-
     std::function<void (void)> functionLeave = [=]() {
         this->closeGame();
     };
-    Button leaveButton("Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
-    _buttons.push_back(leaveButton);
+    std::function<void (void)> functionRestart = [=]() {
+        this->restart();
+        this->setScene(1);
+    };
 
-    Button resumeButton("Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
-    _buttons.push_back(resumeButton);
+
+    //MAIN MENU BUTTON
+    Button playButtonMain(0,"Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    _buttons.push_back(playButtonMain);//BUTTON 0
+
+    Button leaveButtonMain(0,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonMain);//BUTTON 1
+
+
+    //PAUSE MENU BUTTONS
+    Button resumeButtonPause(2,"Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    _buttons.push_back(resumeButtonPause); //BUTTON 2
+
+    Button leaveButtonPause(2,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonPause);//BUTTON 3
+
+
+    //LOOSE MENU
+    Button restartButtonLoose(3,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    _buttons.push_back(restartButtonLoose); //BUTTON 4
+
+    Button leaveButtonLoose(3,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonLoose);//BUTTON 5
+
+
+    //WIN MENU
+    Button restartButtonWin(4,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    _buttons.push_back(restartButtonWin); //BUTTON 6
+
+    Button leaveButtonWin(4,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonWin);//BUTTON 7
+}
+
+void App::handleClickEvent(GLFWwindow* window){
+    double xPos, yPos;
+    //getting cursor position
+    glfwGetCursorPos(window, &xPos, &yPos);
+
+    for(auto &b:_buttons){
+        double y = _height - yPos;
+        if(b.isHovered(xPos, y) && b.getSceneNb() == getScene()){
+            b._clickCallback();
+            b.changeBackgroundColor(glm::vec3(1,0,0));
+        } else {
+            b.changeBackgroundColor(glm::vec3(0.f));
+        }
+    }
+}
+
+void App::handleHoverEvent(double xPos, double yPos) {
+    for(auto &b:_buttons){
+        double y = _height - yPos;
+        if(b.isHovered(xPos, y) && b.getSceneNb() == getScene()){
+            b.changeBackgroundColor(glm::vec3(0.5f));
+        } else {
+            b.changeBackgroundColor(glm::vec3(0.f));
+        }
+    }
 }
 
 
@@ -411,6 +440,8 @@ App::~App(){
     //PLAYER
     _player.~Player();
 }
+
+
 
 
 

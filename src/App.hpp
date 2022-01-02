@@ -78,6 +78,8 @@ public:
 
     //BUTTONS
     void initButtons();
+    void handleClickEvent(GLFWwindow* window);
+    void handleHoverEvent(double xPos, double yPos);
 
     void restart(){
         _restart = !_restart;
@@ -134,8 +136,6 @@ private:
 
     unsigned int _i = 0;
     int _key = _keypressed;
-
-
 
     //BUTTONS
     std::vector<Button> _buttons;
