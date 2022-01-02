@@ -379,9 +379,9 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
-        moveBackward();
-    }
+//    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
+//        moveBackward();
+//    }
 
 }
 
@@ -434,3 +434,4 @@ void Player::turnRight() {
         }
     }
 }
+

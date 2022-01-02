@@ -24,9 +24,5 @@ void App::renderLooseScreen(GLFWwindow *window, double FPS) {
         restart();
         setScene(1);
     }
-    //RESTART:
-    if(_restart){
-    restart();
-    }
 }
 

@@ -24,12 +24,37 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     return models;
 }
 
+std::vector<glm::vec3> getAllLitght(Map &map){
+    std::vector<glm::vec3> light;
+    int total = 0;
+    for (auto &me: map.getSecondFloor()) {
+        if (me.getModel() == 1) {
+            total +=1;
+        }
+    }
+    int count = 0;
+    for (auto &me: map.getSecondFloor()) {
+        if (me.getModel() == 1) {
+            count+=1;
+            if(count == 1){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            if(count == total/2){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            if(count == total -1){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            }
+        }
+        return light;
+    }
+
 
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(),
      _modelsMap(getAllModels(appPath)),
      _map(appPath.dirPath() + "/assets/maps/map7.pgm", _modelsMap, 0.5),
-     _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
      _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
@@ -41,10 +66,11 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _height(window_height),
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
      _camera(_width,_height,_player, _map),
-     _hud(_width,_height),
+     _hud(_width,_height,((std::string)appPath.dirPath() + "/assets/obj/heart/scene.gltf").c_str()),
      _sauv((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
+     _light(_steveShader,_camera, getAllLitght(_map)),
      _buttons()
 {
     size_callback(window_width, window_height);
@@ -59,13 +85,12 @@ void App::init(){
     // -----------
     Model steve(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
     _models.push_back(steve);
-    std::cout << "Taille de Steve: " << steve.getHeight() << std::endl;
     Model diamond (((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str());
     _models.push_back(diamond);
     Model hud(((std::string)_appPath.dirPath() + "/assets/obj/hud/scene.gltf").c_str());
     _models.push_back(hud);
-    Model cube(((std::string)_appPath.dirPath() + "/assets/obj/cube/cube.obj").c_str());
-    _models.push_back(cube);
+    Model glowstone(((std::string)_appPath.dirPath() + "/assets/obj/glowstone/scene.gltf").c_str());
+    _models.push_back(glowstone);
 
 
     Enemy zombie(((std::string)_appPath.dirPath() + "/assets/obj/zombie/scene.gltf").c_str(),glm::vec3(1.3,0.1,-1),glm::vec3(0.06f, 0.06f, 0.06f));

@@ -10,9 +10,8 @@ void App::renderMainMenu(GLFWwindow *window, double FPS) {
 
     glClear(GL_COLOR_BUFFER_BIT);
     _player.inMenu(true);
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    displayGame(FPS);
     float textHeightTitle = _textMinecraft.textHeight("IMACRAFT", 2.f);
     float textWidthTitle = _textMinecraft.textWidth("IMACRAFT", 2.f) + 20;
     float yPosTitle = (static_cast<float>(_height) - textHeightTitle) - 50;

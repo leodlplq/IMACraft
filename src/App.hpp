@@ -97,7 +97,6 @@ private:
     std::vector<Model> _modelsMap;
 
     Map _map;
-    Shader _lightShader;
     Shader _skyboxShader;
     Shader _shaderProgram;
     Shader _steveShader;
@@ -128,6 +127,8 @@ private:
     Text _textArial;
     Text _textMinecraft;
 
+    Light _light;
+
 
     void displayGame(double FPS);
 
@@ -142,3 +143,4 @@ private:
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
+std::vector<glm::vec3> getAllLitght(Map &map);
