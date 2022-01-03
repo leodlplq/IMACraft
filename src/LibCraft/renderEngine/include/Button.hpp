@@ -22,7 +22,7 @@ class Button {
 public:
     //CONSTRUCTORS AND DESTRUCTORS
     Button() = default;
-    Button(std::string text, int &windowHeight, int &windowWidth, int x, int y, float paddingWidth, float paddingHeight, float scale, glm::vec3 colorBackground, glm::vec3 colorText, Text &font, Shader &shaderText, Shader &shaderBackground, std::function<void()> &func);
+    Button(unsigned int scene, std::string text, int &windowHeight, int &windowWidth, int x, int y, float paddingWidth, float paddingHeight, float scale, glm::vec3 colorBackground, glm::vec3 colorText, Text &font, Shader &shaderText, Shader &shaderBackground, std::function<void()> &func);
     ~Button() = default;
 
     //USEFUL
@@ -32,6 +32,7 @@ public:
 
     float getWidth();
     float getHeight();
+    inline unsigned int getSceneNb() const {return _scene; }
 
     //COLOR THINGS
     inline void changeBackgroundColor(glm::vec3 newBg) {_backgroundColor = newBg; }
@@ -57,6 +58,8 @@ private:
     vao _vao;
     vbo _vbo;
     ibo _ibo;
+
+    unsigned int _scene;
 
 
 };

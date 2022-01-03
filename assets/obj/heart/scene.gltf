@@ -1,6 +1,5 @@
 {
     "asset" : {
-        "copyright" : "textures",
         "generator" : "Khronos glTF Blender I/O v1.7.33",
         "version" : "2.0"
     },
@@ -82,65 +81,65 @@
         {
             "mimeType" : "image/png",
             "name" : "palette_baseColor",
-            "uri" : "textures/palette_baseColor.png"
+            "uri" : "texture/palette_baseColor.png"
         }
     ],
     "accessors" : [
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 392,
             "max" : [
-                0.10000000149011612,
-                9.100000381469727,
-                3.9000000953674316
+                0.04999992251396179,
+                0.45542144775390625,
+                0.4295165538787842
             ],
             "min" : [
-                -0.10000000149011612,
-                -9.100000381469727,
-                0
+                -0.05000007897615433,
+                -0.4445791244506836,
+                -0.47048354148864746
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 392,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 392,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 46044,
+            "count" : 624,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 307188,
+            "byteLength" : 4704,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 307188,
-            "byteOffset" : 307188
+            "byteLength" : 4704,
+            "byteOffset" : 4704
         },
         {
             "buffer" : 0,
-            "byteLength" : 204792,
-            "byteOffset" : 614376
+            "byteLength" : 3136,
+            "byteOffset" : 9408
         },
         {
             "buffer" : 0,
-            "byteLength" : 92088,
-            "byteOffset" : 819168
+            "byteLength" : 1248,
+            "byteOffset" : 12544
         }
     ],
     "samplers" : [
@@ -151,7 +150,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 911256,
+            "byteLength" : 13792,
             "uri" : "scene.bin"
         }
     ]

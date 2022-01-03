@@ -80,8 +80,17 @@ public:
 
     //BUTTONS
     void initButtons();
+    void handleClickEvent(GLFWwindow* window);
+    void handleHoverEvent(double xPos, double yPos);
 
-
+    void restart(){
+        _restart = !_restart;
+        _camera.restart();
+        _player.restart();
+        for(auto & _collectible : _collectibles){
+            _collectible.reset();
+        }
+    }
 
 
 
@@ -92,7 +101,6 @@ private:
     std::vector<Model> _modelsMap;
 
     Map _map;
-    Shader _lightShader;
     Shader _skyboxShader;
     Shader _shaderProgram;
     Shader _steveShader;
@@ -110,6 +118,7 @@ private:
     std::vector<Enemy> _enemies;
     HUD _hud;
     bool _scoreRegister = false;
+    bool _restart = false;
 
     unsigned int _selectedScene = 0;
     Sauvegarde _sauv;
@@ -122,13 +131,13 @@ private:
     Text _textArial;
     Text _textMinecraft;
 
+    Light _light;
+
 
     void displayGame(double FPS);
 
     unsigned int _i = 0;
     int _key = _keypressed;
-
-
 
     //BUTTONS
     std::vector<Button> _buttons;
@@ -140,3 +149,4 @@ private:
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
+std::vector<glm::vec3> getAllLitght(Map &map);

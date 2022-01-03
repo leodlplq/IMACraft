@@ -27,9 +27,10 @@ void App::renderGame(GLFWwindow *window, double FPS) {
     }
 
     //PRINTING FPS
-    if(_showingFPS){
+    if (_showingFPS) {
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
-        _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+        _textArial.renderText(_textShader, toPrintFPS, 25.f, static_cast<float>(_height) - 50.f, 0.5f,
+                              glm::vec3(0.5, 0.8f, 0.2f));
     }
 
     /* VERIF SI ON EST EN TRAIN DE TOURNER
@@ -39,10 +40,10 @@ void App::renderGame(GLFWwindow *window, double FPS) {
      *
      * */
     float valueToRotatePerFrame = 5.f;
-    if(_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90){
+    if (_camera.isTurningLeft() && _camera.getCurrentAngleX() < 90) {
         _camera.rotateLeft(-valueToRotatePerFrame);
         _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
-    } else if(_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
+    } else if (_camera.isTurningRight() && _camera.getCurrentAngleX() < 90) {
         _camera.rotateLeft(valueToRotatePerFrame);
         _camera.setCurrentAngleX(_camera.getCurrentAngleX() + valueToRotatePerFrame);
     } else {
@@ -51,15 +52,36 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _camera.setTurningRight(false);
     }
 
-    //HP LOSS
-    /*
-    if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-    {
-        _hp.lossHP();
+    if (_player.getHp() == 0) {
+        _player.die();
+        setScene(3);
     }
-     */
-}
 
+    double sizeMap = sqrt((static_cast<double>(_map.getFloor().size())));
+    int x = static_cast<int>(round(_player.getPosition().x));
+    int y = static_cast<int>(round(_player.getPosition().z));
+    int coord = static_cast<int>((x * sizeMap) + y);
+
+    for (auto &me: _map.getSecondFloor()) {
+
+        int xMe = static_cast<int>(round(me.getPosition().x));
+        int yMe = static_cast<int>(round(me.getPosition().z));
+
+        int coordMe = static_cast<int>((xMe * sizeMap) + yMe);
+
+        if (coord == coordMe && me.getModel() == 1) {
+            _player.die();
+
+        }
+    }
+
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isFinishLine()){
+        setScene(4);
+    }
+
+
+
+}
 void App::displayGame(double FPS){
     glm::mat4 model = glm::mat4(1.f);
 
@@ -70,7 +92,7 @@ void App::displayGame(double FPS){
     _camera.Matrix(45.0f, 0.1f, 100.0f);
 
     //LIGHT
-    Light light(_steveShader,_lightShader,_camera,_models[3]);
+    _light.Draw(_shaderProgram,_models[3],_camera);
 
     //Player Part
     _steveShader.activate();
@@ -86,6 +108,8 @@ void App::displayGame(double FPS){
     for (auto & _enemie : _enemies) {
         _enemie.DrawEnemy(_player, _camera, _steveShader);
     }
+
+
     // Draw the map
     //FLOOR PART
     for (auto &me: _map.getFloor()) {
@@ -96,7 +120,7 @@ void App::displayGame(double FPS){
             _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
         }
     }
-    //SECOND FLOOR PART (WALL / JUMP OBSTACLE...)
+    //SECOND FLOOR PART (WALL / DOWN OBSTACLE...)
     for(auto &me:_map.getSecondFloor()){
         if(me.getModel() != -1){
             model = me.getObjectMatrix();
@@ -105,6 +129,17 @@ void App::displayGame(double FPS){
             _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
         }
     }
+
+    //SECOND FLOOR PART (UP OBSTACLES)
+    for(auto &me:_map.getThirdFloor()){
+        if(me.getModel() != -1){
+            model = me.getObjectMatrix();
+            model = glm::scale(model,glm::vec3(0.5f, 0.5f, 0.5f));
+            glUniformMatrix4fv(glGetUniformLocation(_steveShader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            _modelsMap[static_cast<unsigned long>(me.getModel())].Draw(_steveShader);
+        }
+    }
+
 
     //PRINTING FPS
     if(_showingFPS){

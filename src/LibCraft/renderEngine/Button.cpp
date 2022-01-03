@@ -4,7 +4,8 @@
 
 #include "LibCraft/renderEngine/include/Button.hpp"
 
-Button::Button(std::string text,
+Button::Button(unsigned int scene,
+               std::string text,
                int &windowHeight,
                int &windowWidth,
                int x,
@@ -35,7 +36,8 @@ Button::Button(std::string text,
     _vao(),
     _vbo(),
     _ibo(),
-    _clickCallback(func)
+    _clickCallback(func),
+    _scene(scene)
 {
 }
 
@@ -77,7 +79,7 @@ void Button::setup(Rectangle &rectangle) {
 
     _vao.bind();
     _vbo = vbo(&vertices[0], static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)));
-    //_ibo = ibo(&indices[0], static_cast<GLsizeiptr>(indices.size() * sizeof(GLuint)));
+    _ibo = ibo(&indices[0], static_cast<GLsizeiptr>(indices.size() * sizeof(GLuint)));
     _vao.linkAttrib(_vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Position));
     _vao.linkAttrib(_vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Normal));
     _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, TexCoords));
@@ -98,8 +100,8 @@ void Button::draw(Rectangle &rect) {
     glm::mat4 projection = glm::ortho(0.f, widthProj,0.f, heightProj, -1.f,1.f);
     glUniformMatrix4fv(glGetUniformLocation(_shaderBackground._id, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
     _vao.bind();
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    //glDrawElements(GL_TRIANGLES, 6 , GL_UNSIGNED_INT, 0);
+    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawElements(GL_TRIANGLES, 6 , GL_UNSIGNED_INT, 0);
     _vao.unbind();
 }
 

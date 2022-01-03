@@ -1,6 +1,5 @@
 {
     "asset" : {
-        "copyright" : "textures",
         "generator" : "Khronos glTF Blender I/O v1.7.33",
         "version" : "2.0"
     },
@@ -9,56 +8,32 @@
         {
             "name" : "Scene",
             "nodes" : [
-                2
+                0
             ]
         }
     ],
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "Object_2"
-        },
-        {
-            "children" : [
-                0
-            ],
-            "name" : "HUD Minecraft Object v2.obj.cleaner.materialmerger.gles"
-        },
-        {
-            "children" : [
-                1
-            ],
-            "name" : "Sketchfab_model",
-            "rotation" : [
-                -0.7071068286895752,
-                0,
-                0,
-                0.7071068286895752
-            ]
+            "name" : "Cube"
         }
     ],
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "palette",
+            "name" : "Material",
             "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.8748019337654114,
-                    0.8748019337654114,
-                    0.8748019337654114,
-                    1
-                ],
                 "baseColorTexture" : {
                     "index" : 0
                 },
-                "metallicFactor" : 0.0017795866588130593,
-                "roughnessFactor" : 0.8600442409515381
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.4000000059604645
             }
         }
     ],
     "meshes" : [
         {
-            "name" : "Object_0",
+            "name" : "Cube",
             "primitives" : [
                 {
                     "attributes" : {
@@ -80,67 +55,67 @@
     ],
     "images" : [
         {
-            "mimeType" : "image/png",
-            "name" : "palette_baseColor",
-            "uri" : "textures/palette_baseColor.png"
+            "mimeType" : "image/jpeg",
+            "name" : "14661575-img_m",
+            "uri" : "texture/14661575-img_m.jpg"
         }
     ],
     "accessors" : [
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 24,
             "max" : [
-                0.10000000149011612,
-                9.100000381469727,
-                3.9000000953674316
+                1,
+                1,
+                1
             ],
             "min" : [
-                -0.10000000149011612,
-                -9.100000381469727,
-                0
+                -1,
+                -1,
+                -1
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 24,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 24,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 46044,
+            "count" : 36,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 307188,
+            "byteLength" : 288,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 307188,
-            "byteOffset" : 307188
+            "byteLength" : 288,
+            "byteOffset" : 288
         },
         {
             "buffer" : 0,
-            "byteLength" : 204792,
-            "byteOffset" : 614376
+            "byteLength" : 192,
+            "byteOffset" : 576
         },
         {
             "buffer" : 0,
-            "byteLength" : 92088,
-            "byteOffset" : 819168
+            "byteLength" : 72,
+            "byteOffset" : 768
         }
     ],
     "samplers" : [
@@ -151,7 +126,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 911256,
+            "byteLength" : 840,
             "uri" : "scene.bin"
         }
     ]

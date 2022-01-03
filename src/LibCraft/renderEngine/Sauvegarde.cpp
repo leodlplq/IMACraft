@@ -3,13 +3,14 @@
 //
 
 #include <sstream>
-#include "LibCraft/coreEngine/include/Sauvegarde.hpp"
+#include <utility>
+#include "LibCraft/renderEngine/include/Sauvegarde.hpp"
 
-Sauvegarde::Sauvegarde(const char* scorePath, const char* pseudoPath, std::string pathFileCreated):
-_pathScore(scorePath),_pathPseudo(pseudoPath),_path(std::move(pathFileCreated))
+Sauvegarde::Sauvegarde(std::string scorePath, std::string pseudoPath, std::string pathFileCreated):
+_pathScore(std::move(scorePath)),_pathPseudo(std::move(pseudoPath)),_path(std::move(pathFileCreated))
 {
     // Va chercher les valeurs des meilleurs scores et les stocks dans des tableaux
-    std::ifstream file(_pathScore);
+    std::ifstream file(_pathScore.c_str());
     std::string str;
     while (std::getline(file, str))
     {
@@ -17,18 +18,18 @@ _pathScore(scorePath),_pathPseudo(pseudoPath),_path(std::move(pathFileCreated))
         _scoreInt.push_back(std::stoi(str));
     }
     // Va chercher les pseudos des meilleurs joueurs et les stocks dans des tableaux
-    std::ifstream file2(_pathPseudo);
+    std::ifstream file2(_pathPseudo.c_str());
     std::string str2;
     while (std::getline(file2, str2))
     {
         _pseudo.push_back(str2);
     }
-    // Construit un nouveaux fichier à partir des deux autres pour l'affichage du Score Board
-    std::ofstream o(_path.c_str());
-    o << "SCORE BOARD" << std::endl;
-    for(unsigned int i =0; i<_pseudo.size();i++){
-        o << _pseudo[i] << " ------- "<< _score[i] << std::endl;
-    }
+//    // Construit un nouveaux fichier à partir des deux autres pour l'affichage du Score Board
+//    std::ofstream o(_path.c_str());
+//    o << "SCORE BOARD" << std::endl;
+//    for(unsigned int i =0; i<_pseudo.size();i++){
+//        o << _pseudo[i] << " ------- "<< _score[i] << std::endl;
+//    }
     std::ifstream file3(_path.c_str());
     std::string str3;
     while (std::getline(file3, str3))
@@ -47,19 +48,6 @@ int Sauvegarde::getLowerScore(){
     return min;
 }
 
-void Sauvegarde::enterGamerz(){
-    std::cout << "Quel est ton pseudo ?" << std::endl;
-    std::string pseudo;
-    std::cin >> pseudo;
-    std::stringstream ss;
-    ss << pseudo;
-    std::string pseudoTxt = ss.str();
-    _gamerz = pseudoTxt;
-    std::cout << _gamerz << std::endl;
-}
-
-
-
 void Sauvegarde::SetNewScore(int playerScore,std::string newPseudo) {
     std::stringstream ss;
     ss << playerScore;
@@ -69,25 +57,22 @@ void Sauvegarde::SetNewScore(int playerScore,std::string newPseudo) {
     std::string pseudo = pp.str();
 
     if(playerScore >= _scoreInt[0]){
-        _score[2] = _score[1];
-        _score[1] = _score[0];
         _score[0] = scoreTxt;
-
-        _pseudo[2] = _pseudo[1];
-        _pseudo[1] = _pseudo[0];
         _pseudo[0] = pseudo;
 
     }
     if(playerScore >= _scoreInt[1] && playerScore < _scoreInt[0]){
-        _score[2] = _score[1];
-        _score[1] = scoreTxt;
 
-        _pseudo[2] = _pseudo[1];
+//        std::string sco = _score[1];
+//        std::string pse = _pseudo[1];
+//        _score[2] = sco;
+//        _pseudo[2] = pse;
+
+        _score[1] = scoreTxt;
         _pseudo[1] = pseudo;
     }
     if(playerScore >= _scoreInt[2] && playerScore < _scoreInt[1]){
         _score[2] = scoreTxt;
-
         _pseudo[2] = pseudo;
 
     }
@@ -97,6 +82,18 @@ void Sauvegarde::SetNewScore(int playerScore,std::string newPseudo) {
     for(unsigned int i =0; i<_pseudo.size();i++){
         o << _pseudo[i] << " ------- "<< _score[i] << std::endl;
     }
+    o.close();
+    std::ofstream s(_pathScore.c_str());
+    for(unsigned int i =0; i<_score.size();i++){
+        s <<_score[i] << std::endl;
+    }
+    s.close();
+    std::ofstream p(_pathPseudo.c_str());
+    for(unsigned int i =0; i<_pseudo.size();i++){
+        p <<_pseudo[i] << std::endl;
+    }
+    p.close();
+
     std::ifstream file3(_path.c_str());
     std::string str3;
     _fileContent.clear();
@@ -104,4 +101,5 @@ void Sauvegarde::SetNewScore(int playerScore,std::string newPseudo) {
     {
         _fileContent.push_back(str3);
     }
+
 }

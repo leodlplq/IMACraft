@@ -9,19 +9,18 @@
 #include "LibCraft/renderEngine/include/Model.hpp"
 #include <vector>
 #include <fstream>
-
-
 #include <iostream>
 #include <array>
 
 class Map {
 
 private:
-    //std::vector<Cube> _map;
     std::vector<Model> _models;
 
     std::vector<MapElement> _floor;
     std::vector<MapElement> _secondFloor;
+    std::vector<MapElement> _thirdFloor;
+
     glm::vec3 _spawnPoint;
     float _scale;
     FilePath _appPath;
@@ -33,11 +32,9 @@ public:
     Map(const FilePath &pathToMap, std::vector<Model> &models, float scale);
     ~Map() = default;
 
-    //inline std::vector<Cube> getMap() const {return _map;}
-
-
     [[nodiscard]] inline std::vector<MapElement> getFloor() const {return _floor;}
     [[nodiscard]] inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
+    [[nodiscard]] inline std::vector<MapElement> getThirdFloor() const {return _thirdFloor;}
 
 
     void generateCubeMap(const FilePath &pathToMap);
@@ -47,4 +44,5 @@ public:
         return _spawnPoint;
     }
     [[nodiscard]] inline int getSize() const { return _size; }
+
 };

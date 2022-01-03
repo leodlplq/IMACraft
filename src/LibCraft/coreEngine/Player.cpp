@@ -3,9 +3,14 @@
 //
 #include "include/Player.hpp"
 
-Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map):
-_position(spawnPos), _scale(scale), _facingDirection('N'), _model(model), _hitbox(model, spawnPos,scale),_hp(8), _map(map)
+Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map,Model modelDead):
+_position(spawnPos), _spawnPos(spawnPos), _scale(scale), _facingDirection('N'), _model(model),_modelDead(modelDead),_modelAlive(model), _hitbox(model, spawnPos,scale), _hitbox2(model, spawnPos + glm::vec3(0,1,0),scale),_hp(_hpMax),_map(map)
 {
+}
+
+void Player::die() {
+    _hp = 0;
+    _model = _modelDead;
 }
 
 void Player::Draw(Shader &shader) {
@@ -24,7 +29,16 @@ void Player::Draw(Shader &shader) {
             model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
             break;
     }
-    model = glm::scale(model,glm::vec3(_scale));
+    if(_hp == 0){
+        model = glm::rotate(model, glm::radians(90.f), glm::vec3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
+        model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 1, 0));
+        model = glm::scale(model,glm::vec3(0.07f));
+    }
+    else{
+        model = glm::scale(model,glm::vec3(_scale));
+    }
+
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
     _model.Draw(shader);
 }
@@ -48,6 +62,11 @@ void Player::moveRight() {
     _hitbox.setCorner1( newCorner1 );
     glm::vec3 newCorner2 = _hitbox.getCorner2() + displacementRight;
     _hitbox.setCorner2( newCorner2 );
+
+    glm::vec3 newCorner12 = _hitbox2.getCorner1() + displacementRight;
+    _hitbox2.setCorner1( newCorner12 );
+    glm::vec3 newCorner22 = _hitbox2.getCorner2() + displacementRight;
+    _hitbox2.setCorner2( newCorner22 );
 }
 
 void Player::moveLeft() {
@@ -58,6 +77,11 @@ void Player::moveLeft() {
     _hitbox.setCorner1( newCorner1 );
     glm::vec3 newCorner2 = _hitbox.getCorner2() - displacementLeft;
     _hitbox.setCorner2( newCorner2 );
+
+    glm::vec3 newCorner12 = _hitbox2.getCorner1() - displacementLeft;
+    _hitbox2.setCorner1( newCorner12 );
+    glm::vec3 newCorner22= _hitbox2.getCorner2() - displacementLeft;
+    _hitbox2.setCorner2( newCorner22 );
 }
 
 void Player::moveForward(){
@@ -71,6 +95,11 @@ void Player::moveForward(){
     _hitbox.setCorner1( newCorner1 );
     glm::vec3 newCorner2 = _hitbox.getCorner2() + displacementForward;
     _hitbox.setCorner2( newCorner2 );
+
+    glm::vec3 newCorner12 = _hitbox2.getCorner1() + displacementForward;
+    _hitbox2.setCorner1( newCorner12 );
+    glm::vec3 newCorner22 = _hitbox2.getCorner2() + displacementForward;
+    _hitbox2.setCorner2( newCorner22);
 }
 
 void Player::moveBackward(){
@@ -80,13 +109,16 @@ void Player::moveBackward(){
     //PLAYER'S HITBOX MOVEMENT
     glm::vec3 newCorner1 = _hitbox.getCorner1() - displacementBackward;
     _hitbox.setCorner1( newCorner1 );
-    glm::vec3 newCorner2 = _hitbox.getCorner2() - displacementBackward;-
+    glm::vec3 newCorner2 = _hitbox.getCorner2() - displacementBackward;
     _hitbox.setCorner2( newCorner2 );
+
+    glm::vec3 newCorner12 = _hitbox2.getCorner1() - displacementBackward;
+    _hitbox2.setCorner1( newCorner12 );
+    glm::vec3 newCorner22 = _hitbox2.getCorner2() - displacementBackward;
+    _hitbox2.setCorner2( newCorner22 );
 }
 
 void Player::render(){
-    //PLAYER ALWAYS RUN
-    //moveForward();
 
     //JUMP PART
     _velocityY -= _gravity;
@@ -99,6 +131,11 @@ void Player::render(){
     glm::vec3 newCorner2 = _hitbox.getCorner2() + displacementJump;
     _hitbox.setCorner2( newCorner2 );
 
+    glm::vec3 newCorner12 = _hitbox2.getCorner1() + displacementJump;
+    _hitbox2.setCorner1( newCorner12 );
+    glm::vec3 newCorner22 = _hitbox2.getCorner2() + displacementJump;
+    _hitbox2.setCorner2( newCorner22 );
+
 
     if(_position.y < 1.3f){ //STAYING ON THE GROUND AND NOT FALLING INTO INFINTY
 
@@ -106,6 +143,11 @@ void Player::render(){
         _hitbox.setCorner1( newCorner1 );
         glm::vec3 newCorner2 = glm::vec3(_hitbox.getCorner2().x, 0.5f, _hitbox.getCorner2().z);
         _hitbox.setCorner2( newCorner2 );
+
+        glm::vec3 newCorner11 = glm::vec3(_hitbox2.getCorner1().x, 2.5f, _hitbox2.getCorner1().z);
+        _hitbox2.setCorner1( newCorner11 );
+        glm::vec3 newCorner21 = glm::vec3(_hitbox2.getCorner2().x, 1.5f, _hitbox2.getCorner2().z);
+        _hitbox2.setCorner2( newCorner21 );
 
         _position.y = 1.3f;
         _velocityY = 0.f;
@@ -115,7 +157,6 @@ void Player::render(){
     if(_isColliding){
         if(_hasCollided != _isColliding){
             looseHP();
-            std::cout << "Hp du bonhomme : "<< getHp() << std::endl;
             _hasCollided = _isColliding;
         }
     }
@@ -130,7 +171,7 @@ void Player::Inputs(GLFWwindow *window) {
     //glfwGetKey(window,87) == GLFW_PRESS  OR TRUE
 
     //GOING FORWARD
-    if(true){ //GOING FORWARD
+    if(_hp!=0){ //GOING FORWARD
         int nextBlockPosX;
         int nextBlockPosY;
         int nextBlockNeighbourRX;
@@ -195,44 +236,54 @@ void Player::Inputs(GLFWwindow *window) {
 
         int coord = static_cast<int>((x * sizeMap) + y);
         Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
+        Hitbox blockHitboxUp = _map.getThirdFloor()[static_cast<unsigned long>(coord)].getHitbox();
 
         //RIGHT NEIGHBOUR
         int neiX = xPlayer + nextBlockNeighbourRX;
         int neiY = yPlayer + nextBlockNeighbourRY;
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
-
+        Hitbox neiBlockHitboxUp = _map.getThirdFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
         //LEFT NEIGHBOUR
         int neiX2 = xPlayer + nextBlockNeighbourLX;
         int neiY2 = yPlayer + nextBlockNeighbourLY;
         int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
         Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
+        Hitbox neiBlockHitbox2Up = _map.getThirdFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
+        //TODO : check collisions of uppers block (idk why it's not working)
 
-        //display();
-        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
+
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);
         bool playerBlockNei2 = !getHitbox().intersect(neiBlockHitbox2);
 
-        if(
-                (playerBlock && playerBlockNei  && playerBlockNei2) ||
-                (playerBlock && playerBlockNei  && !playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5) ||
-                (playerBlock && !playerBlockNei  && playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5)
+        bool playerBlockUp = !getHitbox2().intersect(blockHitboxUp);
+        bool playerBlockNeiUp = !getHitbox2().intersect(neiBlockHitboxUp);
+        bool playerBlockNei2Up = !getHitbox2().intersect(neiBlockHitbox2Up);
 
-                ){
+
+
+
+        bool noCollisionBottom = (playerBlock && playerBlockNei  && playerBlockNei2) ||
+                               (playerBlock && playerBlockNei  && !playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5) ||
+                               (playerBlock && !playerBlockNei  && playerBlockNei2 && blockHitbox.getCorner1().x == 10000.5);
+
+        bool noCollisionUp = (playerBlockUp && playerBlockNeiUp  && playerBlockNei2Up) ||
+                               (playerBlockUp && playerBlockNeiUp  && !playerBlockNei2Up && blockHitboxUp.getCorner1().x == 10000.5) ||
+                               (playerBlockUp && !playerBlockNeiUp  && playerBlockNei2Up && blockHitboxUp.getCorner1().x == 10000.5);
+        if(noCollisionUp && noCollisionBottom){
             moveForward();
             _isColliding = false;
         } else {
             _isColliding = true;
-
         }
 
 
     }
 
     //GOING LEFT
-    if(glfwGetKey(window, 65) == GLFW_PRESS){ // MOVEMENT TO THE LEFT
+    if(glfwGetKey(window, 65) == GLFW_PRESS && _hp!=0){ // MOVEMENT TO THE LEFT
         int nextBlockPosX;
         int nextBlockPosY;
         int nextBlockNeighbourX;
@@ -276,21 +327,10 @@ void Player::Inputs(GLFWwindow *window) {
         int y = yPlayer + nextBlockPosY;
         int coord = static_cast<int>((x * sizeMap) + y);
         Hitbox blockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(coord)].getHitbox();
-        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
         int neiX = xPlayer + nextBlockNeighbourX;
         int neiY = yPlayer + nextBlockNeighbourY;
         int neiCoord = static_cast<int>((neiX * sizeMap) + neiY);
         Hitbox neiBlockHitbox = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord)].getHitbox();
-
-        /*std::cout << "------------ PLAYER -------------" << std::endl;
-        getHitbox().display();
-        std::cout << "------------ BLOCK -------------" << std::endl;
-        blockHitbox.display();
-        std::cout << (getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
-        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
-        neiBlockHitbox.display();
-        std::cout << (getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
-*/
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);
@@ -311,7 +351,7 @@ void Player::Inputs(GLFWwindow *window) {
 
 
     }
-    if(glfwGetKey(window, 68) == GLFW_PRESS){ //GOING RIGHT
+    if(glfwGetKey(window, 68) == GLFW_PRESS && _hp!=0){ //GOING RIGHT
 
         int nextBlockPosX;
         int nextBlockPosY;
@@ -376,9 +416,9 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-    if(glfwGetKey(window,83) == GLFW_PRESS){ //GOING BACKWARD
-        moveBackward();
-    }
+//    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
+//        moveBackward();
+//    }
 
 }
 
@@ -431,3 +471,34 @@ void Player::turnRight() {
         }
     }
 }
+
+
+
+
+/*--------------------- PRESSE PAPIER ------------------*/
+
+/*display();
+        //std::cout << "-------------DIRECTION : " << getFacingDirection() << " -------------"<< std::endl;
+        std::cout << "------------ PLAYER H2-------------" << std::endl;
+        getHitbox2().display();
+        std::cout << "------------ BLOCK -------------" << std::endl;
+        blockHitboxUp.display();
+        std::cout << (getHitbox2().intersect(blockHitboxUp) ? "collision" : "no collision")<< std::endl;
+        std::cout << "------------ BLOCK B -------------" << std::endl;
+        blockHitbox.display();
+        std::cout << (getHitbox().intersect(blockHitbox) ? "collision" : "no collision")<< std::endl;
+
+        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
+        neiBlockHitboxUp.display();
+        std::cout << (getHitbox2().intersect(neiBlockHitboxUp) ? "collision" : "no collision")<< std::endl;
+        std::cout << "------------ OTHER BLOCK B -------------" << std::endl;
+        neiBlockHitbox.display();
+        std::cout << (getHitbox().intersect(neiBlockHitbox) ? "collision" : "no collision")<< std::endl;
+
+        std::cout << "------------ OTHER BLOCK -------------" << std::endl;
+        neiBlockHitbox2Up.display();
+        std::cout << (getHitbox2().intersect(neiBlockHitbox2Up) ? "collision" : "no collision")<< std::endl;
+        std::cout << "------------ OTHER BLOCK B -------------" << std::endl;
+        neiBlockHitbox2.display();
+        std::cout << (getHitbox().intersect(neiBlockHitbox2) ? "collision" : "no collision")<< std::endl;*/
+

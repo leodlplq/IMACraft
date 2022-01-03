@@ -1,6 +1,5 @@
 {
     "asset" : {
-        "copyright" : "textures",
         "generator" : "Khronos glTF Blender I/O v1.7.33",
         "version" : "2.0"
     },
@@ -9,56 +8,38 @@
         {
             "name" : "Scene",
             "nodes" : [
-                2
+                0
             ]
         }
     ],
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "Object_2"
-        },
-        {
-            "children" : [
-                0
-            ],
-            "name" : "HUD Minecraft Object v2.obj.cleaner.materialmerger.gles"
-        },
-        {
-            "children" : [
-                1
-            ],
-            "name" : "Sketchfab_model",
+            "name" : "Chest_0_Cube.002",
             "rotation" : [
-                -0.7071068286895752,
+                0.7071068286895752,
                 0,
                 0,
-                0.7071068286895752
+                0.7071067094802856
             ]
         }
     ],
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "palette",
+            "name" : "Material.001",
             "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.8748019337654114,
-                    0.8748019337654114,
-                    0.8748019337654114,
-                    1
-                ],
                 "baseColorTexture" : {
                     "index" : 0
                 },
-                "metallicFactor" : 0.0017795866588130593,
-                "roughnessFactor" : 0.8600442409515381
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.6732679605484009
             }
         }
     ],
     "meshes" : [
         {
-            "name" : "Object_0",
+            "name" : "Chest_0_Cube.002",
             "primitives" : [
                 {
                     "attributes" : {
@@ -81,66 +62,66 @@
     "images" : [
         {
             "mimeType" : "image/png",
-            "name" : "palette_baseColor",
-            "uri" : "textures/palette_baseColor.png"
+            "name" : "Diffuse",
+            "uri" : "textures/Diffuse.png"
         }
     ],
     "accessors" : [
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 72,
             "max" : [
-                0.10000000149011612,
-                9.100000381469727,
-                3.9000000953674316
+                0.9636520147323608,
+                0.9000009894371033,
+                0.8798490166664124
             ],
             "min" : [
-                -0.10000000149011612,
-                -9.100000381469727,
-                0
+                -0.9636520147323608,
+                -0.9000009894371033,
+                -0.8798490166664124
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 72,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 25599,
+            "count" : 72,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 46044,
+            "count" : 108,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 307188,
+            "byteLength" : 864,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 307188,
-            "byteOffset" : 307188
+            "byteLength" : 864,
+            "byteOffset" : 864
         },
         {
             "buffer" : 0,
-            "byteLength" : 204792,
-            "byteOffset" : 614376
+            "byteLength" : 576,
+            "byteOffset" : 1728
         },
         {
             "buffer" : 0,
-            "byteLength" : 92088,
-            "byteOffset" : 819168
+            "byteLength" : 216,
+            "byteOffset" : 2304
         }
     ],
     "samplers" : [
@@ -151,8 +132,8 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 911256,
-            "uri" : "scene.bin"
+            "byteLength" : 2520,
+            "uri" : "chest.bin"
         }
     ]
 }

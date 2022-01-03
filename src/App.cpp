@@ -24,12 +24,37 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     return models;
 }
 
+std::vector<glm::vec3> getAllLitght(Map &map){
+    std::vector<glm::vec3> light;
+    int total = 0;
+    for (auto &me: map.getSecondFloor()) {
+        if (me.getModel() == 1) {
+            total +=1;
+        }
+    }
+    int count = 0;
+    for (auto &me: map.getSecondFloor()) {
+        if (me.getModel() == 1) {
+            count+=1;
+            if(count == 1){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            if(count == total/2){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            if(count == total -1){
+                light.push_back(me.getPosition()+glm::vec3(0,1,0));
+            }
+            }
+        }
+        return light;
+    }
+
 
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(),
      _modelsMap(getAllModels(appPath)),
      _map(appPath.dirPath() + "/assets/maps/map7.pgm", _modelsMap, 0.5),
-     _lightShader("assets/shaders/lightShader.vs.glsl","assets/shaders/lightShader.fs.glsl" , appPath),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
      _hpShader("assets/shaders/hp.vs.glsl","assets/shaders/hp.fs.glsl",appPath),
@@ -40,19 +65,19 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _textures(),
      _width(window_width),
      _height(window_height),
-     _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map),
+     _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
      _camera(_width,_height,_player, _map),
+     _hud(_width,_height,((std::string)appPath.dirPath() + "/assets/obj/heart/scene.gltf").c_str()),
+     _sauv((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
      _hpHUD(),
-     _hud(_width,_height),
      _textArial(appPath, _width, _height, "arial"),
      _textMinecraft(appPath, _width, _height, "Minecraft"),
-     _sauv(((std::string)appPath.dirPath() + "/assets/sauvegarde_score.txt").c_str(),((std::string)appPath.dirPath() + "/assets/sauvegarde_pseudo.txt").c_str(),(std::string)appPath.dirPath() + "/assets/sauvegarde.txt"),
+     _light(_steveShader,_camera, getAllLitght(_map)),
      _buttons()
 {
     size_callback(window_width, window_height);
 }
 void App::init(){
-    std::cout << "Salut, c'est Léo :) Je voulais vous prévenir qu'en appuyrant sur les chiffres en haut de vos claviers \n vous pouvez maintenant changer de scences (menu, pause etc...) ca va de 1 à 5." << std::endl;
     // CAMERA
     // configure global opengl state
     // -----------------------------
@@ -61,13 +86,12 @@ void App::init(){
     // -----------
     Model steve(((std::string)_appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str());
     _models.push_back(steve);
-    std::cout << "Taille de Steve: " << steve.getHeight() << std::endl;
     Model diamond (((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str());
     _models.push_back(diamond);
     Model hud(((std::string)_appPath.dirPath() + "/assets/obj/hud/scene.gltf").c_str());
     _models.push_back(hud);
-    Model cube(((std::string)_appPath.dirPath() + "/assets/obj/cube/cube.obj").c_str());
-    _models.push_back(cube);
+    Model glowstone(((std::string)_appPath.dirPath() + "/assets/obj/glowstone/scene.gltf").c_str());
+    _models.push_back(glowstone);
 
 
     Enemy zombie(((std::string)_appPath.dirPath() + "/assets/obj/zombie/scene.gltf").c_str(),glm::vec3(1.3,0.1,-1),glm::vec3(0.06f, 0.06f, 0.06f));
@@ -76,16 +100,22 @@ void App::init(){
     _enemies.push_back(creeper);
     Enemy enderMan(((std::string)_appPath.dirPath() + "/assets/obj/enderman/scene.gltf").c_str(),glm::vec3(1.8,-0.5,1),glm::vec3(0.05f, 0.05f, 0.05f));
     _enemies.push_back(enderMan);
-    std::cout << _map.getSecondFloor().size() << " =? " << 128*128 << std::endl;
 
-    for(unsigned int i = 0; i<10;i++){
-        if(i%2){
-            _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0, 10);
+
+
+    for (auto &me: _map.getFloor()) {
+        if (me.getModel() != -1 && me.isIntersection() == false) {
+            if(me.getRand()<0.13f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/diamond/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 10);
+            }
+            if(me.getRand()>0.95f && me.getRand()<0.98f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 0, 50);
+            }
+            if(me.getRand()>0.98f){
+                _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), me.getPosition()+glm::vec3(0,0.6,0), 1,0);
+            }
         }
-        else
-        _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/emerald/scene.gltf").c_str(), glm::vec3(124.0f-i, 0.6f, 10.0f), 0,50);
     }
-    _collectibles.emplace_back(((std::string)_appPath.dirPath() + "/assets/obj/apple/scene.gltf").c_str(), glm::vec3(114.0f, 0.6f, 10.0f), 1);
 
     initButtons();
     // SKYBOX SHADER BINDING
@@ -135,27 +165,22 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
         switch (key) {
             case 49:
                 //SET TO MAIN MENU SCENE
-                //std::cout << "scene menu" << std::endl;
                 setScene(0);
                 break;
             case 50:
                 //SET GAME SCENE
-//                std::cout << "scene jeu" << std::endl;
                 setScene(1);
                 break;
             case 51:
                 //SET PAUSE MENU SCENE
-//                std::cout << "scene pause" << std::endl;
                 setScene(2);
                 break;
             case 52:
                 //SET LOOSE SCENE
-//                std::cout << "scene loose" << std::endl;
                 setScene(3);
                 break;
             case 53:
                 //SET WIN SCENE
-//                std::cout << "scene win" << std::endl;
                 setScene(4);
                 break;
         }
@@ -191,7 +216,6 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     if(key == 256 && action == GLFW_PRESS){
         setScene(2);
     }
-
 }
 
 void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* window)
@@ -199,48 +223,35 @@ void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* wi
 
     if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
-        double xPos, yPos;
-        //getting cursor position
-        glfwGetCursorPos(window, &xPos, &yPos);
-
-        for(auto &b:_buttons){
-            double y = _height - yPos;
-            if(b.isHovered(xPos, y)){
-                std::cout << "clicked" << std::endl;
-                b._clickCallback();
-                b.changeBackgroundColor(glm::vec3(1,0,0));
-            } else {
-                b.changeBackgroundColor(glm::vec3(0.f));
-            }
+        switch (getScene()) {
+            case 0:
+                //mENU OF THE GAME
+                handleClickEvent(window);
+                break;
+            case 1:
+                //GAME ITSELF
+                handleClickEvent(window);
+                break;
+            case 2:
+                //PAUSE MENU
+                handleClickEvent(window);
+                break;
+            case 3:
+                //END GAME (LOOSE CASE)
+                handleClickEvent(window);
+                break;
+            case 4:
+                //END GAME (WIN CASE)
+                handleClickEvent(window);
+                break;
+            default:
+                assert((bool) "pas possible");
+                break;
         }
     }
 
 
-    switch (getScene()) {
-        case 0:
-            //mENU OF THE GAME
 
-            break;
-        case 1:
-            //GAME ITSELF
-
-            break;
-        case 2:
-            //PAUSE MENU
-
-            break;
-        case 3:
-            //END GAME (LOOSE CASE)
-
-            break;
-        case 4:
-            //END GAME (WIN CASE)
-
-            break;
-        default:
-            assert((bool) "pas possible");
-            break;
-    }
 }
 
 void App::scroll_callback(double xOffset, double yOffset)
@@ -279,23 +290,10 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
 {
 
     //yPos = _height - yPos;
-
-    for(auto &b:_buttons){
-        double y = _height - yPos;
-        if(b.isHovered(xPos, y)){
-            std::cout << "hovered" << std::endl;
-
-            b.changeBackgroundColor(glm::vec3(0.5f));
-        } else {
-            b.changeBackgroundColor(glm::vec3(0.f));
-        }
-    }
-
-
     switch (getScene()) {
         case 0:
             //MENU OF THE GAME
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 1:
             //GAME ITSELF
@@ -311,15 +309,15 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
             break;
         case 2:
             //PAUSE MENU
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 3:
             //END GAME (LOOSE CASE)
-
+            handleHoverEvent(xPos, yPos);
             break;
         case 4:
             //END GAME (WIN CASE)
-
+            handleHoverEvent(xPos, yPos);
             break;
         default:
             assert((bool) "pas possible");
@@ -339,29 +337,84 @@ void App::size_callback(int width, int height)
 
 void App::initButtons(){
 
+
     std::function<void (void)> functionPlay = [=]() {
-        std::cout << 'lel' << std::endl;
         this->setScene(1);
     };
-    Button playButton("Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
-    _buttons.push_back(playButton);
-
     std::function<void (void)> functionLeave = [=]() {
         this->closeGame();
     };
-    Button leaveButton("Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
-    _buttons.push_back(leaveButton);
+    std::function<void (void)> functionRestart = [=]() {
+        this->restart();
+        this->setScene(1);
+    };
 
-    Button resumeButton("Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
-    _buttons.push_back(resumeButton);
+
+    //MAIN MENU BUTTON
+    Button playButtonMain(0,"Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    _buttons.push_back(playButtonMain);//BUTTON 0
+
+    Button leaveButtonMain(0,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonMain);//BUTTON 1
+
+
+    //PAUSE MENU BUTTONS
+    Button resumeButtonPause(2,"Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    _buttons.push_back(resumeButtonPause); //BUTTON 2
+
+    Button leaveButtonPause(2,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonPause);//BUTTON 3
+
+
+    //LOOSE MENU
+    Button restartButtonLoose(3,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    _buttons.push_back(restartButtonLoose); //BUTTON 4
+
+    Button leaveButtonLoose(3,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonLoose);//BUTTON 5
+
+
+    //WIN MENU
+    Button restartButtonWin(4,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    _buttons.push_back(restartButtonWin); //BUTTON 6
+
+    Button leaveButtonWin(4,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    _buttons.push_back(leaveButtonWin);//BUTTON 7
+}
+
+void App::handleClickEvent(GLFWwindow* window){
+    double xPos, yPos;
+    //getting cursor position
+    glfwGetCursorPos(window, &xPos, &yPos);
+
+    for(auto &b:_buttons){
+        double y = _height - yPos;
+        if(b.isHovered(xPos, y) && b.getSceneNb() == getScene()){
+            b._clickCallback();
+            b.changeBackgroundColor(glm::vec3(1,0,0));
+        } else {
+            b.changeBackgroundColor(glm::vec3(0.f));
+        }
+    }
+}
+
+void App::handleHoverEvent(double xPos, double yPos) {
+    for(auto &b:_buttons){
+        double y = _height - yPos;
+        if(b.isHovered(xPos, y) && b.getSceneNb() == getScene()){
+            b.changeBackgroundColor(glm::vec3(0.5f));
+        } else {
+            b.changeBackgroundColor(glm::vec3(0.f));
+        }
+    }
 }
 
 
 App::~App(){
     //DELETING EVERYTHING
     //SHADERS
-//    _shaderProgram.deleteShader();
-//    _shaderProgram.~Shader();
+    _shaderProgram.deleteShader();
+    _shaderProgram.~Shader();
     _skyboxShader.deleteShader();
     _skyboxShader.~Shader();
     //APP PATH
@@ -385,6 +438,8 @@ App::~App(){
     //PLAYER
     _player.~Player();
 }
+
+
 
 
 

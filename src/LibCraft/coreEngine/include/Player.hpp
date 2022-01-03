@@ -17,7 +17,7 @@ class Player {
 public:
     //CONSTRUCTORS & DESTRUCTOR
 
-    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map);
+    Player(Model model, const glm::vec3 &spawnPos, float scale, const Map& map, Model modelDead);
     Player() = default;
     ~Player() = default;
 
@@ -39,6 +39,7 @@ public:
     //HP PLAYER
     inline void looseHP(){if(_hp>0)_hp-=1;};
     inline void gainHP(){if(_hp < _hpMax)_hp+=1;};
+    void die();
 
 
     void render();
@@ -54,25 +55,41 @@ public:
     inline glm::vec3 getOrientation() const{ return _orientation; }
     inline char getFacingDirection() const { return _facingDirection; }
     inline Hitbox getHitbox() const { return _hitbox;}
+    inline Hitbox getHitbox2() const { return _hitbox2;}
     inline float getScale() const { return  _scale;}
     inline int getHp() const {return _hp;}
     //SETTERS
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
 
-    inline float getDistanceToPlayer() const { return _distanceToPlayer; }
-    inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
+    inline float getDistanceToPlayer() const { return static_cast<float>(_hp);}
     inline void setScale(float scale){_scale = scale;}
 
-    inline int getScore(){return _score;}
+    inline int getScore() const{return _score;}
     inline void winScore(int value){_score+=value;}
 
     inline void inMenu(bool b){_isInMenu = b;}
     inline bool* getIsMenu(){return &_isInMenu;}
 
+    inline void restart(){
+        _hp = _hpMax;
+        _score = 0;
+        _position = _spawnPos;
+        _model = _modelAlive;
+        setFacingOrientation('N');
+        _hitbox = Hitbox(_model,_position,_scale);
+        _hitbox2 = Hitbox(_model,_position + glm::vec3(0.f,1.f,0.f),_scale);
+        _orientationRot = -90;
+    }
+
+    void setPosX(float d){_position.x = d;};
+
+    void setPosZ(float d){_position.z = d;};
+
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
+    glm::vec3 _spawnPos{};
     float _scale{};
     glm::vec3 _orientation = glm::vec3(0.0f,0.0f,1.0f);
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
@@ -91,23 +108,23 @@ private:
     char _facingDirection{};
 
     //SPEEDS AND VALUE FOR THE MOVEMENT + JUMP OF THE PLAYER
-    float _speed = 0.1f;
+    float _speed = 0.12f;
     float _speedSide = _speed;
     float _speedJump = 0.01f;
     float _velocityY = 0.f;
-    float _gravity = 0.2f;
+    float _gravity = 0.3f;
     bool _onGround = true;
     Model _model;
+    Model _modelDead;
+    Model _modelAlive;
     //HITBOX PART
     Hitbox _hitbox;
+    Hitbox _hitbox2;
 
     //PLAYER HEALTH
-    int _hpMax = 10;
+    int _hpMax = 5;
     int _hp;
     //MAP TO GET COLLISION
     Map _map;
-    float _distanceToPlayer = 3.f;
     int _score = 0;
-
-    void HasCollided();
 };
