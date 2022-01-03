@@ -67,7 +67,7 @@ App::App(int window_width, int window_height, const FilePath& appPath) :
      _height(window_height),
      _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
      _camera(_width,_height,_player, _map),
-     _hud(_width,_height,((std::string)appPath.dirPath() + "/assets/obj/heart/scene.gltf").c_str()),
+     _hud(_width,_height),
      _sauv((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
      _hpHUD(),
      _textArial(appPath, _width, _height, "arial"),

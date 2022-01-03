@@ -20,7 +20,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         _player.Inputs(window);
         _player.render();
         _hpHUD.drawHP(_hpShader, _player.getHp());
-        //_hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore(), _textMinecraft,_textShader);
+        _hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore(), _textMinecraft,_textShader);
     }
     else { //Switch to GameOver Scene
         setScene(3);
