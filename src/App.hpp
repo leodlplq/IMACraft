@@ -54,7 +54,6 @@ public:
     void renderLooseScreen(GLFWwindow* window, double FPS);
     void renderWinScreen(GLFWwindow* window, double FPS);
 
-
     inline bool isGameRunning() const { return _running; }
     inline void closeGame(){ _running = false; }
 
@@ -65,7 +64,6 @@ public:
     void cursor_position_callback(double xPos, double yPos, GLFWwindow* window);
     void size_callback(int width, int height);
 
-
     //SCENE SELECTION
     inline unsigned int getScene() const { return _selectedScene; }
     inline void setScene(unsigned int value) { _selectedScene = value; }
@@ -74,7 +72,6 @@ public:
     inline void invertFPSShow() { _showingFPS = !_showingFPS; }
 
     void KeyBoardListener(GLFWwindow *window);
-
 
     //BUTTONS
     void initButtons();

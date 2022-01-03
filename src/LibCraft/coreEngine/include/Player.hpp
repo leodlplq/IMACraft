@@ -58,6 +58,7 @@ public:
     inline Hitbox getHitbox2() const { return _hitbox2;}
     inline float getScale() const { return  _scale;}
     inline int getHp() const {return _hp;}
+    inline bool isSliding() const {return _sliding; }
     //SETTERS
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
@@ -114,7 +115,12 @@ private:
     float _speedJump = 0.01f;
     float _velocityY = 0.f;
     float _gravity = 0.3f;
+
+    float _velocitySlide = 0.f;
+    float _friction = 0.3f;
+
     bool _onGround = true;
+    bool _sliding = false;
     Model _model;
     Model _modelDead;
     Model _modelAlive;

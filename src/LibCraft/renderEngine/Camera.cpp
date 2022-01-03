@@ -54,8 +54,14 @@ glm::mat4 Camera::getViewMatrix() const{
                 whereToLookTo = glm::vec3(0.f, 0.f,1.f) * distanceFromPlayer;
                 break;
         }
-        glm::mat4 lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition() - whereToLookTo);
 
+
+        glm::mat4 lookTo;
+        if(_player.isSliding()){
+            lookTo = glm::translate(glm::mat4(1.f), -_player.getPosition()  - whereToLookTo);
+        } else {
+            lookTo = glm::translate(glm::mat4(1.f), -glm::vec3(_player.getPosition().x,_player.getPosition().y + 0.7f, _player.getPosition().z)  - whereToLookTo);
+        }
         view = glm::mat4(rotX * rotY* lookTo);
     } else {
         glm::vec3 shiftCamera = _player.getOrientation() * _distanceFromCamera;

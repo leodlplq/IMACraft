@@ -79,8 +79,13 @@ void Map::generateCubeMap(const FilePath& pathToMap){
                         _secondFloor.emplace_back(-1,glm::vec3(0), _models[0], false,_scale, true);
                         _thirdFloor.emplace_back(-1,glm::vec3(i,2,j),_models[0], false,_scale, true);
                         break;
+                    case 45:
+                        _floor.emplace_back(0,glm::vec3(i,0,j), _models[0], false,_scale,false);
+                        _secondFloor.emplace_back(1,glm::vec3(i,1,j), _models[1], false,_scale,false);
+                        _thirdFloor.emplace_back(3,glm::vec3(i,2,j),_models[3], false,_scale,false);
+                        break;
                     default:
-                        std::cout << "lol y a r" << std::endl;
+                        std::cout << "lol y a r : " << stoi(line) << std::endl;
                         break;
 
 

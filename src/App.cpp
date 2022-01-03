@@ -54,7 +54,7 @@ std::vector<glm::vec3> getAllLitght(Map &map){
 App::App(int window_width, int window_height, const FilePath& appPath) :
      _models(),
      _modelsMap(getAllModels(appPath)),
-     _map(appPath.dirPath() + "/assets/maps/map7.pgm", _modelsMap, 0.5),
+     _map(appPath.dirPath() + "/assets/maps/map8.pgm", _modelsMap, 0.5),
      _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
      _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
      _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
@@ -154,34 +154,6 @@ void App::render(GLFWwindow* window, double FPS) {
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
-
-    //SCENE SELECTION
-    if(action == GLFW_PRESS){
-        switch (key) {
-            case 49:
-                //SET TO MAIN MENU SCENE
-                setScene(0);
-                break;
-            case 50:
-                //SET GAME SCENE
-                setScene(1);
-                break;
-            case 51:
-                //SET PAUSE MENU SCENE
-                setScene(2);
-                break;
-            case 52:
-                //SET LOOSE SCENE
-                setScene(3);
-                break;
-            case 53:
-                //SET WIN SCENE
-                setScene(4);
-                break;
-        }
-    }
-
-
  std::cout << key << std::endl;
     if(key == 65 && action == GLFW_PRESS){
         _player.turnLeft();
@@ -193,6 +165,10 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     }
     if(key == 32 && (action == GLFW_PRESS)){
         _player.startJump();
+    }
+
+    if(key == 83 && (action == GLFW_PRESS)){
+        _player.slide();
     }
     //L == LOCKING THE CAMERA
     if(key == 76 && (action == GLFW_PRESS)){
@@ -207,10 +183,15 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
     if(key == 292 && action == GLFW_PRESS){
         invertFPSShow();
     }
-
     if(key == 256 && action == GLFW_PRESS){
-        setScene(2);
+        if(getScene() == 2){
+            setScene(1);
+        } else if(getScene()==1) {
+            setScene(2);
+        }
     }
+
+
 }
 
 void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* window)
@@ -344,36 +325,38 @@ void App::initButtons(){
         this->setScene(1);
     };
 
+    float scaleBtn = 0.7f;
+
 
     //MAIN MENU BUTTON
-    Button playButtonMain(0,"Launch game !",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    Button playButtonMain(0,"Launch game !",_height,_width,_width/2,250.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
     _buttons.push_back(playButtonMain);//BUTTON 0
 
-    Button leaveButtonMain(0,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    Button leaveButtonMain(0,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
     _buttons.push_back(leaveButtonMain);//BUTTON 1
 
 
     //PAUSE MENU BUTTONS
-    Button resumeButtonPause(2,"Go back to game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
+    Button resumeButtonPause(2,"Go back to game",_height,_width,_width/2,250.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionPlay );
     _buttons.push_back(resumeButtonPause); //BUTTON 2
 
-    Button leaveButtonPause(2,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    Button leaveButtonPause(2,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
     _buttons.push_back(leaveButtonPause);//BUTTON 3
 
 
     //LOOSE MENU
-    Button restartButtonLoose(3,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    Button restartButtonLoose(3,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
     _buttons.push_back(restartButtonLoose); //BUTTON 4
 
-    Button leaveButtonLoose(3,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    Button leaveButtonLoose(3,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
     _buttons.push_back(leaveButtonLoose);//BUTTON 5
 
 
     //WIN MENU
-    Button restartButtonWin(4,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    Button restartButtonWin(4,"Restart game",_height,_width,_width/2,250.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
     _buttons.push_back(restartButtonWin); //BUTTON 6
 
-    Button leaveButtonWin(4,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,0.7f,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
+    Button leaveButtonWin(4,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
     _buttons.push_back(leaveButtonWin);//BUTTON 7
 }
 

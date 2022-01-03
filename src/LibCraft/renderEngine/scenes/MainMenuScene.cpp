@@ -16,7 +16,7 @@ void App::renderMainMenu(GLFWwindow *window, double FPS) {
     float textWidthTitle = _textMinecraft.textWidth("IMACRAFT", 2.f) + 20;
     float yPosTitle = (static_cast<float>(_height) - textHeightTitle) - 50;
     float xPosTitle = (static_cast<float>(_width) / 2) - (textWidthTitle / 2) ;
-    _textMinecraft.renderText(_textShader, "IMACRAFT", xPosTitle, yPosTitle , 2.f, glm::vec3(0.5, 0.8f, 0.2f));
+    _textMinecraft.renderText(_textShader, "IMACRAFT", xPosTitle, yPosTitle , 2.f, _hud.getFontColor());
 
 
     float scaleBaseline = 0.3f;
@@ -24,7 +24,7 @@ void App::renderMainMenu(GLFWwindow *window, double FPS) {
     float textWidthBaseline = _textMinecraft.textWidth(baseline, scaleBaseline) + (8 * 10 *scaleBaseline);
     float yPosBaseline = 10;
     float xPosBaseline = (static_cast<float>(_width) / 2) - (textWidthBaseline / 2);
-    _textArial.renderText(_textShader, baseline ,xPosBaseline, yPosBaseline, scaleBaseline, glm::vec3(0.5, 0.8f, 0.2f));
+    _textArial.renderText(_textShader, baseline ,xPosBaseline, yPosBaseline, scaleBaseline, _hud.getFontColor());
 
 
 

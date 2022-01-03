@@ -39,6 +39,12 @@ void Player::Draw(Shader &shader) {
         model = glm::scale(model,glm::vec3(_scale));
     }
 
+    if(_sliding){
+        model = glm::rotate(model, glm::radians(90.f), glm::vec3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(180.f), glm::vec3(0, 0, 1));
+        model = glm::rotate(model, glm::radians(-180.f), glm::vec3(0, 1, 0));
+    }
+
     glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
     _model.Draw(shader);
 }
@@ -49,9 +55,18 @@ void Player::startJump(){
     if(_onGround){
         _velocityY = 10.f;
         _onGround = false;
+        _sliding = false;
     }
     //_position -= glm::vec3(0.f, 1.f, 0.f);
 }
+
+void Player::slide() {
+    if(!_sliding && _onGround){
+        _velocitySlide = 10.f;
+        _sliding = true;
+    }
+}
+
 
 //MOVEMENT OF THE PLAYER
 void Player::moveRight() {
@@ -102,7 +117,7 @@ void Player::moveForward(){
     _hitbox2.setCorner2( newCorner22);
 }
 
-void Player::moveBackward(){
+/*void Player::moveBackward(){
     glm::vec3 displacementBackward = _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
     _position -= displacementBackward;
 
@@ -116,7 +131,7 @@ void Player::moveBackward(){
     _hitbox2.setCorner1( newCorner12 );
     glm::vec3 newCorner22 = _hitbox2.getCorner2() - displacementBackward;
     _hitbox2.setCorner2( newCorner22 );
-}
+}*/
 
 void Player::render(){
 
@@ -154,14 +169,37 @@ void Player::render(){
         _onGround = true;
     }
 
+    if(_sliding){
+        std::cout << "ca slide bg"<< std::endl;
+        _velocitySlide -= _friction;
+
+        glm::vec3 newCorner1 = glm::vec3(_hitbox.getCorner1().x, 1.3f, _hitbox.getCorner1().z);
+        _hitbox.setCorner1( newCorner1 );
+        glm::vec3 newCorner2 = glm::vec3(_hitbox.getCorner2().x, 0.5f, _hitbox.getCorner2().z);
+        _hitbox.setCorner2( newCorner2 );
+
+        glm::vec3 newCorner11 = glm::vec3(_hitbox2.getCorner1().x, 1.3f, _hitbox2.getCorner1().z);
+        _hitbox2.setCorner1( newCorner11 );
+        glm::vec3 newCorner21 = glm::vec3(_hitbox2.getCorner2().x, 1.3f, _hitbox2.getCorner2().z);
+        _hitbox2.setCorner2( newCorner21 );
+
+        if(_velocitySlide <= 0.f ){
+            _sliding = false;
+            _velocityY = 0.f;
+        }
+
+    }
+
     if(_isColliding){
         if(_hasCollided != _isColliding){
             looseHP();
             _hasCollided = _isColliding;
         }
     }
-    else
+    else{
         _hasCollided = false;
+    }
+
 
 }
 
@@ -250,7 +288,7 @@ void Player::Inputs(GLFWwindow *window) {
         int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
         Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
         Hitbox neiBlockHitbox2Up = _map.getThirdFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
-        //TODO : check collisions of uppers block (idk why it's not working)
+
 
 
 
@@ -262,7 +300,9 @@ void Player::Inputs(GLFWwindow *window) {
         bool playerBlockNeiUp = !getHitbox2().intersect(neiBlockHitboxUp);
         bool playerBlockNei2Up = !getHitbox2().intersect(neiBlockHitbox2Up);
 
-
+        bool playerBlockUp2 = !getHitbox().intersect(blockHitboxUp);
+        bool playerBlockNeiUp2 = !getHitbox().intersect(neiBlockHitboxUp);
+        bool playerBlockNei2Up2 = !getHitbox().intersect(neiBlockHitbox2Up);
 
 
         bool noCollisionBottom = (playerBlock && playerBlockNei  && playerBlockNei2) ||
@@ -272,7 +312,14 @@ void Player::Inputs(GLFWwindow *window) {
         bool noCollisionUp = (playerBlockUp && playerBlockNeiUp  && playerBlockNei2Up) ||
                                (playerBlockUp && playerBlockNeiUp  && !playerBlockNei2Up && blockHitboxUp.getCorner1().x == 10000.5) ||
                                (playerBlockUp && !playerBlockNeiUp  && playerBlockNei2Up && blockHitboxUp.getCorner1().x == 10000.5);
-        if(noCollisionUp && noCollisionBottom){
+
+        bool noCollisionUp2 = (playerBlockUp2 && playerBlockNeiUp2  && playerBlockNei2Up2) ||
+                             (playerBlockUp2 && playerBlockNeiUp2  && !playerBlockNei2Up2 && blockHitboxUp.getCorner1().x == 10000.5) ||
+                             (playerBlockUp2 && !playerBlockNeiUp2  && playerBlockNei2Up2 && blockHitboxUp.getCorner1().x == 10000.5);
+
+        std::cout << "bot : " << (noCollisionBottom ? "yes ": "no ") << "|" << "up : " <<( noCollisionUp ?"yes ": "no ") << "|" << "up2 : " <<( noCollisionUp2 ?"yes ": "no ") << "|" << std::endl;
+
+        if(noCollisionUp && noCollisionBottom && noCollisionUp2){
             moveForward();
             _isColliding = false;
         } else {
@@ -472,6 +519,8 @@ void Player::turnRight() {
         }
     }
 }
+
+
 
 
 
