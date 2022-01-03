@@ -19,16 +19,20 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         //INPUTS
         _player.Inputs(window);
         _player.render();
-        _hud.DrawHUD(_shaderProgram, _models[2], _models[1], _player.getScore(), _textMinecraft, _textShader,_player.getHp());
-    } else { //Switch to GameOver Scene
+        _hpHUD.drawHP(_hpShader, _player.getHp());
+        _hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore(), _textMinecraft,_textShader);
+    }
+    else { //Switch to GameOver Scene
         setScene(3);
     }
+
     //PRINTING FPS
     if (_showingFPS) {
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
         _textArial.renderText(_textShader, toPrintFPS, 25.f, static_cast<float>(_height) - 50.f, 0.5f,
                               glm::vec3(0.5, 0.8f, 0.2f));
     }
+
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *
      * SI OUI -- ON AUGMENTE X PAR X JUSQU'A MAX 90
@@ -67,6 +71,7 @@ void App::renderGame(GLFWwindow *window, double FPS) {
 
         if (coord == coordMe && me.getModel() == 1) {
             _player.die();
+
         }
     }
 
@@ -141,6 +146,8 @@ void App::displayGame(double FPS){
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
         _textArial.renderText(_textShader, toPrintFPS ,25.f, static_cast<float>(_height) - 50.f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
     }
+
+    //PRINTING HP
 
 
     /* VERIF SI ON EST EN TRAIN DE TOURNER

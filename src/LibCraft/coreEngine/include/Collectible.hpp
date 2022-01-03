@@ -16,7 +16,7 @@ public:
         Model model(path);
         _model = model;
         _position = position;
-        _value = value;
+        _value = static_cast<int>(value);
         _type = type;
         _pos = position;
     }

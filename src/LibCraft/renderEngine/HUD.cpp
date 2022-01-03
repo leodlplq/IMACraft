@@ -4,7 +4,7 @@
 
 #include "LibCraft/renderEngine/include/HUD.hpp"
 
-void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, const Text& text, Shader &textShader, int hp){
+void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, const Text& text, Shader &textShader){
     shader.activate();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model,
@@ -19,18 +19,6 @@ void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, const Text& 
     hud.Draw(shader);
 
     DrawOnlyScore(shader,icon,score,text,textShader);
-
-    shader.activate();
-    for(unsigned int i = 0; i<hp;i++){
-        model = glm::mat4(1.0f);
-        model = glm::translate(model,glm::vec3(0.42f - static_cast<float>(static_cast<float>(i)/24.f), -0.62f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 1, 0));
-        model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1, 0, 0));
-        model = glm::scale(model,glm::vec3(0.1f, 0.05f, 0.08f));    // it's a bit too big for our scene, so scale it down
-        glUniformMatrix4fv(glGetUniformLocation(shader._id, "camMatrix"), 1, GL_FALSE,glm::value_ptr(glm::mat4(1.0f)));
-        glUniformMatrix4fv(glGetUniformLocation(shader._id, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        _modelHeart.Draw(shader);
-    }
 }
 
 //void HUD::DrawGameOver(Shader &shader, Model gameOver){

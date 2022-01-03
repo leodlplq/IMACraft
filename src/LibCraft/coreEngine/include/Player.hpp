@@ -63,15 +63,14 @@ public:
     inline float setOrientationRotation(float degree){ return _orientationRot += degree; }
     inline char setFacingOrientation(char dir){return _facingDirection = dir; }
 
-    inline float getDistanceToPlayer() const { return _distanceToPlayer; }
-    inline void setDistanceToPlayer(float distance){ _distanceToPlayer = distance; }
+    inline float getDistanceToPlayer() const { return static_cast<float>(_hp);}
     inline void setScale(float scale){_scale = scale;}
 
-    inline int getScore(){return _score;}
+    inline int getScore() const{return _score;}
     inline void winScore(int value){_score+=value;}
 
     inline void inMenu(bool b){_isInMenu = b;}
-    inline bool* getIsMenu(){return &_isInMenu;}
+    inline bool getIsMenu(){return _isInMenu;}
 
     inline void restart(){
         _hp = _hpMax;
@@ -110,7 +109,7 @@ private:
     char _facingDirection{};
 
     //SPEEDS AND VALUE FOR THE MOVEMENT + JUMP OF THE PLAYER
-    float _speed = 0.1f;
+    float _speed = 0.12f;
     float _speedSide = _speed;
     float _speedJump = 0.01f;
     float _velocityY = 0.f;
@@ -129,10 +128,9 @@ private:
     Hitbox _hitbox2;
 
     //PLAYER HEALTH
-    int _hpMax = 10;
+    int _hpMax = 5;
     int _hp;
     //MAP TO GET COLLISION
     Map _map;
-    float _distanceToPlayer = 3.f;
     int _score = 0;
 };

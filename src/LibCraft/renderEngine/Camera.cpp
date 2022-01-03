@@ -145,7 +145,7 @@ void Camera::turnLeft() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _player.getIsMenu() == false){
         setTurningLeft(true);
         rotateLeftNoMouse(-90.f);
     }
@@ -159,7 +159,7 @@ void Camera::turnRight() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection()){
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _player.getIsMenu() == false ){
         setTurningRight(true);
         rotateLeftNoMouse(90.f);
     }

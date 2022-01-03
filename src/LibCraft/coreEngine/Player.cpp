@@ -4,7 +4,7 @@
 #include "include/Player.hpp"
 
 Player::Player( Model model, const glm::vec3 &spawnPos, float scale, const Map& map,Model modelDead):
-_position(spawnPos), _spawnPos(spawnPos), _scale(scale), _facingDirection('N'), _model(model),_modelDead(modelDead),_modelAlive(model), _hitbox(model, spawnPos,scale), _hitbox2(model, spawnPos + glm::vec3(0,1,0),scale),_hp(10),_map(map)
+_position(spawnPos), _spawnPos(spawnPos), _scale(scale), _facingDirection('N'), _model(model),_modelDead(modelDead),_modelAlive(model), _hitbox(model, spawnPos,scale), _hitbox2(model, spawnPos + glm::vec3(0,1,0),scale),_hp(_hpMax),_map(map)
 {
 }
 
@@ -323,7 +323,6 @@ void Player::Inputs(GLFWwindow *window) {
             _isColliding = false;
         } else {
             _isColliding = true;
-
         }
 
 
