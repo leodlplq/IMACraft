@@ -6,7 +6,7 @@
 
 std::string get_file_contents(FilePath filePath){
     std::string content;
-   // std::cout << filePath << std::endl;
+
     std::ifstream  fileStream(filePath, std::ios::in);
 
     if(!fileStream.is_open()){

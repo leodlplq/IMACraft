@@ -170,7 +170,6 @@ void Player::render(){
     }
 
     if(_sliding){
-        std::cout << "ca slide bg"<< std::endl;
         _velocitySlide -= _friction;
 
         glm::vec3 newCorner1 = glm::vec3(_hitbox.getCorner1().x, 1.3f, _hitbox.getCorner1().z);
@@ -317,7 +316,7 @@ void Player::Inputs(GLFWwindow *window) {
                              (playerBlockUp2 && playerBlockNeiUp2  && !playerBlockNei2Up2 && blockHitboxUp.getCorner1().x == 10000.5) ||
                              (playerBlockUp2 && !playerBlockNeiUp2  && playerBlockNei2Up2 && blockHitboxUp.getCorner1().x == 10000.5);
 
-        std::cout << "bot : " << (noCollisionBottom ? "yes ": "no ") << "|" << "up : " <<( noCollisionUp ?"yes ": "no ") << "|" << "up2 : " <<( noCollisionUp2 ?"yes ": "no ") << "|" << std::endl;
+        //std::cout << "bot : " << (noCollisionBottom ? "yes ": "no ") << "|" << "up : " <<( noCollisionUp ?"yes ": "no ") << "|" << "up2 : " <<( noCollisionUp2 ?"yes ": "no ") << "|" << std::endl;
 
         if(noCollisionUp && noCollisionBottom && noCollisionUp2){
             moveForward();

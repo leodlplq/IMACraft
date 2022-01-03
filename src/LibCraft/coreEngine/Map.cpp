@@ -15,7 +15,7 @@ void Map::generateCubeMap(const FilePath& pathToMap){
     std::fstream image;
     double size;
 
-    std::cout << pathToMap << std::endl;
+//    std::cout << pathToMap << std::endl;
     image.open(pathToMap);
     if(image.is_open()){
         for (int i = 0; i < 4; i++) {
@@ -85,6 +85,7 @@ void Map::generateCubeMap(const FilePath& pathToMap){
                         _thirdFloor.emplace_back(3,glm::vec3(i,2,j),_models[3], false,_scale,false);
                         break;
                     default:
+                        assert("should not be there -- no ");
                         std::cout << "lol y a r : " << stoi(line) << std::endl;
                         break;
 

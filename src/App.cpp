@@ -154,7 +154,7 @@ void App::render(GLFWwindow* window, double FPS) {
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
- std::cout << key << std::endl;
+//    std::cout << key << std::endl;
     if(key == 65 && action == GLFW_PRESS){
         _player.turnLeft();
         _camera.turnLeft();
@@ -163,7 +163,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
         _player.turnRight();
         _camera.turnRight();
     }
-    if(key == 32 && (action == GLFW_PRESS)){
+    if(key == 87 && (action == GLFW_PRESS)){
         _player.startJump();
     }
 

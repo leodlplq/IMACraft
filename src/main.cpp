@@ -69,7 +69,7 @@ int main(__attribute__((unused)) int argc, char** argv)
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     double FPS = 0;
-    std::cout << w << h << std::endl;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && app.isGameRunning()) {
 

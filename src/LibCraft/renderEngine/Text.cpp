@@ -12,8 +12,6 @@ _wHeight(height), _wWidth(width), _fontName(fontName)
 
 void Text::init(const FilePath &filePath) {
 
-
-    std::cout << "init text broo" << std::endl;
     FT_Library _ft;
     FT_Face _face;
 
@@ -22,20 +20,20 @@ void Text::init(const FilePath &filePath) {
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
         assert("Freetype error - ERROR::FREETYPE: Could not init FreeType Library");
     } else {
-        std::cout << "freetype loaded" <<std::endl;
+//        std::cout << "freetype loaded" <<std::endl;
     }
 
 
     std::string fontDirectory = "/assets/fonts/"+_fontName+".ttf";
 
     std::string pathToFont = filePath.dirPath() + fontDirectory;
-    std::cout << pathToFont<<std::endl;
+//    std::cout << pathToFont<<std::endl;
     if (FT_New_Face(_ft, &pathToFont[0], 0, &_face))
     {
         std::cout << "ERROR::FREETYPE: Failed to load font " << _fontName << std::endl;
         assert("Freetype error - ERROR::FREETYPE: Failed to load font");
     } else {
-        std::cout << "freetype : arial font loaded " <<std::endl;
+//        std::cout << "freetype : arial font loaded " <<std::endl;
     }
 
     FT_Set_Pixel_Sizes(_face, 0, 48);
@@ -45,7 +43,7 @@ void Text::init(const FilePath &filePath) {
         std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
         assert("Freetype error - ERROR::FREETYTPE: Failed to load Glyph");
     } else {
-        std::cout << "freetype : glyph loaded " <<std::endl;
+//        std::cout << "freetype : glyph loaded " <<std::endl;
     }
 
 
