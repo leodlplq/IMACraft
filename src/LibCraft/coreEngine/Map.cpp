@@ -101,16 +101,3 @@ void Map::generateCubeMap(const FilePath& pathToMap){
 
 }
 
-void Map::display() const {
-    double size = sqrt(static_cast<double>(_floor.size()));
-
-    for (int i = 0; i < size; i++) {
-
-        for (int j = 0; j < size; j++) {
-
-            //std::cout << _map[j + (i * size)] << " ";
-        }
-        //std::cout << std::endl;
-    }
-}
-

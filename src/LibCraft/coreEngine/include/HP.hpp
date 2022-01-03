@@ -17,22 +17,26 @@
 
 class HP {
 public:
+    //CONSTRUCTORS & DESTRUCTORS;
     HP();
+    ~HP();
+
     void drawHP(Shader& shader, int nbHp);
     void genTexHP(std::string filePathHP);
-    int getVertexCountHP() {
+
+    inline int getVertexCountHP(){
         return _vertices.size();
     }
-    int getIndicesCountHP() {
+    inline int getIndicesCountHP(){
         return _indices.size();
     }
-    GLuint* getIndicesHP() {
+    inline GLuint* getIndicesHP() {
         return &_indices[0];
     }
-    Vertex* getDataPointerHP() {
+    inline Vertex* getDataPointerHP() {
         return &_vertices[0];
     }
-    ~HP();
+
 private:
     std::vector<Vertex> _vertices = {
             Vertex(glm::vec3(-0.5, -0.5, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.0, 0.0)),

@@ -15,10 +15,9 @@ class Sauvegarde {
 public:
     Sauvegarde() = default;
     Sauvegarde(std::string scorePath, std::string pseudoPath, std::string pathFileCreated);
-    inline std::vector<std::string> getContent(){return _fileContent;}
+    inline std::vector<std::string> getContent() const {return _fileContent;}
     int getLowerScore();
     void SetNewScore(int playerScore,std::string newPseudo);
-    void SaveFile();
 
 private:
     std::string _pathScore;

@@ -90,15 +90,10 @@ int main(__attribute__((unused)) int argc, char** argv)
 
         /* Poll for and process events */
         glfwPollEvents();
-
-        /*if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        {
-            app.closeGame();
-        }*/
-
     }
 
-    glfwTerminate();
+
     app.~App();
+    glfwTerminate();
     return 0;
 }

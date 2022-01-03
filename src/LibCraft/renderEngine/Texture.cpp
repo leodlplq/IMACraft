@@ -35,11 +35,11 @@ void Texture::texUnit(Shader& shader, const char *uniform, GLuint unit) {
     glUniform1i(tex0Uni, unit);
 }
 
-void Texture::bind(){
+void Texture::bind() const{
     glBindTexture(_type, _id);
 }
 
-void Texture::unbind(){
+void Texture::unbind() const{
     glBindTexture(_type, 0);
 }
 

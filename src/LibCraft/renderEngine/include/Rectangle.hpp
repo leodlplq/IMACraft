@@ -19,8 +19,8 @@ public:
 
     //USEFUL
     std::vector<GLuint> getIndices() const;
-    std::vector<Vertex> getVertices() const {return _vertices; }
-    unsigned long getIndicesCount() const { return getIndices().size(); }
+    inline std::vector<Vertex> getVertices() const {return _vertices; }
+    inline unsigned long getIndicesCount() const { return getIndices().size(); }
 
 
 private:

@@ -31,7 +31,7 @@ public:
             };
     Skybox();
     ~Skybox();
-    void draw(){
+    inline void draw() const{
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);

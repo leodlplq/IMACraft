@@ -28,7 +28,6 @@ public:
     void moveLeft();
     void moveRight();
     void moveForward();
-    void moveBackward();
 
     void turnLeft();
     void turnRight();
@@ -41,14 +40,13 @@ public:
     inline void gainHP(){if(_hp < _hpMax)_hp+=1;};
     void die();
 
-
     void render();
     void Inputs(GLFWwindow* window);
 
     inline void display() const{
         std::cout << "player position is : " << " x : " << _position.x  <<" y : " << _position.y << " z : " << _position.z << std::endl;
     }
-    inline void inverseAbleToMove(){ _ableToMove = !_ableToMove; }
+
 
     //GETTERS
     inline glm::vec3 getPosition() const{ return _position; }
@@ -70,7 +68,7 @@ public:
     inline void winScore(int value){_score+=value;}
 
     inline void inMenu(bool b){_isInMenu = b;}
-    inline bool getIsMenu(){return _isInMenu;}
+    inline bool getIsMenu() const{return _isInMenu;}
 
     inline void restart(){
         _hp = _hpMax;
@@ -83,10 +81,6 @@ public:
         _orientationRot = -90;
     }
 
-    void setPosX(float d){_position.x = d;};
-
-    void setPosZ(float d){_position.z = d;};
-
 private:
     //POSITION & MOVEMENT OF THE PLAYER
     glm::vec3 _position{};
@@ -96,11 +90,10 @@ private:
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
     float _orientationRot = -90.f;
 
-    bool _ableToMove = true;
     bool _isColliding = false;
     bool _hasCollided = false;
     bool _isInMenu = true;
-    //float _placement = 0; //define where I am on the the map (0 : mid, -1 : left, 1 : right)
+
     /*
      * CAN TAKE 4 DIFFERENTS VALUE:
      * ----- N S W E ------

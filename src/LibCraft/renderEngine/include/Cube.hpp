@@ -23,24 +23,20 @@ public:
 
     void build(float radius =1.0);
     //renvoie ptr sur data
-    Vertex* getDataPointer() {
+    inline Vertex* getDataPointer() {
         return &vertices[0];
     }
 
-    inline glm::mat4 getObjectMatrix() const{
-        return _placement;
-    };
-
     // Renvoie le nombre de vertex
-    GLsizei getVertexCount() const {
+    inline GLsizei getVertexCount() const {
         return c_VertexCount;
     }
 
-    GLuint* getIndices() {
+    inline GLuint* getIndices() {
         return &indices[0];
     }
 
-    float getHeight() const{
+    inline float getHeight() const{
         return _radius;
     }
 

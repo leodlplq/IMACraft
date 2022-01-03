@@ -35,7 +35,7 @@ void HUD::DrawHUD(Shader &shader, Model hud, Model icon, int score, const Text& 
 //}
 
 void HUD::DrawOnlyScore(Shader &shader, Model &icon, int score, Text text, Shader &textShader){
-
+    shader.activate();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.92f, 0.83f, 0.0f)); // _position de l'icone de score
     model = glm::rotate(model, glm::radians(-90.f), glm::vec3(0, 1, 0));

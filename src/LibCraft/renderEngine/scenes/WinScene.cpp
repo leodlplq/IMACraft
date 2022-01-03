@@ -22,37 +22,37 @@ void App::renderWinScreen(GLFWwindow *window, double FPS) {
     KeyBoardListener(window);
 // AFFICHAGE DU SCORE BOARD
     float scaleScore = (2.f*static_cast<float>(_height)) / 1080;
-    if (_player.getScore() >= _sauv.getLowerScore()) {
+    if (_player.getScore() >= _save.getLowerScore()) {
 
-        _sauv.SetNewScore(_player.getScore(), _pseudo);
+        _save.SetNewScore(_player.getScore(), _pseudo);
 
         float yPosB = (static_cast<float>(_height) / 1.5f);
 
 
 
-        for (unsigned int i = 0; i < _sauv.getContent().size(); i++) {
-            float textHeight = _textMinecraft.textHeight(_sauv.getContent()[i], scaleScore);
+        for (unsigned int i = 0; i < _save.getContent().size(); i++) {
+            float textHeight = _textMinecraft.textHeight(_save.getContent()[i], scaleScore);
             if (i != 0) {
-                yPosB -= (_textMinecraft.textHeight(_sauv.getContent()[i - 1], scaleScore));
+                yPosB -= (_textMinecraft.textHeight(_save.getContent()[i - 1], scaleScore));
             }
-            float textWidth = _textMinecraft.textWidth(_sauv.getContent()[i], scaleScore) + 20;
+            float textWidth = _textMinecraft.textWidth(_save.getContent()[i], scaleScore) + 20;
             float yPos = yPosB - (textHeight / 2);
             yPosB = yPos;
             float xPos = (static_cast<float>(_width) / 2) - (textWidth / 2) - 50;
-            _textMinecraft.renderText(_textShader, _sauv.getContent()[i], xPos, yPos, scaleScore, _hud.getFontColor());
+            _textMinecraft.renderText(_textShader, _save.getContent()[i], xPos, yPos, scaleScore, _hud.getFontColor());
         }
     } else {
         float yPosB = (static_cast<float>(_height) / 1.5f);
-        for (unsigned int i = 0; i < _sauv.getContent().size(); i++) {
-            float textHeight = _textMinecraft.textHeight(_sauv.getContent()[i], scaleScore);
+        for (unsigned int i = 0; i < _save.getContent().size(); i++) {
+            float textHeight = _textMinecraft.textHeight(_save.getContent()[i], scaleScore);
             if (i != 0) {
-                yPosB -= (_textMinecraft.textHeight(_sauv.getContent()[i - 1], scaleScore));
+                yPosB -= (_textMinecraft.textHeight(_save.getContent()[i - 1], scaleScore));
             }
-            float textWidth = _textMinecraft.textWidth(_sauv.getContent()[i], scaleScore) + 20;
+            float textWidth = _textMinecraft.textWidth(_save.getContent()[i], scaleScore) + 20;
             float yPos = yPosB - (textHeight / 2);
             yPosB = yPos;
             float xPos = (static_cast<float>(_width) / 2) - (textWidth / 2) - 50;
-            _textMinecraft.renderText(_textShader, _sauv.getContent()[i], xPos, yPos, scaleScore, _hud.getFontColor());
+            _textMinecraft.renderText(_textShader, _save.getContent()[i], xPos, yPos, scaleScore, _hud.getFontColor());
         }
     }
 

@@ -35,13 +35,13 @@ class Text {
 public:
     //CONSTRUCTORS AND DESTRUCTORS
     Text() = default;
-    Text(const FilePath &filePath, const int width, const int height,const std::string fontName);
+    Text(const FilePath &filePath, int width, int height,std::string fontName);
     ~Text() = default;
 
     void init(const FilePath &filePath);
     void renderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
-    float textWidth(std::string text, const float scale);
-    float textHeight(std::string text, const float scale);
+    float textWidth(std::string text, float scale);
+    float textHeight(std::string text, float scale);
 
 
 private:

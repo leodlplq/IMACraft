@@ -21,24 +21,22 @@ public:
         _pos = position;
     }
 
-    Model getModel(){
+    inline Model getModel() const{
         return _model;
     }
-    glm::vec3 getPosition(){
+    inline glm::vec3 getPosition() const{
         return _position;
     }
 
     void Draw(Shader &shader, Camera &camera);
-    void reset(){
+    inline void reset(){
         _alive = true;
         _position = _pos;
     }
 
-    //void Draw(Shader &shader);
-
     void Update(Player &player);
-    void setAngle(float a){_angle = a;}
-    [[nodiscard]] float getAngle() const { return _angle;}
+    inline void setAngle(float a){_angle = a;}
+    inline float getAngle() const { return _angle;}
 
 private:
     Model _model;

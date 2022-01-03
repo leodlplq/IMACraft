@@ -46,15 +46,9 @@ public:
     }
 
     inline glm::vec3 setCorner1(glm::vec3 newCorner){ return _corner1 = newCorner; }
-    inline glm::vec3 getCorner1(){ return _corner1; }
+    inline glm::vec3 getCorner1() const{ return _corner1; }
 
     inline glm::vec3 setCorner2(glm::vec3 newCorner){ return _corner2 = newCorner; }
-    inline glm::vec3 getCorner2(){ return _corner2; }
-
-    void Draw();
-
-    //Debug
-    vao _vao;
-    vbo _vbo;
+    inline glm::vec3 getCorner2() const{ return _corner2; }
 };
 

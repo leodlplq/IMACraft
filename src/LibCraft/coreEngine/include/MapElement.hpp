@@ -62,14 +62,6 @@ public:
     }
 
     //RETURNING ALL ATTRIBUTES
-    /*inline int getType() const{
-        return _type;
-    }
-
-    inline int getTexture() const{
-        return _texture;
-    }*/
-
     inline int getModel() const{
         return _modelType;
     }
@@ -95,7 +87,7 @@ public:
         std::mt19937 generator(seed);
         // uniform real distribution
         std::uniform_real_distribution<float> uniformRealDistribution(0,1);
-        _rand =uniformRealDistribution(generator);
+        _rand = uniformRealDistribution(generator);
     }
 
     inline float getRand() const { return _rand;}

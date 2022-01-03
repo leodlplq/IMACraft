@@ -31,14 +31,13 @@ public:
     void turnLeft();
     void turnRight();
 
-    inline glm::mat4 getModelMatrix() const{ return _model; }
     inline glm::mat4 getProjMatrix() const{ return _projection; }
     glm::mat4 getViewMatrix() const;
 
     inline bool isCamLocked() const { return _isLocked; }
     inline void invertCamLock() {_isLocked = ! _isLocked; };
 
-    inline bool isCamFPS() const { return _isFPS; }
+//    inline bool isCamFPS() const { return _isFPS; }
     inline void invertCamMode() {_isFPS = !_isFPS; };
     void resetAngle();
 
@@ -77,9 +76,6 @@ private:
     glm::vec3 _up = glm::vec3(0.0f,1.0f,0.0f);
 
     //MATRIXs OF THE CAMERA
-    glm::vec3 _rotaxis;
-    glm::mat4 _model = glm::mat4(1.0f);
-    glm::mat4 _view = glm::mat4(1.0f);
     glm::mat4 _projection = glm::mat4(1.0f);
 
     Player &_player;
@@ -95,7 +91,7 @@ private:
     float _scrollSensitivity = 0.5;
     float _sensitivity = 50.0f;
 
-    float _rotationspeed = 1.5f;
+//    float _rotationspeed = 1.5f;
 
 
     //LOCK PART
@@ -103,7 +99,6 @@ private:
 
     //CHOICE OF THE CAM PART
     bool _isFPS = false;
-    bool _firstClick = true;
 
 };
 

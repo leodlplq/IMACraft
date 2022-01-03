@@ -24,7 +24,7 @@ std::vector<Model> getAllModels(const FilePath& appPath){
     return models;
 }
 
-std::vector<glm::vec3> getAllLitght(Map &map){
+std::vector<glm::vec3> getAllLight(Map &map){
     std::vector<glm::vec3> light;
     int total = 0;
     for (auto &me: map.getSecondFloor()) {
@@ -52,28 +52,28 @@ std::vector<glm::vec3> getAllLitght(Map &map){
 
 
 App::App(int window_width, int window_height, const FilePath& appPath) :
-     _models(),
-     _modelsMap(getAllModels(appPath)),
-     _map(appPath.dirPath() + "/assets/maps/map8.pgm", _modelsMap, 0.5),
-     _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
-     _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
-     _hpShader("assets/shaders/hp.vs.glsl","assets/shaders/hp.fs.glsl",appPath),
-     _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
-     _textShader("assets/shaders/textShader.vs.glsl", "assets/shaders/textShader.fs.glsl", appPath),
-     _buttonShader("assets/shaders/buttonShader.vs.glsl", "assets/shaders/buttonShader.fs.glsl", appPath),
-     _appPath(appPath),
-     _textures(),
-     _width(window_width),
-     _height(window_height),
-     _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
-     _camera(_width,_height,_player, _map),
-     _hud(_width,_height),
-     _sauv((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt",(std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
-     _hpHUD(),
-     _textArial(appPath, _width, _height, "arial"),
-     _textMinecraft(appPath, _width, _height, "Minecraft"),
-     _light(_steveShader,_camera, getAllLitght(_map)),
-     _buttons()
+        _models(),
+        _modelsMap(getAllModels(appPath)),
+        _map(appPath.dirPath() + "/assets/maps/map8.pgm", _modelsMap, 0.5),
+        _skyboxShader("assets/shaders/skybox.vs.glsl","assets/shaders/skybox.fs.glsl",appPath),
+        _shaderProgram("assets/shaders/shader.vs.glsl","assets/shaders/shader.fs.glsl" , appPath),
+        _hpShader("assets/shaders/hp.vs.glsl","assets/shaders/hp.fs.glsl",appPath),
+        _steveShader("assets/shaders/shaderSteve.vs.glsl","assets/shaders/shaderSteve.fs.glsl",appPath),
+        _textShader("assets/shaders/textShader.vs.glsl", "assets/shaders/textShader.fs.glsl", appPath),
+        _buttonShader("assets/shaders/buttonShader.vs.glsl", "assets/shaders/buttonShader.fs.glsl", appPath),
+        _appPath(appPath),
+        _textures(),
+        _width(window_width),
+        _height(window_height),
+        _player(Model(((std::string)appPath.dirPath() + "/assets/obj/steve/scene.gltf").c_str()), _map.getSpawnPoint(),0.026f, _map, Model(((std::string)appPath.dirPath() + "/assets/obj/skeleton/scene.gltf").c_str())),
+        _camera(_width,_height,_player, _map),
+        _hud(_width,_height),
+        _save((std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_score.txt", (std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde_pseudo.txt", (std::string)appPath.dirPath() + "/assets/savefiles/sauvegarde.txt"),
+        _hpHUD(),
+        _textArial(appPath, _width, _height, "arial"),
+        _textMinecraft(appPath, _width, _height, "Minecraft"),
+        _light(_steveShader, _camera, getAllLight(_map)),
+        _buttons()
 {
     size_callback(window_width, window_height);
 }

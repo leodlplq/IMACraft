@@ -23,7 +23,6 @@ private:
 
     glm::vec3 _spawnPoint;
     float _scale;
-    FilePath _appPath;
     int _size;
 
 public:
@@ -32,17 +31,15 @@ public:
     Map(const FilePath &pathToMap, std::vector<Model> &models, float scale);
     ~Map() = default;
 
-    [[nodiscard]] inline std::vector<MapElement> getFloor() const {return _floor;}
-    [[nodiscard]] inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
-    [[nodiscard]] inline std::vector<MapElement> getThirdFloor() const {return _thirdFloor;}
-
-
+    inline std::vector<MapElement> getFloor() const {return _floor;}
+    inline std::vector<MapElement> getSecondFloor() const {return _secondFloor;}
+    inline std::vector<MapElement> getThirdFloor() const {return _thirdFloor;}
+    
     void generateCubeMap(const FilePath &pathToMap);
-    void display() const;
 
-    [[nodiscard]] inline glm::vec3 getSpawnPoint() const{
+    inline glm::vec3 getSpawnPoint() const{
         return _spawnPoint;
     }
-    [[nodiscard]] inline int getSize() const { return _size; }
+    inline int getSize() const { return _size; }
 
 };

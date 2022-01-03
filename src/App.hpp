@@ -80,7 +80,7 @@ public:
     void handleClickEvent(GLFWwindow* window);
     void handleHoverEvent(double xPos, double yPos);
 
-    void restart(){
+    inline void restart(){
         _restart = !_restart;
         _camera.restart();
         _player.restart();
@@ -114,13 +114,13 @@ private:
     std::vector<Collectible> _collectibles;
     std::vector<Enemy> _enemies;
     HUD _hud;
-    bool _scoreRegister = false;
+
     bool _restart = false;
 
     unsigned int _selectedScene = 0;
-    Sauvegarde _sauv;
+    Sauvegarde _save;
     std::string _pseudo;
-    int _keypressed;
+    int _keyPressed;
 
     //FPS
     bool _showingFPS = false;
@@ -134,7 +134,7 @@ private:
     void displayGame(double FPS);
 
     unsigned int _i = 0;
-    int _key = _keypressed;
+    int _key = _keyPressed;
 
     //BUTTONS
     std::vector<Button> _buttons;
@@ -146,4 +146,4 @@ private:
 };
 
 std::vector<Model> getAllModels(const FilePath &appPath);
-std::vector<glm::vec3> getAllLitght(Map &map);
+std::vector<glm::vec3> getAllLight(Map &map);

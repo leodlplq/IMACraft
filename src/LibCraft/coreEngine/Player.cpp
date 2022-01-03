@@ -117,22 +117,6 @@ void Player::moveForward(){
     _hitbox2.setCorner2( newCorner22);
 }
 
-/*void Player::moveBackward(){
-    glm::vec3 displacementBackward = _speed * glm::rotate(_orientation, glm::radians(_orientationRot), _up);
-    _position -= displacementBackward;
-
-    //PLAYER'S HITBOX MOVEMENT
-    glm::vec3 newCorner1 = _hitbox.getCorner1() - displacementBackward;
-    _hitbox.setCorner1( newCorner1 );
-    glm::vec3 newCorner2 = _hitbox.getCorner2() - displacementBackward;
-    _hitbox.setCorner2( newCorner2 );
-
-    glm::vec3 newCorner12 = _hitbox2.getCorner1() - displacementBackward;
-    _hitbox2.setCorner1( newCorner12 );
-    glm::vec3 newCorner22 = _hitbox2.getCorner2() - displacementBackward;
-    _hitbox2.setCorner2( newCorner22 );
-}*/
-
 void Player::render(){
 
     //JUMP PART
@@ -205,7 +189,6 @@ void Player::render(){
 void Player::Inputs(GLFWwindow *window) {
 
     //(x * 128)+y TO GET 2D VECTOR WITH JUST 1D VECTOR.
-    //glfwGetKey(window,87) == GLFW_PRESS  OR TRUE
 
     //GOING FORWARD
     if(_hp!=0){ //GOING FORWARD
@@ -287,9 +270,6 @@ void Player::Inputs(GLFWwindow *window) {
         int neiCoord2 = static_cast<int>((neiX2 * sizeMap) + neiY2);
         Hitbox neiBlockHitbox2 = _map.getSecondFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
         Hitbox neiBlockHitbox2Up = _map.getThirdFloor()[static_cast<unsigned long>(neiCoord2)].getHitbox();
-
-
-
 
         bool playerBlock = !getHitbox().intersect(blockHitbox);
         bool playerBlockNei = !getHitbox().intersect(neiBlockHitbox);
@@ -462,10 +442,6 @@ void Player::Inputs(GLFWwindow *window) {
 
     }
 
-//    if(glfwGetKey(window,83) == GLFW_PRESS && _hp!=0){ //GOING BACKWARD
-//        moveBackward();
-//    }
-
 }
 
 void Player::turnLeft() {
@@ -474,7 +450,7 @@ void Player::turnLeft() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _isInMenu == false) {
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && !_isInMenu) {
         setOrientationRotation(90.f);
         switch (getFacingDirection()) {
             case 'N':
@@ -499,7 +475,7 @@ void Player::turnRight() {
 
     int coord = static_cast<int>((xPlayer * _map.getSize()) + yPlayer);
 
-    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && _isInMenu == false) {
+    if(_map.getFloor()[static_cast<unsigned long>(coord)].isIntersection() && !_isInMenu) {
         setOrientationRotation(-90.f);
         switch (getFacingDirection()) {
             case 'N':

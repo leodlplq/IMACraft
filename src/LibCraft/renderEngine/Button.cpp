@@ -20,10 +20,11 @@ Button::Button(unsigned int scene,
                Shader &shaderBackground,
                std::function<void()> &func
                 ) :
+    _clickCallback(func),
     _windowHeight(windowHeight),
     _windowWidth(windowWidth),
-    _x(x),
-    _y(y),
+    _x(static_cast<float>(x)),
+    _y(static_cast<float>(y)),
     _paddingWidth(paddingWidth),
     _paddingHeight(paddingHeight),
     _scale(scale),
@@ -36,7 +37,6 @@ Button::Button(unsigned int scene,
     _vao(),
     _vbo(),
     _ibo(),
-    _clickCallback(func),
     _scene(scene)
 {
 }
@@ -75,8 +75,6 @@ void Button::setup(Rectangle &rectangle) {
     std::vector<Vertex> vertices = rectangle.getVertices();
     std::vector<GLuint> indices = rectangle.getIndices();
 
-
-
     _vao.bind();
     _vbo = vbo(&vertices[0], static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)));
     _ibo = ibo(&indices[0], static_cast<GLsizeiptr>(indices.size() * sizeof(GLuint)));
@@ -85,7 +83,7 @@ void Button::setup(Rectangle &rectangle) {
     _vao.linkAttrib(_vbo, 2, 2, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, TexCoords));
     _vao.unbind();
     _vbo.unbind();
-    //_ibo.unbind();
+    _ibo.unbind();
 
 }
 
@@ -100,7 +98,7 @@ void Button::draw(Rectangle &rect) {
     glm::mat4 projection = glm::ortho(0.f, widthProj,0.f, heightProj, -1.f,1.f);
     glUniformMatrix4fv(glGetUniformLocation(_shaderBackground._id, "projection"), 1, GL_FALSE,glm::value_ptr(projection));
     _vao.bind();
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+
     glDrawElements(GL_TRIANGLES, 6 , GL_UNSIGNED_INT, 0);
     _vao.unbind();
 }
@@ -111,12 +109,6 @@ bool Button::isHovered(double& xPos, double& yPos) {
 
     glm::vec2 cornerTopLeft = {_x - width/2, _y - (height/2) - _paddingHeight};
     glm::vec2 cornerBottomRight = {_x + width/2, _y + (height/2) - _paddingHeight};
-
-//    std::cout << "x : " << xPos << " y : " << yPos << std::endl;
-//    std::cout << "x Corner1 " << cornerTopLeft.x << " y : " << cornerTopLeft.y << std::endl;
-//    std::cout << "x Corner2 " << cornerBottomRight.x << " y : " << cornerBottomRight.y << std::endl;
-
-
     if(
         (xPos > cornerTopLeft.x && xPos < cornerBottomRight.x) &&
         (yPos > cornerTopLeft.y && yPos < cornerBottomRight.y)
