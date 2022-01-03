@@ -55,6 +55,7 @@ public:
     void renderPauseMenu(GLFWwindow* window, double FPS);
     void renderLooseScreen(GLFWwindow* window, double FPS);
     void renderWinScreen(GLFWwindow* window, double FPS);
+    void renderScoreScreen(GLFWwindow* window, double FPS);
 
     inline bool isGameRunning() const { return _running; }
     inline void closeGame(){ _running = false; }

@@ -21,6 +21,7 @@ void App::renderPauseMenu(GLFWwindow *window, double FPS) {
     _buttons[1].render();
     _buttons[2].render();
     _buttons[8].render();
+    _buttons[9].render();
 
 }
 

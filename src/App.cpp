@@ -150,6 +150,9 @@ void App::render(GLFWwindow* window, double FPS) {
             //END GAME (WIN CASE)
             renderWinScreen(window, FPS);
             break;
+        case 5:
+            //SHOW SCORES
+            renderScoreScreen(window, FPS);
         default:
             assert((bool) "pas possible");
             break;
@@ -159,7 +162,7 @@ void App::render(GLFWwindow* window, double FPS) {
 
 void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
 {
-//    std::cout << key << std::endl;
+    std::cout << key << std::endl;
     if(key == 65 && action == GLFW_PRESS){
         _player.turnLeft();
         _camera.turnLeft();
@@ -180,8 +183,7 @@ void App::key_callback(int key, /*int scancode,*/ int action/*, int mods*/)
         _camera.invertCamLock();
     }
     //M == LOCKING THE CAMERA
-    if(key == 77 && (action == GLFW_PRESS)){
-
+    if(key == 67 && (action == GLFW_PRESS)){
         _camera.invertCamMode();
         _camera.resetAngle();
     }
@@ -223,6 +225,9 @@ void App::mouse_button_callback(int button, int action, int mods, GLFWwindow* wi
                 break;
             case 4:
                 //END GAME (WIN CASE)
+                handleClickEvent(window);
+                break;
+            case 5:
                 handleClickEvent(window);
                 break;
             default:
@@ -300,6 +305,8 @@ void App::cursor_position_callback(double xPos, double yPos, GLFWwindow* window)
             //END GAME (WIN CASE)
             handleHoverEvent(xPos, yPos);
             break;
+        case 5:
+            handleHoverEvent(xPos, yPos);
         default:
             assert((bool) "pas possible");
             break;
@@ -329,6 +336,14 @@ void App::initButtons(){
         this->restart();
         this->setScene(1);
     };
+
+    std::function<void (void)> functionScore = [=]() {
+        this->setScene(5);
+    };
+    std::function<void (void)> functionGoBack = [=]() {
+        this->setScene(2);
+    };
+
 
 
     float scaleBtn = 0.7f;
@@ -368,6 +383,12 @@ void App::initButtons(){
     //PAUSE MENU AGAIN
     Button restartButtonPause(2,"Restart",_height,_width,_width/2,350.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
     _buttons.push_back(restartButtonPause); //BUTTON 8
+    Button scoreButtonPause(2,"Show best scores",_height,_width,_width/2,450.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionScore );
+    _buttons.push_back(scoreButtonPause); //BUTTON 9
+
+    //SCORE MENU BUTTON
+    Button goBackButtonScore(5,"Back",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionGoBack );
+    _buttons.push_back(goBackButtonScore); //BUTTON 10
 }
 
 void App::handleClickEvent(GLFWwindow* window){
