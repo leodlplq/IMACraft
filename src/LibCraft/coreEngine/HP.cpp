@@ -6,15 +6,15 @@
 
 HP::HP() :
 _vao(),
-_vbo((Vertex2D*){}, 0),
+_vbo({}, 0),
 _ibo({}, 0)
 {
     _vao.bind();
-    _vbo = vbo(this->getDataPointerHP(),this->getVertexCountHP()*sizeof(Vertex2D));
+    _vbo = vbo(this->getDataPointerHP(),this->getVertexCountHP()*sizeof(Vertex));
     _ibo = ibo(this->getIndicesHP(), this->getIndicesCountHP()*sizeof(GLuint));
-    _vao.linkAttrib(_vbo, 3, 2, GL_FLOAT, sizeof(Vertex2D), (const GLvoid*) offsetof(Vertex2D, _position));
-    _vao.linkAttrib(_vbo, 4, 3, GL_FLOAT, sizeof(Vertex2D), (const GLvoid*) offsetof(Vertex2D, _color));
-    _vao.linkAttrib(_vbo, 5, 2, GL_FLOAT, sizeof(Vertex2D), (const GLvoid*) offsetof(Vertex2D, _texCoords));
+    _vao.linkAttrib(_vbo, 3, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Position));
+    _vao.linkAttrib(_vbo, 4, 3, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, Normal));
+    _vao.linkAttrib(_vbo, 5, 2, GL_FLOAT, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, TexCoords));
     _vao.unbind();
     _vbo.unbind();
     _ibo.unbind();

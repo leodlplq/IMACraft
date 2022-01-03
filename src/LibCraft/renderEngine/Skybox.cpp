@@ -6,7 +6,7 @@
 
 
 Skybox::Skybox():_vao(),
-                 _vbo((Vertex*){}, 0),
+                 _vbo({}, 0),
                  _ibo({}, 0) {
     Cube skybox(2);
     _vao.bind();

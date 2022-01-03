@@ -6,7 +6,7 @@
 
 Hitbox::Hitbox(Model &model,const glm::vec3 &position, const float &scale):
 _vao(),
-_vbo((Vertex*)0,0)
+_vbo(0,0)
 {
     //TODO : define the good position of each corner.
     float heightModel = model.getHeight()*scale;

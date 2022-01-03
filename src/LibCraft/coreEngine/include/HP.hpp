@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include "vector"
-#include "LibCraft/renderEngine/include/Vertex2D.hpp"
+#include "LibCraft/renderEngine/include/Vertex.hpp"
 #include "LibCraft/renderEngine/include/Cube.hpp"
 #include "LibCraft/renderEngine/include/vbo.hpp"
 #include "LibCraft/renderEngine/include/vao.hpp"
@@ -29,27 +29,20 @@ public:
     GLuint* getIndicesHP() {
         return &_indices[0];
     }
-    Vertex2D* getDataPointerHP() {
+    Vertex* getDataPointerHP() {
         return &_vertices[0];
-    }
-    float getHP() {
-        return _nbHearts;
-    }
-    void lossHP() {
-        _nbHearts--;
     }
     ~HP();
 private:
-    std::vector<Vertex2D> _vertices = {
-            Vertex2D(glm::vec2(-0.5, -0.5), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.0, 0.0)),
-            Vertex2D(glm::vec2(0.5, -0.5), glm::vec3(0.0, 1.0, 0.0), glm::vec2(1.0, 0.0)),
-            Vertex2D(glm::vec2(0.5, 0.5), glm::vec3(0.0, 0.0, 1.0), glm::vec2(1.0, 1.0)),
-            Vertex2D(glm::vec2(-0.5, 0.5), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.0, 1.0))
+    std::vector<Vertex> _vertices = {
+            Vertex(glm::vec3(-0.5, -0.5, 0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.0, 0.0)),
+            Vertex(glm::vec3(0.5, -0.5, 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec2(1.0, 0.0)),
+            Vertex(glm::vec3(0.5, 0.5, 0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec2(1.0, 1.0)),
+            Vertex(glm::vec3(-0.5, 0.5, 0.0), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.0, 1.0))
     };
     std::vector<GLuint> _indices = {0, 1, 2, 0, 2, 3};
     vao _vao;
     vbo _vbo;
     ibo _ibo;
     GLuint _texture;
-    float _nbHearts = 10;
 };

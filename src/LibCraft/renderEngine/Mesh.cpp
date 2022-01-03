@@ -7,7 +7,7 @@
 // constructor
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures):
 _vao(),
-_vbo((Vertex*){}, 0),
+_vbo({}, 0),
 _ibo({}, 0)
 {
     this->_vertices = vertices;
