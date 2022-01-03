@@ -19,11 +19,13 @@ void App::renderGame(GLFWwindow *window, double FPS) {
         //INPUTS
         _player.Inputs(window);
         _player.render();
+        _hpHUD.drawHP(_hpShader, _player.getHp());
         //_hud.DrawHUD(_shaderProgram, _models[2],_models[1], _player.getScore(), _textMinecraft,_textShader);
     }
     else { //Switch to GameOver Scene
         setScene(3);
     }
+
     //PRINTING FPS
     if(_showingFPS){
         std::string toPrintFPS = "FPS : " + std::to_string(FPS);
@@ -111,7 +113,7 @@ void App::displayGame(double FPS){
     }
 
     //PRINTING HP
-    _hpHUD.drawHP(_hpShader, _player.getHp());
+
 
     /* VERIF SI ON EST EN TRAIN DE TOURNER
      *
