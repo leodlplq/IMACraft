@@ -26,7 +26,7 @@ int main(__attribute__((unused)) int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1920, 1080, "IMACraft", nullptr , nullptr);
+    GLFWwindow* window = glfwCreateWindow(1920, 1040, "IMACraft", nullptr , nullptr);
 
     if (!window) {
         glfwTerminate();

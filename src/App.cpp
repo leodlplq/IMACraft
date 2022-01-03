@@ -330,6 +330,7 @@ void App::initButtons(){
         this->setScene(1);
     };
 
+
     float scaleBtn = 0.7f;
 
 
@@ -363,6 +364,10 @@ void App::initButtons(){
 
     Button leaveButtonWin(4,"Leave game !",_height,_width,_width/2,150.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionLeave );
     _buttons.push_back(leaveButtonWin);//BUTTON 7
+
+    //PAUSE MENU AGAIN
+    Button restartButtonPause(2,"Restart",_height,_width,_width/2,350.f,40.f,20.f,scaleBtn,glm::vec3(0.f,0.f,0.f),glm::vec3(1.f,1.f,1.f),_textArial,_textShader,_buttonShader, functionRestart );
+    _buttons.push_back(restartButtonPause); //BUTTON 8
 }
 
 void App::handleClickEvent(GLFWwindow* window){
