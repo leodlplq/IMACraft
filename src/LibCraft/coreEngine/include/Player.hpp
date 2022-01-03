@@ -69,7 +69,7 @@ public:
     inline void winScore(int value){_score+=value;}
 
     inline void inMenu(bool b){_isInMenu = b;}
-    inline bool* getIsMenu(){return &_isInMenu;}
+    inline bool getIsMenu(){return _isInMenu;}
 
     inline void restart(){
         _hp = _hpMax;
