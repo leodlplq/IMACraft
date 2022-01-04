@@ -121,7 +121,7 @@ private:
     Hitbox _hitbox2;
 
     //PLAYER HEALTH
-    int _hpMax = 5;
+    int _hpMax = 10;
     int _hp;
     //MAP TO GET COLLISION
     Map _map;
